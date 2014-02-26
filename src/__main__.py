@@ -25,7 +25,6 @@ from x import *
 open_x()
 
 width, height, left, top, panel_height, at_top = get_monitors()[0][:3] + [24, 1 * 12, True]
-print(width, height, left, top)
 
 display = get_display()
 window = create_panel(width, height, left, top, panel_height, at_top)
@@ -41,7 +40,9 @@ while True:
             break
     except KeyboardInterrupt:
         break
-    gc.change(foreground = get_screen().black_pixel)
+    cmap = window.get_attributes().colormap
+    print(cmap)
+    gc.change(foreground = cmap.alloc_color(0xFFFF, 0x0000, 0x4000).pixel)
     window.fill_rectangle(gc, 0, 0, width, panel_height)
     display.flush()
 

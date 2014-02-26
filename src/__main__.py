@@ -41,9 +41,18 @@ while True:
     except KeyboardInterrupt:
         break
     cmap = window.get_attributes().colormap
-    print(cmap)
-    gc.change(foreground = cmap.alloc_color(0xFFFF, 0x0000, 0x4000).pixel)
+    gc.change(foreground = cmap.alloc_color(0x0000, 0x0000, 0x0000).pixel)
     window.fill_rectangle(gc, 0, 0, width, panel_height)
+    gc.change(foreground = cmap.alloc_color(0xC0C0, 0xC0C0, 0xC0C0).pixel)
+    gc.change(font = display.open_font('-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*'))
+    text_ = '°°° TEST °°° ꚺ░∈𝕐 '.encode('utf-16')[2:]
+    text = []
+    for i in range(len(text_)):
+        if (i & 1) == 0:
+            text.append(text_[i])
+        else:
+            text[-1] |= text_[i] << 8
+    window.image_text_16(gc, 0, 10, text)
     display.flush()
 
 window.unmap()

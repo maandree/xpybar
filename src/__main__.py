@@ -22,16 +22,29 @@ import Xlib.display, Xlib.Xatom, Xlib.ext.randr, Xlib.X
 from x import *
 
 
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+FONT = '-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*'
+BACKGROUND, FOREGROUND = (0, 0, 0), (192, 192, 192)
+
+
 open_x()
 
-width, height, left, top, panel_height, at_top = get_monitors()[0][:3] + [24, 1 * 12, True]
+width, height, left, top, panel_height, at_top = get_monitors()[OUTPUT][:3] + [YPOS, HEIGHT, TOP]
 
 display = get_display()
 window = create_panel(width, height, left, top, panel_height, at_top)
 gc = window.create_gc()
+cmap = window.get_attributes().colormap
 
 window.map()
 display.flush()
+
+background = cmap.alloc_color(*[x * 257 for x in BACKGROUND]).pixel
+foreground = cmap.alloc_color(*[x * 257 for x in FOREGROUND]).pixel
+font = display.open_font(FONT)
+font_q = font.query()
+font_height = font_q.font_ascent + font_q.font_descent
+text_width = lambda text : font.query_text_extents(text).overall_width
 
 while True:
     try:
@@ -40,15 +53,10 @@ while True:
             break
     except KeyboardInterrupt:
         break
-    cmap = window.get_attributes().colormap
-    gc.change(foreground = cmap.alloc_color(0x0000, 0x0000, 0x0000).pixel)
+    gc.change(foreground = background)
     window.fill_rectangle(gc, 0, 0, width, panel_height)
-    gc.change(foreground = cmap.alloc_color(0xC0C0, 0xC0C0, 0xC0C0).pixel)
-    font =  display.open_font('-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*')
+    gc.change(foreground = foreground)
     gc.change(font = font)
-    print(font.query().font_ascent)
-    print(font.query().font_descent)
-    print(font.query_text_extents("Test").overall_width)
     text_ = '°°° TEST °°° ꚺ░∈𝕐 '.encode('utf-16')[2:]
     text = []
     for i in range(len(text_)):

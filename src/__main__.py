@@ -143,6 +143,15 @@ class Bar:
         @param  font  The font
         '''
         self.gc.change(font = font)
+    
+    def clear(self):
+        '''
+        Fill the panel with its background colour and reset the colour and font
+        '''
+        self.change_colour(self.background)
+        self.window.fill_rectangle(self.gc, 0, 0, self.width, self.panel_height)
+        self.change_colour(self.foreground)
+        self.change_font(self.font)
 
 
 open_x()
@@ -159,10 +168,7 @@ while True:
             break
     except KeyboardInterrupt:
         break
-    bar.change_colour(bar.background)
-    bar.window.fill_rectangle(bar.gc, 0, 0, bar.width, bar.panel_height)
-    bar.change_colour(bar.foreground)
-    bar.change_font(bar.font)
+    bar.clear()
     bar.draw_text(0, 10, '°°° TEST °°°')
     display.flush()
 

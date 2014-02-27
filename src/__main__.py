@@ -32,7 +32,8 @@ BACKGROUND, FOREGROUND = (0, 0, 0), (192, 192, 192)
 
 def redraw():
     '''
-    Invoked when redraw is needed, feel free to replace it completely
+    Invoked when redraw is needed,
+    feel free to replace this completely
     '''
     global bar
     bar.clear()
@@ -40,7 +41,7 @@ def redraw():
 def start():
     '''
     Invoked when it is time to create panels and map them,
-    feel free to replace it completely
+    feel free to replace this completely
     '''
     global bar
     bar = Bar(OUTPUT, HEIGHT, YPOS, TOP, FONT, BACKGROUND, FOREGROUND)
@@ -49,10 +50,19 @@ def start():
 def stop():
     '''
     Invoked when it is time to unmap the panels,
-    feel free to replace it completely
+    feel free to replace this completely
     '''
     global bar
     bar.unmap()
+
+def unhandled_event(e):
+    '''
+    Invoked when an unrecognised even is polled,
+    feel free to replace this completely
+    
+    @param  e  The event
+    '''
+    pass
 
 
 class Bar:
@@ -133,6 +143,8 @@ class Bar:
         '''
         draw_text(bar.window, bar.gc, x, y, text)
     
+    # TODO add draw_colour_text
+    
     def create_colour(self, red, green, blue):
         '''
         Create a colour instance
@@ -195,6 +207,8 @@ while True:
         e = display.next_event()
         if e.type == Xlib.X.DestroyNotify:
             break
+        else:
+            unhandled_event(e)
     except KeyboardInterrupt:
         break
     redraw()

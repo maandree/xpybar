@@ -16,6 +16,32 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
+import sys
+import threading
+import subprocess
 
-# TODO add utility functions
+
+def async(target, name = None, group = None):
+    '''
+    Start a function asynchronously
+    
+    @param   target:()→void  The function
+    @param   name:str?       The name of the thread
+    @return  :Thread         A running deamon-thread running `target`, with the name `name`
+    '''
+    t = threading.Thread(target = target, name = name)
+    t.setDaemon(True)
+    t.start()
+    return t
+
+
+def spawn(*command):
+    '''
+    Spawn an external process
+    
+    @param   command:*str  The command line
+    @return  :istream      The process's stdout
+    '''
+    proc = process.Popen(list(command), stderr = sys.stderr, stdout = PIPE)
+    return proc.stdout
 

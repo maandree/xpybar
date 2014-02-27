@@ -27,24 +27,130 @@ FONT = '-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*'
 BACKGROUND, FOREGROUND = (0, 0, 0), (192, 192, 192)
 
 
+class Bar:
+    '''
+    Docked panel
+    
+    @variable  window            The X window
+    @variable  gc                The window's graphics context
+    @variable  cmap              The window's colour map
+    
+    @variable  width:int         The output's pixel width
+    @variable  height:int        The output's pixel height
+    @variable  left:int          The output's left position
+    @variable  ypos:int          The position of the panel in relation to either the top or bottom edge of the output
+    @variable  panel_height:int  The panel's height
+    @variable  at_top:bool       Whether the panel is to be docked to the top of the output, otherwise to the bottom
+    
+    @variable  background        The default background
+    @variable  foreground        The default foreground
+    @variable  font              The default font
+    @variable  font_metrics      The default font's metrics
+    @variable  font_height:int   The height of the default font
+    '''
+    
+    def __init__(self, output, height, ypos, top, font, background, foreground):
+        '''
+        Constructor
+        
+        @param  output:int                                 The index of the output within the screen as printed by xrandr, except primary is first
+        @param  height:int                                 The height of the panel
+        @param  ypos:int                                   The position of the panel in relation the either the top or bottom edge of the output
+        @param  top:int                                    Whether the panel is to be docked to the top of the output, otherwise to the bottom
+        @param  font:str                                   The default font
+        @param  background:(red:int, green:int, blue:int)  The default background
+        @param  foreground:(red:int, green:int, blue:int)  The default foreground
+        '''
+        ## Panel position
+        pos = outputs[output][:3] + [ypos, height, top]
+        self.width, self.height, self.left, self.ypos, self.panel_height, self.at_top = pos
+        ## Create window and create/fetch resources
+        self.window = create_panel(*pos)
+        self.gc = self.window.create_gc()
+        self.cmap = self.window.get_attributes().colormap
+        ## Graphics variables
+        self.background = self.create_colour(*background)
+        self.foreground = self.create_colour(*foreground)
+        (self.font, self.font_metrics, self.font_height) = self.create_font(font)
+    
+    def map(self):
+        '''
+        Map the window
+        '''
+        self.window.map()
+        display.flush()
+    
+    def unmap(self):
+        '''
+        Unmap the window
+        '''
+        self.window.unmap()
+    
+    def text_width(self, text):
+        '''
+        Get the width of a text
+        
+        @param   text:str  The text
+        @return  :int      The width of the text
+        '''
+        return self.font.query_text_extents(text).overall_width
+    
+    def draw_text(self, x, y, text):
+        '''
+        Draw a text
+        
+        @param  x:int     The left position of the text
+        @param  y:int     The Y position of the bottom of the text
+        @param  text:str  The text to draw
+        '''
+        draw_text(bar.window, bar.gc, x, y, text)
+    
+    def create_colour(self, red, green, blue):
+        '''
+        Create a colour instance
+        
+        @param   red:int    The red component [0, 255]
+        @param   green:int  The green component [0, 255]
+        @param   blue:int   The blue component [0, 255]
+        @return             The colour
+        '''
+        return self.cmap.alloc_color(red * 257, green * 257, blue * 257).pixel
+    
+    def create_font(self, font):
+        '''
+        Create a font
+        
+        @param   font:str  The font
+        @return            The font, font metrics, and font height
+        '''
+        font = display.open_font(font)
+        font_metrics = font.query()
+        font_height = font_metrics.font_ascent + font_metrics.font_descent
+        return (font, font_metrics, font_height)
+    
+    def change_colour(self, colour):
+        '''
+        Change the current colour
+        
+        @param  colour  The colour
+        '''
+        self.gc.change(foreground = colour)
+    
+    def change_font(self, font):
+        '''
+        Change the current font
+        
+        @param  font  The font
+        '''
+        self.gc.change(font = font)
+
+
 open_x()
-
-width, height, left, top, panel_height, at_top = get_monitors()[OUTPUT][:3] + [YPOS, HEIGHT, TOP]
-
 display = get_display()
-window = create_panel(width, height, left, top, panel_height, at_top)
-gc = window.create_gc()
-cmap = window.get_attributes().colormap
+outputs = get_monitors()
+bar = Bar(OUTPUT, HEIGHT, YPOS, TOP, FONT, BACKGROUND, FOREGROUND)
 
-window.map()
-display.flush()
-
-background = cmap.alloc_color(*[x * 257 for x in BACKGROUND]).pixel
-foreground = cmap.alloc_color(*[x * 257 for x in FOREGROUND]).pixel
-font = display.open_font(FONT)
-font_q = font.query()
-font_height = font_q.font_ascent + font_q.font_descent
-text_width = lambda text : font.query_text_extents(text).overall_width
+bar.map()
 
 while True:
     try:
@@ -53,13 +159,13 @@ while True:
             break
     except KeyboardInterrupt:
         break
-    gc.change(foreground = background)
-    window.fill_rectangle(gc, 0, 0, width, panel_height)
-    gc.change(foreground = foreground)
-    gc.change(font = font)
-    draw_text(window, gc, 0, 10, '°°° TEST °°°')
+    bar.change_colour(bar.background)
+    bar.window.fill_rectangle(bar.gc, 0, 0, bar.width, bar.panel_height)
+    bar.change_colour(bar.foreground)
+    bar.change_font(bar.font)
+    bar.draw_text(0, 10, '°°° TEST °°°')
     display.flush()
 
-window.unmap()
+bar.unmap()
 close_x()
 

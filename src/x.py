@@ -105,7 +105,7 @@ def create_panel(width, height, left, ypos, panel_height, at_top):
     @param   width:int         The width of the output
     @param   height:int        The height of the output
     @param   left:int          The left position of the output
-    @param   ypos:int          The position of the panel in relation the either the top or bottom edge of the output
+    @param   ypos:int          The position of the panel in relation to either the top or bottom edge of the output
     @param   panel_height:int  The height of the panel
     @param   at_top:bool       Whether the panel is to be docked to the top of the output, otherwise to the bottom
     @return                    The window

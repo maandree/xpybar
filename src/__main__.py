@@ -22,9 +22,37 @@ import Xlib.display, Xlib.Xatom, Xlib.ext.randr, Xlib.X
 from x import *
 
 
-OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+global OUTPUT, HEIGHT, YPOS, TOP, FONT, BACKGROUND, FOREGROUND
+global dislay, outputs, redraw, Bar, start, stop
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 0, True
 FONT = '-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*'
 BACKGROUND, FOREGROUND = (0, 0, 0), (192, 192, 192)
+
+
+def redraw():
+    '''
+    Invoked when redraw is needed, feel free to replace it completely
+    '''
+    global bar
+    bar.clear()
+
+def start():
+    '''
+    Invoked when it is time to create panels and map them,
+    feel free to replace it completely
+    '''
+    global bar
+    bar = Bar(OUTPUT, HEIGHT, YPOS, TOP, FONT, BACKGROUND, FOREGROUND)
+    bar.map()
+
+def stop():
+    '''
+    Invoked when it is time to unmap the panels,
+    feel free to replace it completely
+    '''
+    global bar
+    bar.unmap()
 
 
 class Bar:
@@ -154,12 +182,13 @@ class Bar:
         self.change_font(self.font)
 
 
+# TODO load configurations
+
+
 open_x()
 display = get_display()
 outputs = get_monitors()
-bar = Bar(OUTPUT, HEIGHT, YPOS, TOP, FONT, BACKGROUND, FOREGROUND)
-
-bar.map()
+start()
 
 while True:
     try:
@@ -168,10 +197,9 @@ while True:
             break
     except KeyboardInterrupt:
         break
-    bar.clear()
-    bar.draw_text(0, 10, '°°° TEST °°°')
+    redraw()
     display.flush()
 
-bar.unmap()
+stop()
 close_x()
 

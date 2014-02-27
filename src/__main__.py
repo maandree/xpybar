@@ -57,14 +57,7 @@ while True:
     window.fill_rectangle(gc, 0, 0, width, panel_height)
     gc.change(foreground = foreground)
     gc.change(font = font)
-    text_ = '°°° TEST °°° ꚺ░∈𝕐 '.encode('utf-16')[2:]
-    text = []
-    for i in range(len(text_)):
-        if (i & 1) == 0:
-            text.append(text_[i])
-        else:
-            text[-1] |= text_[i] << 8
-    window.image_text_16(gc, 0, 10, text)
+    draw_text(window, gc, 0, 10, '°°° TEST °°°')
     display.flush()
 
 window.unmap()

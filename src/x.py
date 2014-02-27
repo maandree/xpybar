@@ -139,6 +139,26 @@ def create_panel(width, height, left, ypos, panel_height, at_top):
     return window
 
 
+def draw_text(window, gc, x, y, text):
+    '''
+    Draw a text on a window
+
+    @param  window    The window
+    @param  gc        The window's graphics context
+    @param  x:int     The left position of the text
+    @param  y:int     The Y position of the bottom of the text
+    @param  text:str  The text to draw
+    '''
+    text_ = text.encode('utf-16')[2:]
+    text = []
+    for i in range(len(text_)):
+        if (i & 1) == 0:
+            text.append(text_[i])
+        else:
+            text[-1] |= text_[i] << 8
+    window.image_text_16(gc, x, y, text)
+
+
 def close_x():
     '''
     Closes the connection to X, but flushes it first

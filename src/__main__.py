@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import Xlib.display, Xlib.Xatom, Xlib.ext.randr, Xlib.X
 
 from x import *
-
+from util import *
 
 global OUTPUT, HEIGHT, YPOS, TOP, FONT, BACKGROUND, FOREGROUND
 global dislay, outputs, redraw, Bar, start, stop

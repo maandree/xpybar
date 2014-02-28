@@ -91,6 +91,7 @@ class Bar:
     @variable  font              The default font
     @variable  font_metrics      The default font's metrics
     @variable  font_height:int   The height of the default font
+    @variable  palette           A 16-array of standard colours
     '''
     
     def __init__(self, output, height, ypos, top, font, background, foreground):
@@ -116,6 +117,10 @@ class Bar:
         self.background = self.create_colour(*background)
         self.foreground = self.create_colour(*foreground)
         (self.font, self.font_metrics, self.font_height) = self.create_font(font)
+        self.palette = [0x000000, 0xCD656C, 0x32A679, 0xCCAD47, 0x2495BE, 0xA46EB0, 0x00A09F, 0xD8D8D8]
+        self.palette += [0x555555, 0xEB5E6A, 0x0EC287, 0xF2CA38, 0x00ACE0, 0xC473D1, 0x00C3C7, 0xEEEEEE]
+        self.palette = [((p >> 16) & 255, (p >> 8) & 255, p & 255) for p in self.palette]
+        self.palette = [self.create_colour(*p) for p in self.palette]
     
     def map(self):
         '''
@@ -149,7 +154,80 @@ class Bar:
         '''
         draw_text(bar.window, bar.gc, x, y, text)
     
-    # TODO add draw_coloured_text
+    def draw_coloured_text(self, x, y, ascent, descent, text):
+        '''
+        Draw a coloured multi-line text
+        
+        @param  x:int        The left position of the text
+        @param  y:int        The Y position of the bottom of the text
+        @param  ascent:int   Extra height above the text on each line
+        @param  descent:int  Extra height under the text on each line
+        @param  text:str     The text to draw
+        '''
+        buf, bc, fc, xx = '', self.background, self.foreground, x
+        line_height = ascent + self.font_height + descent
+        esc = False
+        for c in text + '\033[m':
+            if esc:
+                buf += c
+                if ('a' <= c <= 'z') or ('A' <= c <= 'Z') or (c == '~'):
+                    if (buf[0] == '[') and (buf[-1] == 'm'):
+                        buf = buf[1 : -1].split(';')
+                        buf = [int('0' + x) for x in buf]
+                        bci, fci = 0, 0
+                        for b in buf:
+                            if bci != 0:
+                                if bci == 1:
+                                    if not b == 2:
+                                        bci = -2
+                                    bc = 0
+                                elif bci > 1:
+                                    bc = (bc << 8) + b
+                                    if bci == 4:
+                                        bci = -1
+                                        bc = self.create_colour(*bc)
+                                bci += 1
+                            elif fci != 0:
+                                if fci == 1:
+                                    if not b == 2:
+                                        fci = -2
+                                    fc = 0
+                                elif fci > 1:
+                                    fc = (fc << 8) + b
+                                    if fci == 4:
+                                        fci = -1
+                                        fc = ((fc >> 16) & 255, (fc >> 8) & 255, fc & 255)
+                                        fc = self.create_colour(*fc)
+                                fci += 1
+                            elif b == 0:           bc, fc = self.background, self.foreground
+                            elif b == 39:          fc = self.foreground
+                            elif b == 49:          bc = self.background
+                            elif 30 <= b <= 37:    fc = self.palette[b - 30]
+                            elif 40 <= b <= 47:    bc = self.palette[b - 40]
+                            elif 90 <= b <= 97:    fc = self.palette[b - 90 + 8]
+                            elif 100 <= b <= 107:  bc = self.palette[b - 100 + 8]
+                            elif b == 38:          fci = 1
+                            elif b == 48:          bci = 1
+                    buf = ''
+                    esc = False
+            elif c in ('\033', '\n'):
+                if not buf == '':
+                    self.change_colour(bc)
+                    h = self.font_height + ascent
+                    w = self.text_width(buf)
+                    self.window.fill_rectangle(self.gc, x, y - h, w, line_height)
+                    self.gc.change(foreground = fc, background = bc)
+                    self.draw_text(x, y + ascent, buf)
+                    x += w
+                    buf = ''
+                if c == '\n':
+                    y += line_height
+                    x = xx
+                else:
+                    esc = True
+            else:
+                buf += c
+        self.change_colour(self.foreground)
     
     def create_colour(self, red, green, blue):
         '''

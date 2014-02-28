@@ -23,6 +23,10 @@ from x import *
 from util import *
 
 
+PROGRAM_NAME = 'xpybar'
+PROGRAM_VERSION = '1.0'
+
+
 global OUTPUT, HEIGHT, YPOS, TOP, FONT, BACKGROUND, FOREGROUND
 global dislay, outputs, redraw, Bar, start, stop
 global conf_opts, config_file, parser

@@ -1,0 +1,20 @@
+# -*- python -*-
+
+# A simple xpybar configuration example that tests the plugins
+
+from plugins.uptime import Uptime
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
+
+def redraw():
+    bar.clear()
+    
+    uptime_ = Uptime()
+    uptime = '%id %02i:%02i:%0.2f' % uptime_.uptime
+    tot_idle = '%id %02i:%02i:%0.2f' % uptime_.total_idle
+    avg_idle = '%id %02i:%02i:%0.2f' % uptime_.average_idle
+    
+    text = 'Uptime: %s │ Idle time: %s %s'
+    text %= (uptime, tot_idle, avg_idle)
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

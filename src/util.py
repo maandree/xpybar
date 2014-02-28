@@ -36,16 +36,20 @@ def async(target, name = None, group = None):
     return t
 
 
-def watch(interval, target):
+def watch(interval, target, delay = 0):
     '''
     Run a function periodically forever
     
     @param  interval:float  The number of seconds to sleep between invocatons
     @param  target:()→void  The function
+    @param  delay:float     Number of extra seconds seconds to wait the first time
     '''
+    target()
+    if not delay == 0:
+        time.sleep(delay)
     while True:
-        target()
         time.sleep(interval)
+        target()
 
 
 def spawn(*command):

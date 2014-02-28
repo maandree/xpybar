@@ -2,9 +2,13 @@
 
 # A simple xpybar configuration example that tests the plugins
 
+
 from plugins.uptime import Uptime
+from plugins.loadavg import AverageLoad
+
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
+
 
 def redraw():
     bar.clear()
@@ -14,7 +18,15 @@ def redraw():
     tot_idle = '%id %02i:%02i:%0.2f' % uptime_.total_idle
     avg_idle = '%id %02i:%02i:%0.2f' % uptime_.average_idle
     
-    text = 'Uptime: %s │ Idle time: %s %s'
-    text %= (uptime, tot_idle, avg_idle)
+    loadavg_ = AverageLoad()
+    avg_5 = int(loadavg_.avg_5_min * 100)
+    avg_10 = int(loadavg_.avg_10_min * 100)
+    avg_15 = int(loadavg_.avg_15_min * 100)
+    act_tasks = loadavg_.active_tasks
+    tot_tasks = loadavg_.total_tasks
+    last_pid = loadavg_.last_pid
+    
+    text = 'Uptime: %s │ Idle time: %s %s │ Average load: %2i%% %2i%% %2i%% %i/%i %i'
+    text %= (uptime, tot_idle, avg_idle, avg_5, avg_10, avg_15, act_tasks, tot_tasks, last_pid)
     bar.draw_coloured_text(0, 10, 0, 2, text)
 

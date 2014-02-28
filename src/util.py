@@ -55,6 +55,6 @@ def spawn(*command):
     @param   command:*str  The command line
     @return  :istream      The process's stdout
     '''
-    proc = process.Popen(list(command), stderr = sys.stderr, stdout = PIPE)
+    proc = subprocess.Popen(list(command), stderr = sys.stderr, stdout = subprocess.PIPE)
     return proc.stdout
 

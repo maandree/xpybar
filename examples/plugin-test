@@ -2,9 +2,11 @@
 
 # A simple xpybar configuration example that tests the plugins
 
+import os
 
 from plugins.uptime import Uptime
 from plugins.loadavg import AverageLoad
+from plugins.users import Users
 
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
@@ -26,7 +28,18 @@ def redraw():
     tot_tasks = loadavg_.total_tasks
     last_pid = loadavg_.last_pid
     
-    text = 'Uptime: %s │ Idle time: %s %s │ Average load: %2i%% %2i%% %2i%% %i/%i %i'
-    text %= (uptime, tot_idle, avg_idle, avg_5, avg_10, avg_15, act_tasks, tot_tasks, last_pid)
+    users_ = Users().users
+    you = os.environ['USER']
+    def colour_user(user):
+        if user == 'root':
+            return '\033[31m%s\033[39m'
+        elif not user == you:
+            return '\033[33m%s\033[39m'
+        else:
+            return '%s'
+    users = ' '.join(['%s{%i}' % (colour_user(u) % u, len(users_[u])) for u in users_.keys()])
+    
+    text = 'Uptime: %s │ Idle time: %s %s │ Average load: %2i%% %2i%% %2i%% %i/%i %i │ Users: %s'
+    text %= (uptime, tot_idle, avg_idle, avg_5, avg_10, avg_15, act_tasks, tot_tasks, last_pid, users)
     bar.draw_coloured_text(0, 10, 0, 2, text)
 

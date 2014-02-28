@@ -152,7 +152,35 @@ class Bar:
         @param  y:int     The Y position of the bottom of the text
         @param  text:str  The text to draw
         '''
-        draw_text(bar.window, bar.gc, x, y, text)
+        special = '─│┌┐└┘├┤┬┴┼╱╲╳\0'
+        buf = ''
+        w = self.text_width('X')
+        h = self.font_height
+        y_ = y - self.font_height
+        for c in text + '\0':
+            if c in special:
+                if not buf == '':
+                    self.window.draw_text(self.gc, x, y, buf)
+                    x += self.text_width(buf)
+                    buf = ''
+                if not c == '\0':
+                    segs = []
+                    if c in '─┼┬┴':  segs.append((0, 1,  2, 1))
+                    if c in '│┼├┤':  segs.append((1, 0,  1, 2))
+                    if c in '├┌└':   segs.append((1, 1,  2, 1))
+                    if c in '┤┐┘':   segs.append((0, 1,  1, 1))
+                    if c in '┬┌┐':   segs.append((1, 1,  1, 2))
+                    if c in '┴└┘':   segs.append((1, 0,  1, 1))
+                    if c in '╱╳':    segs.append((0, 2,  2, 0))
+                    if c in '╲╳':    segs.append((0, 0,  2, 2))
+                    segs_ = []
+                    for seg in segs:
+                        (x1, y1, x2, y2) = [c / 2 for c in seg]
+                        segs_.append((int(x1 * w) + x, int(y1 * h) + y_, int(x2 * w) + x, int(y2 * h) + y_))
+                    self.window.poly_segment(self.gc, segs_)
+                    x += w
+            else:
+                buf += c
     
     def draw_coloured_text(self, x, y, ascent, descent, text):
         '''

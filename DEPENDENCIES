@@ -1,0 +1,7 @@
+RUNTIME DEPENDENCIES:
+
+	python3
+	python3-xlib
+	xrandr
+	argparser-python
+

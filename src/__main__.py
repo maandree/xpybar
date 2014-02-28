@@ -154,8 +154,8 @@ class Bar:
         '''
         special = '─│┌┐└┘├┤┬┴┼╱╲╳\0'
         buf = ''
-        w = self.text_width('X')
-        h = self.font_height
+        w = self.text_width('X') - 1
+        h = self.font_height - 1
         y_ = y - self.font_height
         for c in text + '\0':
             if c in special:
@@ -176,9 +176,11 @@ class Bar:
                     segs_ = []
                     for seg in segs:
                         (x1, y1, x2, y2) = [c / 2 for c in seg]
-                        segs_.append((int(x1 * w) + x, int(y1 * h) + y_, int(x2 * w) + x, int(y2 * h) + y_))
+                        x1, x2 = x1 * w + 0.5, x2 * w + 0.5
+                        y1, y2 = y1 * h + 0.5, y2 * h + 0.5
+                        segs_.append((int(x1) + x, int(y1) + y_, int(x2) + x, int(y2) + y_))
                     self.window.poly_segment(self.gc, segs_)
-                    x += w
+                    x += w + 1
             else:
                 buf += c
     

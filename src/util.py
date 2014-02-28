@@ -58,3 +58,16 @@ def spawn(*command):
     proc = subprocess.Popen(list(command), stderr = sys.stderr, stdout = subprocess.PIPE)
     return proc.stdout
 
+
+def spawn_read(*command):
+    '''
+    Spawn an external process and returns its output
+    
+    @param   command:*str  The command line
+    @return  :str          The process's output to stdout, without the final LF
+    '''
+    proc = subprocess.Popen(list(command), stderr = sys.stderr, stdout = subprocess.PIPE)
+    out = proc.stdout.read().decode('utf-8', 'replace')
+    if out.endswith('\n'):
+        out = out[:-1]
+    return out

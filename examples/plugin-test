@@ -41,7 +41,9 @@ def redraw():
     users = ['%s{%i}' % (colour_user(u) % u, len(users_[u])) for u in users_.keys()]
     users = 'Users: %s' % (' '.join(users))
     
-    text = '%s │ %s │ %s │ %s'
-    text %= (uptime, idle, loadavg, users)
+    time = spawn_read('date', '+%Y-(%m)%b-%d %T, %a w%V, %Z')
+    
+    text = '%s │ %s │ %s │ %s │ %s'
+    text %= (time, uptime, idle, loadavg, users)
     bar.draw_coloured_text(0, 10, 0, 2, text)
 

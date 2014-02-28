@@ -1,6 +1,6 @@
 # -*- python -*-
 
-# A simple xpybar configuration example
+# A simple xpybar configuration example that tests a few features
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
 

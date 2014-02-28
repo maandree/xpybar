@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 import sys
+import time
 import threading
 import subprocess
 
@@ -33,6 +34,18 @@ def async(target, name = None, group = None):
     t.setDaemon(True)
     t.start()
     return t
+
+
+def watch(interval, target):
+    '''
+    Run a function periodically forever
+    
+    @param  interval:float  The number of seconds to sleep between invocatons
+    @param  target:()→void  The function
+    '''
+    while True:
+        target()
+        time.sleep(interval)
 
 
 def spawn(*command):

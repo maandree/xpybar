@@ -152,7 +152,7 @@ class Bar:
         @param  y:int     The Y position of the bottom of the text
         @param  text:str  The text to draw
         '''
-        special = '─│┌┐└┘├┤┬┴┼╱╲╳\0'
+        special = '─│┌┐└┘├┤┬┴┼╱╲╳←↓→↑\0'
         buf = ''
         w = self.text_width('X') - 1
         h = self.font_height - 1
@@ -173,11 +173,27 @@ class Bar:
                     if c in '┴└┘':   segs.append((1, 0,  1, 1))
                     if c in '╱╳':    segs.append((0, 2,  2, 0))
                     if c in '╲╳':    segs.append((0, 0,  2, 2))
+                    if c in '←':
+                        segs.append((0, 1,  2, 1))
+                        segs.append((1, 0.5,  0, 1))
+                        segs.append((1, 1.5,  0, 1))
+                    elif c in '→':
+                        segs.append((0, 1,  2, 1))
+                        segs.append((1.2, 0.5,  2, 1))
+                        segs.append((1.2, 1.5,  2, 1))
+                    elif c in '↑':
+                        segs.append((1, 0,  1, 2))
+                        segs.append((0.3, 0.5,  1, 0))
+                        segs.append((1.7, 0.5,  1, 0))
+                    elif c in '↓':
+                        segs.append((1, 0,  1, 2))
+                        segs.append((0.3, 1.7,  1, 2))
+                        segs.append((1.7, 1.7,  1, 2))
                     segs_ = []
                     for seg in segs:
                         (x1, y1, x2, y2) = [c / 2 for c in seg]
-                        x1, x2 = x1 * w + 0.5, x2 * w + 0.5
-                        y1, y2 = y1 * h + 0.5, y2 * h + 0.5
+                        x1, x2 = x1 * w, x2 * w
+                        y1, y2 = y1 * h, y2 * h
                         segs_.append((int(x1) + x, int(y1) + y_, int(x2) + x, int(y2) + y_))
                     self.window.poly_segment(self.gc, segs_)
                     x += w + 1

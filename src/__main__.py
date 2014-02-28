@@ -160,7 +160,7 @@ class Bar:
         for c in text + '\0':
             if c in special:
                 if not buf == '':
-                    self.window.draw_text(self.gc, x, y, buf)
+                    draw_text(self.window, self.gc, x, y, buf)
                     x += self.text_width(buf)
                     buf = ''
                 if not c == '\0':

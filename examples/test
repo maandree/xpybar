@@ -6,5 +6,5 @@ OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
 
 def redraw():
     bar.clear()
-    bar.draw_coloured_text(0, 10, 0, 2, '°°°² \033[31;47m|T|\033[49mE|\033[mS\033[38;2;128;16;255m|T|\033[0m ²°°°\nTEST ─│┌┐└┘├┤┬┴┼╱╲╳ ←↓→↑')
+    bar.draw_coloured_text(0, 10, 0, 2, '┌┐ °°°² \033[31;47m|T|\033[49mE|\033[mS\033[38;2;128;16;255m|T|\033[0m ²°°°\n└┘ TEST ─│┌┐└┘├┤┬┴┼╱╲╳ ←↓→↑X')
 

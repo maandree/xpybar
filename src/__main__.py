@@ -144,18 +144,19 @@ class Bar:
         '''
         return self.font.query_text_extents(text).overall_width
     
-    def draw_text(self, x, y, text):
+    def draw_text(self, x, y, descent, text):
         '''
         Draw a text
         
-        @param  x:int     The left position of the text
-        @param  y:int     The Y position of the bottom of the text
-        @param  text:str  The text to draw
+        @param  x:int        The left position of the text
+        @param  y:int        The Y position of the bottom of the text
+        @param  descent:int  Extra height under the text on each line
+        @param  text:str     The text to draw
         '''
         special = '─│┌┐└┘├┤┬┴┼╱╲╳←↓→↑\0'
         buf = ''
         w = self.text_width('X') - 1
-        h = self.font_height - 1
+        h = self.font_height + descent - 1
         y_ = y - self.font_height
         for c in text + '\0':
             if c in special:
@@ -174,21 +175,21 @@ class Bar:
                     if c in '╱╳':    segs.append((0, 2,  2, 0))
                     if c in '╲╳':    segs.append((0, 0,  2, 2))
                     if c in '←':
-                        segs.append((0, 1,  2, 1))
-                        segs.append((1, 0.5,  0, 1))
-                        segs.append((1, 1.5,  0, 1))
+                        segs.append((0, 1,  1.9, 1))
+                        segs.append((1, 0.6,  0, 1))
+                        segs.append((1, 1.4,  0, 1))
                     elif c in '→':
-                        segs.append((0, 1,  2, 1))
-                        segs.append((1.2, 0.5,  2, 1))
-                        segs.append((1.2, 1.5,  2, 1))
+                        segs.append((0, 1,  1.9, 1))
+                        segs.append((1.1, 0.6,  1.9, 1))
+                        segs.append((1.1, 1.4,  1.9, 1))
                     elif c in '↑':
-                        segs.append((1, 0,  1, 2))
-                        segs.append((0.3, 0.5,  1, 0))
-                        segs.append((1.7, 0.5,  1, 0))
+                        segs.append((1, 0.4,  1, 1.8))
+                        segs.append((0.3, 0.9,  1, 0.4))
+                        segs.append((1.7, 0.9,  1, 0.4))
                     elif c in '↓':
-                        segs.append((1, 0,  1, 2))
-                        segs.append((0.3, 1.7,  1, 2))
-                        segs.append((1.7, 1.7,  1, 2))
+                        segs.append((1, 0.4,  1, 1.8))
+                        segs.append((0.3, 1.3,  1, 1.8))
+                        segs.append((1.7, 1.3,  1, 1.8))
                     segs_ = []
                     for seg in segs:
                         (x1, y1, x2, y2) = [c / 2 for c in seg]
@@ -263,7 +264,7 @@ class Bar:
                     w = self.text_width(buf)
                     self.window.fill_rectangle(self.gc, x, y - h, w, line_height)
                     self.gc.change(foreground = fc, background = bc)
-                    self.draw_text(x, y + ascent, buf)
+                    self.draw_text(x, y + ascent, descent, buf)
                     x += w
                     buf = ''
                 if c == '\n':

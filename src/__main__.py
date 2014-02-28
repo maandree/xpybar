@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-'''
+copyright = '''
 xpybar – xmobar replacement written in python
 Copyright © 2014  Mattias Andrée (maandree@member.fsf.org)
 
@@ -16,14 +16,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
-
 import Xlib.display, Xlib.Xatom, Xlib.ext.randr, Xlib.X
+from argparser import *
 
 from x import *
 from util import *
 
+
 global OUTPUT, HEIGHT, YPOS, TOP, FONT, BACKGROUND, FOREGROUND
 global dislay, outputs, redraw, Bar, start, stop
+global conf_opts, config_file, parser
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 0, True
 FONT = '-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*'
@@ -143,7 +145,7 @@ class Bar:
         '''
         draw_text(bar.window, bar.gc, x, y, text)
     
-    # TODO add draw_colour_text
+    # TODO add draw_coloured_text
     
     def create_colour(self, red, green, blue):
         '''
@@ -194,7 +196,70 @@ class Bar:
         self.change_font(self.font)
 
 
-# TODO load configurations
+## Read command line arguments
+parser = ArgParser('A highly extensible minimalistic dock panel',
+                   sys.argv[0] + ' [options] [-- configuration-options]',
+                   None, None, True, ArgParser.standard_abbreviations())
+
+parser.add_argumented(['-c', '--configurations'], 0, 'FILE', 'Select configuration file')
+parser.add_argumentless(['-h', '-?', '--help'], 0, 'Print this help information')
+parser.add_argumentless(['-C', '--copying', '--copyright'], 0, 'Print copyright information')
+parser.add_argumentless(['-W', '--warranty'], 0, 'Print non-warranty information')
+parser.add_argumentless(['-v', '--version'], 0, 'Print program name and version')
+
+parser.parse()
+parser.support_alternatives()
+
+if parser.opts['--help'] is not None:
+    parser.help()
+    sys.exit(0)
+elif parser.opts['--copyright'] is not None:
+    print(copyright[1 : -1])
+    sys.exit(0)
+elif parser.opts['--warranty'] is not None:
+    print('This program is distributed in the hope that it will be useful,')
+    print('but WITHOUT ANY WARRANTY; without even the implied warranty of')
+    print('MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the')
+    print('GNU Affero General Public License for more details.')
+    sys.exit(0)
+elif parser.opts['--version'] is not None:
+    print('%s %s' % (PROGRAM_NAME, PROGRAM_VERSION))
+    sys.exit(0)
+
+a = lambda opt : opt[0] if opt is not None else None
+config_file = a(parser.opts['--configurations'])
+
+
+## Load extension and configurations via xpybarrc
+if config_file is None:
+    for file in ('$XDG_CONFIG_HOME/%/%rc', '$HOME/.config/%/%rc', '$HOME/.%rc', '/etc/%rc'):
+        file = file.replace('%', 'xpybarrc')
+        for arg in ('XDG_CONFIG_HOME', 'HOME'):
+            if '$' + arg in file:
+                if arg in os.environ:
+                    file = file.replace('$' + arg, os.environ[arg].replace('$', '\0'))
+                else:
+                    file = None
+                    break
+        if file is not None:
+            file = file.replace('\0', '$')
+            if os.path.exists(file):
+                config_file = file
+                break
+conf_opts = [config_file] + parser.files
+if config_file is not None:
+    code = None
+    with open(config_file, 'rb') as script:
+        code = script.read()
+    code = code.decode('utf-8', 'error') + '\n'
+    code = compile(code, config_file, 'exec')
+    g, l = globals(), dict(locals())
+    for key in l:
+        g[key] = l[key]
+    exec(code, g)
+else:
+    print('No configuration file found')
+    sys.exit(1)
 
 
 open_x()

@@ -1,0 +1,10 @@
+# -*- python -*-
+
+# A simple xpybar configuration example
+
+OUTPUT, YPOS, TOP = 0, 24, True
+
+def redraw():
+    bar.clear()
+    bar.draw_text(0, 10, '°°° TEST °°°')
+

@@ -9,6 +9,7 @@ from plugins.loadavg import AverageLoad
 from plugins.users import Users
 from plugins.pacman import Pacman
 from plugins.uname import Uname
+from plugins.df import Discs
 
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
@@ -82,7 +83,30 @@ def redraw():
     uname = '%s %s %s'
     uname %= (nodename, kernel_release, operating_system)
     
-    text = '%s │ %s │ %s │ %s │ %s │ %s'
-    text %= (time, uptime, idle, loadavg, users, uname)
+    discs_ = Discs()
+    discs = []
+    for fs in discs_.filesystems:
+        if '/' not in fs:
+            continue
+        disc = discs_.filesystems[fs]
+        mp = disc.mountpoint
+        if mp in ['/boot', '/rescue']:
+            continue
+        mp = mp.split('/')[-1]
+        if mp == '':
+            mp = '/'
+        use = disc.used * 100 / disc.blocks
+        colour, colour_ = '39', '39'
+        if use < 50:  colour = '32'
+        if use > 75:  colour = '33'
+        if use > 95:  colour = '31'
+        if use > 99:  colour, colour_ = '31', '31'
+        discs.append((mp, use, colour, colour_))
+    discs.sort(key = lambda d : d[0])
+    discs = ['\033[%sm%s:\033[%sm%.1f\033[0m%%' % (d[3], d[0], d[2], d[1]) for d in discs]
+    discs = 'df: %s' % ' '.join(discs)
+    
+    text = '%s │ %s │ %s │ %s │ %s │ %s\n%s'
+    text %= (time, uptime, idle, loadavg, users, uname, discs)
     bar.draw_coloured_text(0, 10, 0, 2, text)
 

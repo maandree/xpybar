@@ -7,6 +7,7 @@ import os
 from plugins.uptime import Uptime
 from plugins.loadavg import AverageLoad
 from plugins.users import Users
+from plugins.pacman import Pacman
 from plugins.uname import Uname
 
 
@@ -44,10 +45,39 @@ def redraw():
     users = ['%s{%i}' % (colour_user(u) % u, len(users_[u])) for u in users_.keys()]
     users = 'Users: %s' % (' '.join(users))
     
+    have_linux_libre, have_pacman = True, True
+    linux_installed, linux_latest = None, None
+    try:
+        linux_installed = Pacman('linux-libre', True)
+    except:
+        have_linux_libre = False
+        try:
+            linux_installed = Pacman('linux', True)
+        except:
+            have_pacman = False
+    if have_pacman:
+        linux_latest = Pacman('linux-libre' if have_linux_libre else 'linux', False)
+    
     uname_ = Uname()
     nodename = uname_.nodename
     kernel_release = uname_.kernel_release
     operating_system = uname_.operating_system
+    if have_pacman:
+        linux_running = kernel_release.split('-')
+        linux_running, kernel_release = linux_running[:2], linux_running[2:]
+        linux_running = '-'.join(linux_running)
+        kernel_release = '-' + '-'.join(kernel_release)
+        linux_installed = linux_installed.version
+        linux_latest = linux_latest.version
+        if linux_installed == linux_latest:
+            if linux_running == linux_installed:
+                linux_running = '\033[32m%s\033[39m' % linux_running
+        else:
+            if linux_running == linux_installed:
+                linux_running = '\033[33m%s\033[39m' % linux_running
+            else:
+                linux_running = '\033[31m%s\033[39m' % linux_running
+        kernel_release = linux_running + kernel_release
     uname = '%s %s %s'
     uname %= (nodename, kernel_release, operating_system)
     

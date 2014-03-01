@@ -7,6 +7,7 @@ import os
 from plugins.uptime import Uptime
 from plugins.loadavg import AverageLoad
 from plugins.users import Users
+from plugins.uname import Uname
 
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
@@ -14,6 +15,8 @@ OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
 
 def redraw():
     bar.clear()
+    
+    time = spawn_read('date', '+%Y-(%m)%b-%d %T, %a w%V, %Z')
     
     uptime_ = Uptime()
     uptime = '%id %02i:%02i:%0.2f' % uptime_.uptime
@@ -41,9 +44,14 @@ def redraw():
     users = ['%s{%i}' % (colour_user(u) % u, len(users_[u])) for u in users_.keys()]
     users = 'Users: %s' % (' '.join(users))
     
-    time = spawn_read('date', '+%Y-(%m)%b-%d %T, %a w%V, %Z')
+    uname_ = Uname()
+    nodename = uname_.nodename
+    kernel_release = uname_.kernel_release
+    operating_system = uname_.operating_system
+    uname = '%s %s %s'
+    uname %= (nodename, kernel_release, operating_system)
     
-    text = '%s │ %s │ %s │ %s │ %s'
-    text %= (time, uptime, idle, loadavg, users)
+    text = '%s │ %s │ %s │ %s │ %s │ %s'
+    text %= (time, uptime, idle, loadavg, users, uname)
     bar.draw_coloured_text(0, 10, 0, 2, text)
 

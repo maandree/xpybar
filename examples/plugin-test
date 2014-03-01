@@ -24,7 +24,7 @@ def redraw():
     tot_idle = '%id %02i:%02i:%0.2f' % uptime_.total_idle
     avg_idle = '%id %02i:%02i:%0.2f' % uptime_.average_idle
     uptime = 'Uptime: %s' % (uptime)
-    idle = 'Idle time: %s %s' % (tot_idle, avg_idle)
+    idle = 'Idle time: %s : %s' % (avg_idle, tot_idle)
     
     loadavg_ = AverageLoad()
     avg_5 = int(loadavg_.avg_5_min * 100)

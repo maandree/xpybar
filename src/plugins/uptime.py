@@ -22,6 +22,9 @@ class Uptime:
     '''
     The current uptime of the machine and how long it has been idle
     
+    @variable  uptime_seconds:float                                            Total uptime
+    @variable  total_idle_seconds:float                                        Total processor idle time
+    @variable  average_idle_seconds:float                                      Average processor idle time
     @variable  uptime:(days:int, hours:int, minutes:int, seconds:float)        Total uptime
     @variable  total_idle:(days:int, hours:int, minutes:int, seconds:float)    Total processor idle time
     @variable  average_idle:(days:int, hours:int, minutes:int, seconds:float)  Average processor idle time
@@ -51,9 +54,13 @@ class Uptime:
             Uptime.cpu_count = filter(lambda line : 'processor' in line, Uptime.cpu_count)
             Uptime.cpu_count = len(list(Uptime.cpu_count))
         
-        self.uptime = Uptime.split_time(uptime)
-        self.total_idle = Uptime.split_time(idle)
-        self.average_idle = Uptime.split_time(idle / Uptime.cpu_count)
+        self.uptime_seconds = uptime
+        self.total_idle_seconds = idle
+        self.average_idle_seconds = idle / Uptime.cpu_count
+        
+        self.uptime = Uptime.split_time(self.uptime_seconds)
+        self.total_idle = Uptime.split_time(self.total_idle_seconds)
+        self.average_idle = Uptime.split_time(self.average_idle_seconds)
     
     
     @staticmethod

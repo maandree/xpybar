@@ -1,5 +1,6 @@
 List of plugins to implement:
 
+     iostat [-x] [-d] [-c] [-N] -yzk [-p | <devices>...] <interval>
      SMART monitoring
      Solar position
      Weather

@@ -103,7 +103,7 @@ def redraw():
         if use > 99:  colour, colour_ = '31', '31'
         discs.append((mp, use, colour, colour_))
     discs.sort(key = lambda d : d[0])
-    discs = ['\033[%sm%s:\033[%sm%.1f\033[0m%%' % (d[3], d[0], d[2], d[1]) for d in discs]
+    discs = ['\033[%sm%s:\033[%sm%.1f\033[%sm%%\033[0m' % (d[3], d[0], d[2], d[1], d[3]) for d in discs]
     discs = 'df: %s' % ' '.join(discs)
     
     text = '%s │ %s │ %s │ %s │ %s │ %s\n%s'

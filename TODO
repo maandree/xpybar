@@ -5,7 +5,6 @@ List of plugins to implement:
      Weather
      Network usage
      CPU usage
-     /proc/meminfo
      Current CPU speed
      X display
      Xmonad

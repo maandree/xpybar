@@ -10,6 +10,7 @@ from plugins.users import Users
 from plugins.pacman import Pacman
 from plugins.uname import Uname
 from plugins.df import Discs
+from plugins.mem import Memory
 
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
@@ -83,6 +84,17 @@ def redraw():
     uname = '%s %s %s'
     uname %= (nodename, kernel_release, operating_system)
     
+    memory_ = Memory()
+    def colourise(value, format = '%.0f'):
+        colour = '39'
+        if value > 30:  colour = '32'
+        if value > 50:  colour = '33'
+        if value > 80:  colour = '31'
+        return '\033[%sm%s%%\033[0m' % (colour, format % value)
+    mem = 'Mem: ' + colourise(memory_.mem_used * 100 / memory_.mem_total)
+    swp = 'Swp: ' + colourise(memory_.swap_used * 100 / memory_.swap_total)
+    shm = 'Shm: ' + colourise(memory_.shmem * 100 / memory_.mem_total)
+    
     discs_ = Discs()
     discs = []
     discs_used = 0
@@ -116,7 +128,7 @@ def redraw():
     if use > 99:  colour = '41;33'
     discs = 'df: %s : \033[%sm%.2f\033[0m%%' % (' '.join(discs), colour, use)
     
-    text = '%s │ %s │ %s │ %s │ %s │ %s\n%s'
-    text %= (time, uptime, idle, loadavg, users, uname, discs)
+    text = '%s │ %s │ %s │ %s │ %s │ %s │ %s │ %s │ %s\n%s'
+    text %= (time, uptime, idle, loadavg, users, uname, mem, swp, shm, discs)
     bar.draw_coloured_text(0, 10, 0, 2, text)
 

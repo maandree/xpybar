@@ -85,6 +85,8 @@ def redraw():
     
     discs_ = Discs()
     discs = []
+    discs_used = 0
+    discs_total = 0
     for fs in discs_.filesystems:
         if '/' not in fs:
             continue
@@ -95,6 +97,8 @@ def redraw():
         mp = mp.split('/')[-1]
         if mp == '':
             mp = '/'
+        discs_used += disc.used
+        discs_total += disc.blocks
         use = disc.used * 100 / disc.blocks
         colour, colour_ = '39', '39'
         if use < 50:  colour = '32'
@@ -104,7 +108,13 @@ def redraw():
         discs.append((mp, use, colour, colour_))
     discs.sort(key = lambda d : d[0])
     discs = ['\033[%sm%s:\033[%sm%.1f\033[%sm%%\033[0m' % (d[3], d[0], d[2], d[1], d[3]) for d in discs]
-    discs = 'df: %s' % ' '.join(discs)
+    use = discs_used * 100 / discs_total
+    colour = '39'
+    if use < 50:  colour = '32'
+    if use > 75:  colour = '33'
+    if use > 95:  colour = '31'
+    if use > 99:  colour = '41;33'
+    discs = 'df: %s : \033[%sm%.2f\033[0m%%' % (' '.join(discs), colour, use)
     
     text = '%s │ %s │ %s │ %s │ %s │ %s\n%s'
     text %= (time, uptime, idle, loadavg, users, uname, discs)

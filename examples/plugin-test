@@ -11,6 +11,7 @@ from plugins.pacman import Pacman
 from plugins.uname import Uname
 from plugins.df import Discs
 from plugins.mem import Memory
+from plugins.discstats import DiscStats
 
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
@@ -128,7 +129,23 @@ def redraw():
     if use > 99:  colour = '41;33'
     discs = 'df: %s : \033[%sm%.2f\033[0m%%' % (' '.join(discs), colour, use)
     
-    text = '%s │ %s │ %s │ %s │ %s │ %s │ %s │ %s │ %s\n%s'
-    text %= (time, uptime, idle, loadavg, users, uname, mem, swp, shm, discs)
+    discstats_ = DiscStats()
+    discstats = []
+    for disc in discstats_.devices.keys():
+        if disc.startswith('sd') or disc.startswith('hd'):
+            disc = discstats_.devices[disc]
+            discstats.append((disc.device, disc.io_current))
+    def colourise(value):
+        colour = '39'
+        if value >= 1:  colour = '32'
+        if value >= 3:  colour = '33'
+        if value >= 5:  colour = '31'
+        return '\033[%sm%i\033[0m' % (colour, value)
+    discstats.sort(key = lambda x : x[0])
+    discstats = ['%s:%s' % (d[2:], colourise(i)) for d, i in discstats]
+    discstats = 'Disc stats: %s' % (' '.join(discstats))
+    
+    text = '%s │ %s │ %s │ %s │ %s │ %s │ %s │ %s │ %s\n%s │ %s'
+    text %= (time, uptime, idle, loadavg, users, uname, mem, swp, shm, discs, discstats)
     bar.draw_coloured_text(0, 10, 0, 2, text)
 

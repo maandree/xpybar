@@ -22,7 +22,7 @@ List of plugins to implement:
      Backlight control
      /proc/stat
      /sys/devices/system/cpu/cpuX
-     /proc/diskstats
+     hdparm
      Thermal monitoring
      ESSID and link quality for wireless interfaces
      News feed syndication

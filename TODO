@@ -1,0 +1,33 @@
+List of plugins to implement:
+
+     SMART monitoring
+     Solar position
+     Weather
+     Network usage
+     CPU usage
+     /proc/meminfo
+     Current CPU speed
+     X display
+     Xmonad
+     Battery
+     Music players
+     Volume control
+     System tray
+     Eyes
+     Launchers
+     Taskbar (as in rarity)
+     Application menu
+     UPS
+     Line reader
+     Blueshift integration
+     Backlight control
+     /proc/stat
+     /sys/devices/system/cpu/cpuX
+     /proc/diskstats
+     Thermal monitoring
+     ESSID and link quality for wireless interfaces
+     News feed syndication
+     Keyboard lock keys
+     Keyboard layout
+     EWMH
+

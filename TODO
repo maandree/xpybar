@@ -10,6 +10,7 @@ List of plugins to implement:
      Battery
      Music players
      Volume control
+     /proc/acpi (mute)
      System tray
      Eyes
      Launchers

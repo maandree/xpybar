@@ -13,6 +13,7 @@ from plugins.df import Discs
 from plugins.mem import Memory
 from plugins.discstats import DiscStats
 from plugins.xdisplay import XDisplay
+from plugins.moc import MOC
 
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
@@ -148,7 +149,12 @@ def redraw():
     
     xdisplay = ':%i' % XDisplay().display
     
-    text = '%s │ %s │ %s │ %s │ %s │ %s %s │ %s │ %s │ %s\n%s │ %s'
-    text %= (time, uptime, idle, loadavg, users, uname, xdisplay, mem, swp, shm, discs, discstats)
+    moc_ = MOC().state
+    moc = {None : 'dead', MOC.STOPPED : 'stopped', MOC.PAUSED : 'paused', MOC.PLAYING : 'playing'}
+    moc = 'Moc: %s' % moc[moc_]
+    
+    
+    text = '%s │ %s │ %s │ %s │ %s │ %s %s │ %s │ %s │ %s │ %s\n%s │ %s'
+    text %= (time, uptime, idle, loadavg, users, uname, xdisplay, mem, swp, shm, moc, discs, discstats)
     bar.draw_coloured_text(0, 10, 0, 2, text)
 

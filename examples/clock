@@ -1,0 +1,33 @@
+# -*- python -*-
+
+# A simple xpybar configuration example of a clock
+
+import time
+import threading
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+start_ = start
+def start():
+    start_()
+    def clock():
+        while True:
+            time.sleep(0.1)
+            time.sleep(1 - (time.time() % 1))
+            if redraw():
+                get_display().flush()
+    async(clock)
+
+
+semaphore = threading.Semaphore()
+def redraw():
+    if semaphore.acquire(blocking = False):
+        text = spawn_read('date', '+%Y-(%m)%b-%d %T, %a w%V, %Z')
+        bar.clear()
+        bar.draw_coloured_text(0, 10, 0, 2, text)
+        semaphore.release()
+        return True
+    return False
+

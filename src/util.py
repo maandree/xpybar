@@ -21,6 +21,8 @@ import time
 import threading
 import subprocess
 
+import Xlib.threaded
+
 
 def async(target, name = None, group = None):
     '''

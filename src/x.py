@@ -112,11 +112,14 @@ def create_panel(width, height, left, ypos, panel_height, at_top):
     '''
     global display, screen
     ypos = ypos if at_top else (height - ypos - panel_height)
-    window = screen.root.create_window(left, ypos, width, panel_height, 0, screen.root_depth,
-                                       Xlib.X.InputOutput, Xlib.X.CopyFromParent,
+    window = screen.root.create_window(left, ypos, width, panel_height, 0,
+                                       Xlib.X.CopyFromParent,
+                                       Xlib.X.InputOutput,
+                                       Xlib.X.CopyFromParent,
                                        event_mask = (
                                            Xlib.X.StructureNotifyMask |
-                                           Xlib.X.ButtonReleaseMask
+                                           Xlib.X.ButtonReleaseMask |
+                                           Xlib.X.ExposureMask
                                        ),
                                        colormap = Xlib.X.CopyFromParent)
     

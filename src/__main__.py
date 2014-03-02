@@ -91,6 +91,7 @@ class Bar:
     @variable  font              The default font
     @variable  font_metrics      The default font's metrics
     @variable  font_height:int   The height of the default font
+    @variable  font_width:int    The width of an 'X' with the default font
     @variable  palette           A 16-array of standard colours
     '''
     
@@ -117,6 +118,7 @@ class Bar:
         self.background = self.create_colour(*background)
         self.foreground = self.create_colour(*foreground)
         (self.font, self.font_metrics, self.font_height) = self.create_font(font)
+        self.font_width = self.text_width('X')
         self.palette = [0x000000, 0xCD656C, 0x32A679, 0xCCAD47, 0x2495BE, 0xA46EB0, 0x00A09F, 0xD8D8D8]
         self.palette += [0x555555, 0xEB5E6A, 0x0EC287, 0xF2CA38, 0x00ACE0, 0xC473D1, 0x00C3C7, 0xEEEEEE]
         self.palette = [((p >> 16) & 255, (p >> 8) & 255, p & 255) for p in self.palette]
@@ -155,14 +157,14 @@ class Bar:
         '''
         special = '─│┌┐└┘├┤┬┴┼╱╲╳←↓→↑\0'
         buf = ''
-        w = self.text_width('X') - 1
+        w = self.font_width - 1
         h = self.font_height + descent - 1
         y_ = y - self.font_height
         for c in text + '\0':
             if c in special:
                 if not buf == '':
                     draw_text(self.window, self.gc, x, y, buf)
-                    x += self.text_width(buf)
+                    x += self.font_width * len(buf)
                     buf = ''
                 if not c == '\0':
                     segs = []
@@ -261,7 +263,7 @@ class Bar:
                 if not buf == '':
                     self.change_colour(bc)
                     h = self.font_height + ascent
-                    w = self.text_width(buf)
+                    w = self.font_width * len(buf)
                     self.window.fill_rectangle(self.gc, x, y - h, w, line_height)
                     self.gc.change(foreground = fc, background = bc)
                     self.draw_text(x, y + ascent, descent, buf)

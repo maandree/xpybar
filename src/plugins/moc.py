@@ -58,7 +58,7 @@ class MOC:
         Constructor
         '''
         self.__info = {}
-        for line in spawn_read('mocp', '--info').split('\n'):
+        for line in MOC.__interact('--info').stdout.read().decode('utf-8', 'replace').split('\n'):
             if ': ' in line:
                 line = line.split(': ')
                 self.__info[line[0]] = ': '.join(line[1:])
@@ -99,7 +99,7 @@ class MOC:
         @return  :Popen     The spawned process
         '''
         command = ['mocp'] + list(args)
-        return subprocess.Popen(command, stderr = sys.stderr, stdout = subprocess.PIPE)
+        return subprocess.Popen(command, stderr = subprocess.PIPE, stdout = subprocess.PIPE)
     
     
     @staticmethod

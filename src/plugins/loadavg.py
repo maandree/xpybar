@@ -22,12 +22,20 @@ class AverageLoad:
     '''
     The current average load, number of scheduling entities and latest PID
     
-    @variable  avg_5_min:float   The average load over the last 5 minutes
-    @variable  avg_10_min:float  The average load over the last 10 minutes
-    @variable  avg_15_min:float  The average load over the last 15 minutes
-    @variable  active_tasks:int  The number of active scheduling entities
-    @variable  total_tasks:int   The total number of scheduling entities
-    @variable  last_pid:int      The PID of the last created process on the system
+    @variable  total_avg_5_min:float     The average load over the last 5 minutes, sum of processors
+    @variable  total_avg_10_min:float    The average load over the last 10 minutes, sum of processors
+    @variable  total_avg_15_min:float    The average load over the last 15 minutes, sum of processors
+    @variable  average_avg_5_min:float   The average load over the last 5 minutes, average of processors
+    @variable  average_avg_10_min:float  The average load over the last 10 minutes, average of processors
+    @variable  average_avg_15_min:float  The average load over the last 15 minutes, average of processors
+    @variable  active_tasks:int          The number of active scheduling entities
+    @variable  total_tasks:int           The total number of scheduling entities
+    @variable  last_pid:int              The PID of the last created process on the system
+    '''
+    
+    cpu_count = None
+    '''
+    :int?  The number of processors on the machine
     '''
     
     
@@ -41,10 +49,20 @@ class AverageLoad:
         uptime = uptime.decode('utf-8', 'replace')
         uptime = uptime.replace('\n', ' ').split(' ')
         
-        self.avg_5_min, self.avg_10_min, self.avg_15_min, tasks, self.last_pid = uptime[:5]
-        self.avg_5_min = float(self.avg_5_min)
-        self.avg_10_min = float(self.avg_10_min)
-        self.avg_15_min = float(self.avg_15_min)
+        if AverageLoad.cpu_count is None:
+            with open('/proc/cpuinfo', 'rb') as file:
+                AverageLoad.cpu_count = file.read()
+            AverageLoad.cpu_count = AverageLoad.cpu_count.decode('utf-8', 'replace').split('\n')
+            AverageLoad.cpu_count = filter(lambda line : 'processor' in line, AverageLoad.cpu_count)
+            AverageLoad.cpu_count = len(list(AverageLoad.cpu_count))
+        
+        self.total_avg_5_min, self.total_avg_10_min, self.total_avg_15_min, tasks, self.last_pid = uptime[:5]
+        self.total_avg_5_min = float(self.total_avg_5_min)
+        self.total_avg_10_min = float(self.total_avg_10_min)
+        self.total_avg_15_min = float(self.total_avg_15_min)
+        self.average_avg_5_min = self.total_avg_5_min / AverageLoad.cpu_count
+        self.average_avg_10_min = self.total_avg_10_min / AverageLoad.cpu_count
+        self.average_avg_15_min = self.total_avg_15_min / AverageLoad.cpu_count
         self.last_pid = int(self.last_pid)
         self.active_tasks, self.total_tasks = [int(t) for t in tasks.split('/')]
 

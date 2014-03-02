@@ -33,9 +33,9 @@ def redraw():
     idle = 'Idle time: %s : %s : %1.2f%%' % (avg_idle, tot_idle, prc_idle * 100)
     
     loadavg_ = AverageLoad()
-    avg_5 = int(loadavg_.avg_5_min * 100)
-    avg_10 = int(loadavg_.avg_10_min * 100)
-    avg_15 = int(loadavg_.avg_15_min * 100)
+    avg_5 = int(loadavg_.average_avg_5_min * 100)
+    avg_10 = int(loadavg_.average_avg_10_min * 100)
+    avg_15 = int(loadavg_.average_avg_15_min * 100)
     act_tasks = loadavg_.active_tasks
     tot_tasks = loadavg_.total_tasks
     last_pid = loadavg_.last_pid

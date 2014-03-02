@@ -3,6 +3,7 @@
 # A simple xpybar configuration example that tests the plugins
 
 import os
+import time
 
 from plugins.uptime import Uptime
 from plugins.loadavg import AverageLoad
@@ -14,6 +15,7 @@ from plugins.mem import Memory
 from plugins.discstats import DiscStats
 from plugins.xdisplay import XDisplay
 from plugins.moc import MOC
+from plugins.cpu import CPU
 
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
@@ -22,7 +24,7 @@ OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
 def redraw():
     bar.clear()
     
-    time = spawn_read('date', '+%Y-(%m)%b-%d %T, %a w%V, %Z')
+    date = spawn_read('date', '+%Y-(%m)%b-%d %T, %a w%V, %Z')
     
     uptime_ = Uptime()
     uptime = '%id %02i:%02i:%0.2f' % uptime_.uptime
@@ -93,7 +95,7 @@ def redraw():
         if value > 30:  colour = '32'
         if value > 50:  colour = '33'
         if value > 80:  colour = '31'
-        return '\033[%sm%s%%\033[0m' % (colour, format % value)
+        return '\033[%sm%s\033[0m%%' % (colour, format % value)
     mem = 'Mem: ' + colourise(memory_.mem_used * 100 / memory_.mem_total)
     swp = 'Swp: ' + colourise(memory_.swap_used * 100 / memory_.swap_total)
     shm = 'Shm: ' + colourise(memory_.shmem * 100 / memory_.mem_total)
@@ -122,7 +124,7 @@ def redraw():
         if use > 99:  colour, colour_ = '31', '31'
         discs.append((mp, use, colour, colour_))
     discs.sort(key = lambda d : d[0])
-    discs = ['\033[%sm%s:\033[%sm%.1f\033[%sm%%\033[0m' % (d[3], d[0], d[2], d[1], d[3]) for d in discs]
+    discs = ['\033[%sm%s:\033[%sm%.1f\033[%sm%%\033[0m' % (d[3], d[0][-4:], d[2], d[1], d[3]) for d in discs]
     use = discs_used * 100 / discs_total
     colour = '39'
     if use < 50:  colour = '32'
@@ -153,8 +155,30 @@ def redraw():
     moc = {None : 'dead', MOC.STOPPED : 'stopped', MOC.PAUSED : 'paused', MOC.PLAYING : 'playing'}
     moc = 'Moc: %s' % moc[moc_]
     
+    cpu_ = CPU()
+    last_cpu_idle, last_cpus_idle = cpu_.cpu[CPU.idle], [cpu[CPU.idle] for cpu in cpu_.cpus]
+    last_cpu_total, last_cpus_total = sum(cpu_.cpu), [sum(cpu) for cpu in cpu_.cpus]
+    time.sleep(1)
+    cpu_ = CPU()
+    now_cpu_idle, now_cpus_idle = cpu_.cpu[CPU.idle], [cpu[CPU.idle] for cpu in cpu_.cpus]
+    now_cpu_total, now_cpus_total = sum(cpu_.cpu), [sum(cpu) for cpu in cpu_.cpus]
+    def cpu_usage(now_idle, now_total, last_idle, last_total):
+        total = now_total - last_total
+        idle = now_idle - last_idle
+        return (total - idle) * 100 / total
+    def colourise(value):
+        colour = '39'
+        if value >= 5:   colour = '32'
+        if value >= 50:  colour = '33'
+        if value >= 90:  colour = '31'
+        return '\033[%sm%2.0f\033[0m%%' % (colour, value)
+    cpus = zip(now_cpus_idle, now_cpus_total, last_cpus_idle, last_cpus_total)
+    cpus = ' '.join([colourise(cpu_usage(*c)) for c in cpus])
+    cpu = colourise(cpu_usage(now_cpu_idle, now_cpu_total, last_cpu_idle, last_cpu_total))
+    cpu = 'Cpu: %s : %s' % (cpus, cpu)
     
-    text = '%s │ %s │ %s │ %s │ %s │ %s %s │ %s │ %s │ %s │ %s\n%s │ %s'
-    text %= (time, uptime, idle, loadavg, users, uname, xdisplay, mem, swp, shm, moc, discs, discstats)
+    
+    text = '%s │ %s │ %s │ %s │ %s │ %s %s │ %s │ %s │ %s │ %s\n%s │ %s │ %s'
+    text %= (date, uptime, idle, loadavg, users, uname, xdisplay, mem, swp, shm, moc, discs, discstats, cpu)
     bar.draw_coloured_text(0, 10, 0, 2, text)
 

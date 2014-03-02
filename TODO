@@ -4,7 +4,6 @@ List of plugins to implement:
      SMART monitoring
      Solar position
      Network usage
-     CPU usage
      Current CPU speed
      Xmonad
      Battery
@@ -20,7 +19,6 @@ List of plugins to implement:
      Line reader
      Blueshift integration
      Backlight control
-     /proc/stat
      /sys/devices/system/cpu/cpuX
      hdparm
      Thermal monitoring

@@ -38,7 +38,7 @@ class Weather:
     
     @variable  wind_dir:float?           The wind direction, `None` if variable
     @variable  wind_speed:float          The wind speed in knots
-    @variable  wind_gusts:float?         The wind gusts in knots
+    @variable  wind_gusts:float?         The wind gusts (variability of the wind speed) in knots
     @variable  wind_var:(float, float)?  The wind direction range, `None` if less than 60° variation
     @variable  temp:float                The temperature in °C
     @variable  dew:float                 The dew point in °C
@@ -86,8 +86,9 @@ class Weather:
             self.__temp(ob)
             self.__pressure(ob)
             self.__visibility(ob)
-            # (-SHRA)-Present Weather and Obscurations  from  http://www.wunderground.com/metarFAQ.asp
+            # (-SHRA)-Present Weather and Obscurations  from  http://www.wunderground.com/metarFAQ.asp (p44)
             # BKN070-Sky Condition                      from  http://www.wunderground.com/metarFAQ.asp
+            # (p46, p49, p59(7,8,9). p61-65, p67-77, p91+96)
         
         #Wind: from the N (010 degrees) at 18 MPH (16 KT):0
         #Visibility: 3 mile(s):0
@@ -110,9 +111,8 @@ class Weather:
         if ob.endswith('KT'):
             self.wind_dir = None if ob.startswith('VRB') else float(ob[:3])
             ob = ob[3:]
-            if self.wind_dir is not None:
-                ob = '0' + ob
-            self.wind_speed, ob = float(ob[:3]), wind[3:]
+            i = ob.find('G') if 'G' in ob else ob.find('K')
+            self.wind_speed, ob = float(ob[:i]), wind[i:]
             self.wind_gusts = float(ob[1 : -2]) if ob[0] == 'G' else None
     
     def __wind_var(self, ob):
@@ -135,6 +135,7 @@ class Weather:
                     self.pressure = 33.86 * float(ob[1:]) / 100
     
     def __visibility(self, ob):
+        # TODO p61
         if ob.endswith('SM') and (len(ob) > 0):
             if len(list(filter(lambda c : not ('0' <= c <= '9'), ob))) == 2:
                 self.visibility = float(ob[:-2])

@@ -61,7 +61,7 @@ class Weather:
         station_header, self.headers, decoded = decoded[0].split(', '), decoded[:2], decoded[2:]
         self.station, station_header = station_header[0], ', '.join(station_header[1:])
         self.location = station_header.split(' (')[0]
-        self.latitude, self.longitude = station_header.split(') ').split(' ')[2:]
+        self.latitude, self.longitude = station_header.split(') ')[1].split(' ')[:2]
         self.latitude, ysign = self.latitude[:-1], self.latitude[-1] == 'S'
         self.longitude, xsign = self.longitude[:-1], self.longitude[-1] == 'W'
         self.latitude = [float(x) for x in self.latitude.split('-')]
@@ -112,7 +112,7 @@ class Weather:
             self.wind_dir = None if ob.startswith('VRB') else float(ob[:3])
             ob = ob[3:]
             i = ob.find('G') if 'G' in ob else ob.find('K')
-            self.wind_speed, ob = float(ob[:i]), wind[i:]
+            self.wind_speed, ob = float(ob[:i]), ob[i:]
             self.wind_gusts = float(ob[1 : -2]) if ob[0] == 'G' else None
     
     def __wind_var(self, ob):

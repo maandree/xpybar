@@ -22,8 +22,6 @@ OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
 
 
 def redraw():
-    bar.clear()
-    
     date = spawn_read('date', '+%Y-(%m)%b-%d %T, %a w%V, %Z')
     
     uptime_ = Uptime()
@@ -180,5 +178,6 @@ def redraw():
     
     text = '%s │ %s │ %s │ %s │ %s │ %s %s │ %s │ %s │ %s │ %s\n%s │ %s │ %s'
     text %= (date, uptime, idle, loadavg, users, uname, xdisplay, mem, swp, shm, moc, discs, discstats, cpu)
+    bar.clear()
     bar.draw_coloured_text(0, 10, 0, 2, text)
 

@@ -77,3 +77,20 @@ def spawn_read(*command):
     if out.endswith('\n'):
         out = out[:-1]
     return out
+
+
+def reduce(f, items):
+    '''
+    https://en.wikipedia.org/wiki/Fold_(higher-order_function)
+    
+    @param   f:(¿E?, ¿E?)→¿E?  The function
+    @param   item:itr<¿E?>     The input
+    @return  ¿E?               The output
+    '''
+    if len(items) < 2:
+        return items
+    rc = items[0]
+    for i in range(1, len(items)):
+        rc = f(rc, items[i])
+    return rc
+

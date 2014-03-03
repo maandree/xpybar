@@ -24,22 +24,13 @@ List of plugins to implement:
      Keyboard layout
      EWMH
      /proc/interrupts
-     /proc/softirqs
-     /proc/sys/kernel/pty/nr
      /proc/net/dev
      /proc/net/sockstat
      /proc/net/sockstat6
-     /proc/net/snmp
-     /proc/net/snmp6
      /proc/net/wireless
      /sys/class/net/<nic>/duplex (half, full)
      /proc/cpuinfo (cpu MHz)
      /sys/devices/system/cpu/cpu<index>/cpufreq/ (some parts requires root)
-     /sys/devices/system/cpu/offline
-     /sys/devices/system/cpu/online
-     /sys/devices/system/cpu/possible
-     /sys/devices/system/cpu/present
-     /proc/vmstat
      /proc/sys/fs/dentry-state
          This file contains information about the status of the directory
          cache (dcache). The file contains six numbers, nr_dentry, nr_unused,

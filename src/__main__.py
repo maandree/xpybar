@@ -278,6 +278,30 @@ class Bar:
                 buf += c
         self.change_colour(self.foreground)
     
+    def draw_coloured_splitted_text(self, x, width, y, ascent, descent, text):
+        '''
+        Draw a coloured multi-line, multi-column text
+        
+        @param  x:int        The left position of the text
+        @param  width:int    The width of the print area
+        @param  y:int        The Y position of the bottom of the text
+        @param  ascent:int   Extra height above the text on each line
+        @param  descent:int  Extra height under the text on each line
+        @param  text:str     The text to draw, '\0' is column delimiter inside each line
+        '''
+        line_height = ascent + self.font_height + descent
+        for line in text.split('\n'):
+            if '\0' not in line:
+                self.draw_coloured_text(x, y, ascent, descent, line)
+            else:
+                parts = line.split('\0')
+                i, n = 0, len(parts) - 1
+                for part in parts:
+                    x = (width - Bar.coloured_length(part) * self.font_width) * i / n
+                    self.draw_coloured_text(int(x), y, ascent, descent, part)
+                    i += 1
+            y += line_height
+        
     def create_colour(self, red, green, blue):
         '''
         Create a colour instance
@@ -325,6 +349,26 @@ class Bar:
         self.window.fill_rectangle(self.gc, 0, 0, self.width, self.panel_height)
         self.change_colour(self.foreground)
         self.change_font(self.font)
+    
+    @staticmethod
+    def coloured_length(text):
+        '''
+        The print length of a coloured text
+        
+        @param   text:str  The text
+        @return  :int      The print length of the text
+        '''
+        n = 0
+        esc = False
+        for c in text:
+            if esc:
+                if ('a' <= c <= 'z') or ('A' <= c <= 'Z') or (c == '~'):
+                    esc = False
+            elif c == '\033':
+                esc = True
+            else:
+                n += 1
+        return n
 
 
 ## Read command line arguments

@@ -113,6 +113,7 @@ class Sometimes:
         self.function = function
         self.interval = interval
         self.counter = initial
+        self.last_return = None
     
     def __call__(self, *args, **kargs):
         '''
@@ -120,11 +121,12 @@ class Sometimes:
         
         @param   args:*?    The parameters of the function
         @param   kargs:**?  The named parameters of the function
-        @return  :¿R??      The return value of the function, `None` if not invoked
+        @return  :¿R?       The return value of the function, the last return if not invoked
         '''
-        rc = None
+        rc = self.last_return
         if self.counter == 0:
             rc = self.function(*args, **kargs)
+            self.last_return = rc
             self.counter = self.interval
         self.counter -= 1
         return rc

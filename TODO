@@ -1,6 +1,6 @@
 List of plugins to implement:
 
-     iostat [-x] [-d] [-c] [-N] -yzk [-p | <devices>...] <interval>
+     iostat [-x] [-d] [-N] -zk [-p | <devices>...] <interval>
      SMART monitoring
      Solar position
      Network usage

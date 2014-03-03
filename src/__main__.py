@@ -349,6 +349,45 @@ class Bar:
         '''
         self.gc.change(font = font)
     
+    def partial_clear(self, x, width, y, ascent, descent, text):
+        '''
+        Fill the panel with its background colour on areas that are not
+        about to be over painted with text and reset the colour and font
+        
+        @param  x:int        The left position of the text
+        @param  width:int    The width of the print area
+        @param  y:int        The Y position of the bottom of the text
+        @param  ascent:int   Extra height above the text on each line
+        @param  descent:int  Extra height under the text on each line
+        @param  text:str     The text to draw, '\0' is column delimiter inside each line
+        '''
+        line_height, areas = ascent + self.font_height + descent, []
+        y -= self.font_height - ascent
+        
+        for line in text.split('\n'):
+            if '\0' not in line:
+                x_ = Bar.coloured_length(line)
+                areas.append((x + x_, y, width - x_, line_height))
+            else:
+                areas_ = []
+                parts = line.split('\0')
+                i, n = 0, len(parts) - 1
+                for part in parts:
+                    w = Bar.coloured_length(part) * self.font_width
+                    x_ = int((width - w) * i / n)
+                    areas_.append((x_, x_ + w))
+                    i += 1
+                x1 = areas_[0][1]
+                for x2, x3 in areas_[1:]:
+                    areas.append((x + x1, y, x2 - x1, line_height))
+                    x1 = x3
+            y += line_height
+        
+        self.change_colour(self.background)
+        self.window.poly_fill_rectangle(self.gc, areas)
+        self.change_colour(self.foreground)
+        self.change_font(self.font)
+    
     def clear(self):
         '''
         Fill the panel with its background colour and reset the colour and font

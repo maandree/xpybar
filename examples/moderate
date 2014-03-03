@@ -232,8 +232,8 @@ semaphore = threading.Semaphore()
 def redraw():
     if semaphore.acquire(blocking = False):
         values = pattern % tuple([f() for f in functions])
-        bar.clear()
         #print(values.replace('\0', ' ' * 8))
+        bar.partial_clear(0, bar.width, 10, 0, 2, values)
         bar.draw_coloured_splitted_text(0, bar.width, 10, 0, 2, values)
         semaphore.release()
         return True

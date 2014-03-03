@@ -16,13 +16,17 @@ from plugins.discstats import DiscStats
 from plugins.xdisplay import XDisplay
 from plugins.moc import MOC
 from plugins.cpu import CPU
+from plugins.clock import Clock
 
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
 
 
+clock = Clock(format = '%Y-(%m)%b-%d %T, %a w%V, %Z')
+
+
 def redraw():
-    date = spawn_read('date', '+%Y-(%m)%b-%d %T, %a w%V, %Z')
+    date = clock.read()
     
     uptime_ = Uptime()
     uptime = '%id %02i:%02i:%05.2f' % uptime_.uptime

@@ -5,26 +5,28 @@
 import time
 import threading
 
+from plugins.clock import Clock
+
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(format = '%Y-(%m)%b-%d %T, %a w%V, %Z', utc = False, sync_to = Clock.SECONDS)
 
 
 start_ = start
 def start():
     start_()
-    def clock():
-        while True:
-            time.sleep(0.1)
-            time.sleep(1 - (time.time() % 1))
-            if redraw():
-                get_display().flush()
-    async(clock)
+    def refresh():
+        if redraw():
+            get_display().flush()
+    async(lambda : clock.continuous_sync(refresh))
 
 
 semaphore = threading.Semaphore()
 def redraw():
     if semaphore.acquire(blocking = False):
-        text = spawn_read('date', '+%Y-(%m)%b-%d %T, %a w%V, %Z')
+        text = clock.read()
         bar.clear()
         bar.draw_coloured_text(0, 10, 0, 2, text)
         semaphore.release()

@@ -24,7 +24,6 @@ List of plugins to implement:
      Keyboard layout
      EWMH
      /proc/interrupts
-     /proc/net/dev
      /proc/net/sockstat
      /proc/net/sockstat6
      /proc/net/wireless

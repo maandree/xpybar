@@ -11,6 +11,7 @@ from plugins.network import Network
 from plugins.users import Users
 from plugins.pacman import Pacman
 from plugins.uname import Uname
+from plugins.weather import Weather
 
 
 OUTPUT, YPOS, TOP = 0, 24, True
@@ -155,16 +156,42 @@ def cpu():
     return cpu
 
 
+weather_last = '?'
+weather_semaphore = threading.Semaphore()
+def weather_update_():
+    global weather_last
+    if weather_semaphore.acquire(blocking = False):
+        try:
+            weather_ = Weather('ESSA').temp
+            colour = '34'
+            if weather_ < -10:  colour = '39;44'
+            if weather_ >= 18:  colour = '39'
+            if weather_ >= 25:  colour = '33'
+            if weather_ >= 30:  colour = '31'
+            weather_ = '\033[%sm%.0f\033[0m°C' % (colour, weather_)
+            weather_last = weather_
+        except:
+            if not weather_last.endswith('?'):
+                weather_last += '?'
+        weather_semaphore.release()
+weather_update = Sometimes(lambda : async(weather_update_), 20 * 60 * 2)
+def weather():
+    rc = weather_last
+    weather_update()
+    return rc
+
+
 functions = [ Sometimes(lambda : clock_.read(), 1 * 2),
               lambda : time.time() % 1,
               Sometimes(users, 1 * 2),
+              weather,
               cpu,
               memory,
               network,
               Sometimes(uname, 30 * 60 * 2),
             ]
 
-pattern = [ '%s │ %.2f │ %s }{ %s │ %s │ %s │ %s'
+pattern = [ '%s │ %.2f │ %s │ %s }{ %s │ %s │ %s │ %s'
           ]
 
 

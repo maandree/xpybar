@@ -42,4 +42,5 @@ class XDisplay:
         self.display, self.screen = (self.connection.split(':')[1] + '.').split('.')[:2]
         self.display = int(self.display)
         self.screen = None if self.screen == '' else int(self.screen)
+        # TODO get VT
 

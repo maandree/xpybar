@@ -3,11 +3,8 @@ List of plugins to implement:
      iostat [-x] [-d] [-N] -zk [-p | <devices>...] <interval>
      SMART monitoring
      Solar position
-     Network usage
-     Current CPU speed
      Xmonad
      Battery
-     Music players
      Volume control
      /proc/acpi (mute)
      System tray
@@ -19,7 +16,6 @@ List of plugins to implement:
      Line reader
      Blueshift integration
      Backlight control
-     /sys/devices/system/cpu/cpuX
      hdparm
      Thermal monitoring
      ESSID and link quality for wireless interfaces
@@ -27,4 +23,47 @@ List of plugins to implement:
      Keyboard lock keys
      Keyboard layout
      EWMH
+     /proc/interrupts
+     /proc/softirqs
+     /proc/sys/kernel/pty/nr
+     /proc/net/dev
+     /proc/net/sockstat
+     /proc/net/sockstat6
+     /proc/net/snmp
+     /proc/net/snmp6
+     /proc/net/wireless
+     /sys/class/net/<nic>/duplex (half, full)
+     /proc/cpuinfo (cpu MHz)
+     /sys/devices/system/cpu/cpu<index>/cpufreq/ (some parts requires root)
+     /sys/devices/system/cpu/offline
+     /sys/devices/system/cpu/online
+     /sys/devices/system/cpu/possible
+     /sys/devices/system/cpu/present
+     /proc/vmstat
+     /proc/sys/fs/dentry-state
+         This file contains information about the status of the directory
+         cache (dcache). The file contains six numbers, nr_dentry, nr_unused,
+         age_limit (age in seconds), want_pages (pages requested by system)
+         and two dummy values.
+     /proc/sys/fs/inode-state
+         This file contains seven numbers: nr_inodes, nr_free_inodes,
+         preshrink, and four dummy values. nr_inodes is the number of inodes
+         the system has allocated. This can be slightly more than inode-max
+         because Linux allocates them one page full at a time. nr_free_inodes
+         represents the number of free inodes. preshrink is nonzero when the
+         nr_inodes > inode-max and the system needs to prune the inode list
+         instead of allocating more.
+     /proc/sys/fs/file-nr
+         This (read-only) file contains three numbers: the number of allocated
+         file handles (i.e., the number of files presently opened); the number
+         of free file handles; and the maximum number of file handles (i.e.,
+         the same value as /proc/sys/fs/file-max). If the number of allocated
+         file handles is close to the maximum, you should consider increasing
+         the maximum. Before Linux 2.6, the kernel allocated file handles
+         dynamically, but it didn't free them again. Instead the free file
+         handles were kept in a list for reallocation; the "free file handles"
+         value indicates the size of that list. A large number of free file
+         handles indicates that there was a past peak in the usage of open
+         file handles. Since Linux 2.6, the kernel does deallocate freed file
+         handles, and the "free file handles" value is always zero.
 

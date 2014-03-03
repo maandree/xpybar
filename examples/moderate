@@ -2,6 +2,7 @@
 
 # A moderate xpybar configuration example that has a few monitors that are updates continuously
 
+import os
 import time
 
 from plugins.clock import Clock
@@ -13,6 +14,7 @@ from plugins.pacman import Pacman
 from plugins.uname import Uname
 from plugins.weather import Weather
 from plugins.chase import Chase
+from plugins.solar import Solar
 
 
 OUTPUT, YPOS, TOP = 0, 24, True
@@ -191,18 +193,25 @@ def chase():
     return '\033[%smChase\033[0m' % status
 
 
+solar_ = os.environ['HOME'] + '/.xpybar.sun'
+def sun():
+    try:
+        return Solar(solar_).output
+    except:
+        return '¿Cannot get solar information?'
 functions = [ Sometimes(lambda : clock_.read(), 1 * 2),
               lambda : time.time() % 1,
               Sometimes(users, 1 * 2),
               weather,
               chase,
+              Sometimes(sun, 1 * 2),
               cpu,
               memory,
               network,
               Sometimes(uname, 30 * 60 * 2),
             ]
 
-pattern = [ '%s │ %.2f │ %s │ %s │ %s }{ %s │ %s │ %s │ %s'
+pattern = [ '%s │ %.2f │ %s │ %s │ %s │ %s }{ %s │ %s │ %s │ %s'
           ]
 
 

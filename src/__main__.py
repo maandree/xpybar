@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
+import Xlib.threaded # IMPORTANT (threading do not work otherwise, see XInitThreads)
 import Xlib.display, Xlib.Xatom, Xlib.ext.randr, Xlib.X
 from argparser import *
 
@@ -93,6 +94,7 @@ class Bar:
     @variable  font_height:int   The height of the default font
     @variable  font_width:int    The width of an 'X' with the default font
     @variable  palette           A 16-array of standard colours
+    @variable  cmap_cache        Custom colour map cache
     '''
     
     def __init__(self, output, height, ypos, top, font, background, foreground):
@@ -115,6 +117,7 @@ class Bar:
         self.gc = self.window.create_gc()
         self.cmap = self.window.get_attributes().colormap
         ## Graphics variables
+        self.cmap_cache = {}
         self.background = self.create_colour(*background)
         self.foreground = self.create_colour(*foreground)
         (self.font, self.font_metrics, self.font_height) = self.create_font(font)
@@ -311,7 +314,12 @@ class Bar:
         @param   blue:int   The blue component [0, 255]
         @return             The colour
         '''
-        return self.cmap.alloc_color(red * 257, green * 257, blue * 257).pixel
+        cid = (red << 16) | (green << 8) | blue
+        if cid in self.cmap_cache:
+            return self.cmap_cache[cid]
+        rc = self.cmap.alloc_color(red * 257, green * 257, blue * 257).pixel
+        self.cmap_cache[cid] = rc
+        return rc
     
     def create_font(self, font):
         '''

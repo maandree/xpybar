@@ -196,9 +196,11 @@ def chase():
 solar_ = os.environ['HOME'] + '/.xpybar.sun'
 def sun():
     try:
-        return Solar(solar_).output
+        return 'Sun: %s' % Solar(solar_).output
     except:
         return '¿Cannot get solar information?'
+
+
 functions = [ Sometimes(lambda : clock_.read(), 1 * 2),
               lambda : time.time() % 1,
               Sometimes(users, 1 * 2),

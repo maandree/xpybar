@@ -12,6 +12,7 @@ from plugins.users import Users
 from plugins.pacman import Pacman
 from plugins.uname import Uname
 from plugins.weather import Weather
+from plugins.chase import Chase
 
 
 OUTPUT, YPOS, TOP = 0, 24, True
@@ -181,17 +182,27 @@ def weather():
     return rc
 
 
+chase_ = Chase()
+chase_update = Sometimes(lambda : async(chase_.update), 2 * 60 * 60 * 2)
+def chase():
+    status = chase_.status
+    status = '39' if status is None else ('32' if status else '31')
+    chase_update()
+    return '\033[%smChase\033[0m' % status
+
+
 functions = [ Sometimes(lambda : clock_.read(), 1 * 2),
               lambda : time.time() % 1,
               Sometimes(users, 1 * 2),
               weather,
+              chase,
               cpu,
               memory,
               network,
               Sometimes(uname, 30 * 60 * 2),
             ]
 
-pattern = [ '%s │ %.2f │ %s │ %s }{ %s │ %s │ %s │ %s'
+pattern = [ '%s │ %.2f │ %s │ %s │ %s }{ %s │ %s │ %s │ %s'
           ]
 
 
@@ -211,7 +222,7 @@ def redraw():
     if semaphore.acquire(blocking = False):
         values = pattern % tuple([f() for f in functions])
         bar.clear()
-        print(values.replace('\0', ' ' * 8))
+        #print(values.replace('\0', ' ' * 8))
         bar.draw_coloured_splitted_text(0, bar.width, 10, 0, 2, values)
         semaphore.release()
         return True

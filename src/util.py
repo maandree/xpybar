@@ -94,3 +94,38 @@ def reduce(f, items):
         rc = f(rc, items[i])
     return rc
 
+
+class Sometimes:
+    '''
+    Function wrapper for only actually invoking
+    the function every n:th time, where n is a
+    customisable parameter
+    '''
+    
+    def __init__(self, function, interval, initial = 0):
+        '''
+        Constructor
+        
+        @param  function:(*?)→¿R?  The function
+        @param  interval:int       Invoke the function every `interval`:th time
+        @param  initial:int        The of times needed to invoke before actual invocation
+        '''
+        self.function = function
+        self.interval = interval
+        self.counter = initial
+    
+    def __call__(self, *args, **kargs):
+        '''
+        Invoke the function, every `interval`:th time
+        
+        @param   args:*?    The parameters of the function
+        @param   kargs:**?  The named parameters of the function
+        @return  :¿R??      The return value of the function, `None` if not invoked
+        '''
+        rc = None
+        if self.counter == 0:
+            rc = self.function(*args, **kargs)
+            self.counter = self.interval
+        self.counter -= 1
+        return rc
+

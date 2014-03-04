@@ -220,10 +220,7 @@ pattern = [ '%s │ %.2f │ %s │ %s │ %s │ %s }{ %s │ %s │ %s │ %s'
 start_ = start
 def start():
     start_()
-    def refresh():
-        if redraw():
-            get_display().flush()
-    async(lambda : clock_.continuous_sync(refresh))
+    async(lambda : clock_.continuous_sync(lambda : bar.invalidate()))
 
 HEIGHT = len(pattern) * 12
 pattern = '\n'.join([p.replace('}{', '\0') for p in pattern])

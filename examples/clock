@@ -17,19 +17,11 @@ clock = Clock(format = '%Y-(%m)%b-%d %T, %a w%V, %Z', utc = False, sync_to = Clo
 start_ = start
 def start():
     start_()
-    def refresh():
-        if redraw():
-            get_display().flush()
-    async(lambda : clock.continuous_sync(refresh))
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
 
 
-semaphore = threading.Semaphore()
 def redraw():
-    if semaphore.acquire(blocking = False):
-        text = clock.read()
-        bar.clear()
-        bar.draw_coloured_text(0, 10, 0, 2, text)
-        semaphore.release()
-        return True
-    return False
+    text = clock.read()
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
 

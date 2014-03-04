@@ -26,50 +26,35 @@ def start():
             text = input()
         except:
             sys.exit(0)
-        # Dummy event for performing update in the main thread # TODO do this better
-        e = Xlib.protocol.event.KeyPress(detail = 1,
-                                         time = Xlib.X.CurrentTime,
-                                         root = get_display().screen().root,
-                                         window = bar.window,
-                                         child = Xlib.X.NONE,
-                                         root_x = 1, root_y = 1,
-                                         event_x = 1, event_y = 1,
-                                         state = 0, same_screen = 1)
-        get_display().send_event(bar.window, e)
-        get_display().flush()
+        bar.invalidate()
     async(lambda : forever(refresh))
 
 
-semaphore = threading.Semaphore()
 def redraw():
     global text
-    if semaphore.acquire(blocking = False):
-        buf, esc = '', None
-        for c in text:
-            if esc is not None:
-                esc += c
-                if esc == '^':
-                    buf += '^'
-                    esc = None
-                elif esc[-1] == ')':
-                    if esc.startswith('bg(') or esc.startswith('fg('):
-                        c = 4 if esc.startswith('bg(') else 3
-                        esc = esc[3 : -1]
-                        if esc == '':
-                            buf += '\033[%i9m' % c
-                        else:
-                            r, g, b = esc[1 : 3], esc[3 : 5], esc[5 : 7]
-                            r, g, b = int(r, 16), int(g, 16), int(b, 16)
-                            r, g, b = str(r), str(g), str(b)
-                            buf += '\033[%i8;2;%sm' % (c, ';'.join([r, g, b]))
-                    esc = None
-            elif c == '^':
-                esc = ''
-            else:
-                buf += c
-        bar.clear()
-        bar.draw_coloured_text(0, 10, 0, 2, buf)
-        semaphore.release()
-        return True
-    return False
+    buf, esc = '', None
+    for c in text:
+        if esc is not None:
+            esc += c
+            if esc == '^':
+                buf += '^'
+                esc = None
+            elif esc[-1] == ')':
+                if esc.startswith('bg(') or esc.startswith('fg('):
+                    c = 4 if esc.startswith('bg(') else 3
+                    esc = esc[3 : -1]
+                    if esc == '':
+                        buf += '\033[%i9m' % c
+                    else:
+                        r, g, b = esc[1 : 3], esc[3 : 5], esc[5 : 7]
+                        r, g, b = int(r, 16), int(g, 16), int(b, 16)
+                        r, g, b = str(r), str(g), str(b)
+                        buf += '\033[%i8;2;%sm' % (c, ';'.join([r, g, b]))
+                esc = None
+        elif c == '^':
+            esc = ''
+        else:
+            buf += c
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, buf)
 

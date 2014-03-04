@@ -398,6 +398,22 @@ class Bar:
         self.change_colour(self.foreground)
         self.change_font(self.font)
     
+    def invalidate(self):
+        '''
+        Cause the window to be redraw on the main window
+        '''
+        # Dummy event for performing update in the main thread # TODO do this better
+        e = Xlib.protocol.event.KeyPress(detail = 1,
+                                         time = Xlib.X.CurrentTime,
+                                         root = display.screen().root,
+                                         window = self.window,
+                                         child = Xlib.X.NONE,
+                                         root_x = 1, root_y = 1,
+                                         event_x = 1, event_y = 1,
+                                         state = 0, same_screen = 1)
+        display.send_event(self.window, e)
+        display.flush()
+    
     @staticmethod
     def coloured_length(text):
         '''

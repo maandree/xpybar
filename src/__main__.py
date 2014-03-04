@@ -228,7 +228,7 @@ class Bar:
                         buf = [int('0' + x) for x in buf]
                         bci, fci = 0, 0
                         for b in buf:
-                            if bci != 0:
+                            if not bci == 0:
                                 if bci == 1:
                                     if not b == 2:
                                         bci = -2
@@ -237,9 +237,10 @@ class Bar:
                                     bc = (bc << 8) + b
                                     if bci == 4:
                                         bci = -1
+                                        bc = (bc >> 16) & 255, (bc >> 8) & 255, bc & 255
                                         bc = self.create_colour(*bc)
                                 bci += 1
-                            elif fci != 0:
+                            elif not fci == 0:
                                 if fci == 1:
                                     if not b == 2:
                                         fci = -2

@@ -1,0 +1,80 @@
+# -*- python -*-
+
+# A simple xpybar configuration for replacing dzen2
+
+import sys
+import threading
+
+from util import *
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 0, True
+
+text = ''
+
+start_ = start
+create = [] # FIXME this should not be required!!
+def start():
+    start_()
+    bar.create_colour(0x90, 0x90, 0x90) # FIXME this should not be required!!
+    bar.create_colour(0x60, 0x60, 0x60)
+    bar.create_colour(0x30, 0x30, 0x30)
+    def refresh():
+        global text
+        text_ = None
+        try:
+            text_ = input()
+        except:
+            sys.exit(0)
+        buf, esc = '', None
+        for c in text_:
+            if esc is not None:
+                esc += c
+                if esc == '^':
+                    buf += '^'
+                    esc = None
+                elif esc[-1] == ')':
+                    if esc.startswith('bg('):
+                        esc = esc[3 : -1]
+                        if esc == '':
+                            buf += '\033[49m'
+                        else:
+                            r, g, b = esc[1 : 3], esc[3 : 5], esc[5 : 7]
+                            r, g, b = int(r, 16), int(g, 16), int(b, 16)
+                            create.append((r, g, b))
+                            r, g, b = str(r), str(g), str(b)
+                            buf += '\033[48;2;%sm' % ';'.join([r, g, b])
+                    elif esc.startswith('fg('):
+                        esc = esc[3 : -1]
+                        if esc == '':
+                            buf += '\033[39m'
+                        else:
+                            r, g, b = esc[1 : 3], esc[3 : 5], esc[5 : 7]
+                            r, g, b = int(r, 16), int(g, 16), int(b, 16)
+                            create.append((r, g, b))
+                            r, g, b = str(r), str(g), str(b)
+                            buf += '\033[38;2;%sm' % ';'.join([r, g, b])
+                    esc = None
+            elif c == '^':
+                esc = ''
+            else:
+                buf += c
+        text = buf
+        if redraw():
+            get_display().flush()
+    async(lambda : forever(refresh))
+
+
+semaphore = threading.Semaphore()
+def redraw():
+    global create
+    if semaphore.acquire(blocking = False):
+        for r, g, b in create:
+            bar.create_colour(r, g, b)
+        create = []
+        bar.clear()
+        bar.draw_coloured_text(0, 10, 0, 2, text)
+        semaphore.release()
+        return True
+    return False
+

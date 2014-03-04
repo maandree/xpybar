@@ -42,13 +42,25 @@ def watch(interval, target, delay = 0):
     
     @param  interval:float  The number of seconds to sleep between invocatons
     @param  target:()→void  The function
-    @param  delay:float     Number of extra seconds seconds to wait the first time
+    @param  delay:float     Number of extra seconds to wait the first time
     '''
-    target()
     if not delay == 0:
         time.sleep(delay)
     while True:
+        target()
         time.sleep(interval)
+
+
+def forever(target, delay = 0):
+    '''
+    Run a function continuously forever
+    
+    @param  target:()→void  The function
+    @param  delay:float     Number of extra seconds to wait the first time
+    '''
+    if not delay == 0:
+        time.sleep(delay)
+    while True:
         target()
 
 

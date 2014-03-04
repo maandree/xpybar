@@ -2,7 +2,6 @@ List of plugins to implement:
 
      iostat [-x] [-d] [-N] -zk [-p | <devices>...] <interval>
      SMART monitoring
-     Xmonad
      Battery
      Volume control
      /proc/acpi (mute)

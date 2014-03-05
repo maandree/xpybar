@@ -20,6 +20,8 @@ List of plugins to implement:
      Keyboard lock keys
      Keyboard layout
      EWMH
+     Meteor Showers
+     Calendars: holidays, birthdays, name days, events
      /proc/interrupts
      /proc/net/sockstat
      /proc/net/sockstat6

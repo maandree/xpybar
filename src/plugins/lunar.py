@@ -43,6 +43,7 @@ ref = julian_day(934329600) # 11 August 1999 00:00:00 UTC
 now = julian_day(time.time())
 synodic_month = 29.530588853
 
+# TODO how to we calculate the Moon's apparent geocentric celestial longitude
 fraction = ((now - ref) / synodic_month) % 1
 waxing = fraction <= 0.5 # we get an off by one without equality
 print('fraction: %f' % fraction)
@@ -62,4 +63,18 @@ if (not waxing) != inverted:
     illumination = 1 - illumination
 
 print('illumination: %.2f%%' % (illumination * 100))
+
+# TODO add libration
+# TODO add phase names
+# TODO add solar and lunar eclipses
+# TODO add position of sunlit area
+# TODO add tides
+# TODO add blue moon
+# TODO add black moon
+# TODO add moon colour
+# TODO add altitude
+# TODO add azimuth
+# TODO add zodiac sign
+# TODO add distances
+# TODO add angular diameters
 

@@ -20,6 +20,7 @@ List of plugins to implement:
      Keyboard lock keys
      Keyboard layout
      EWMH
+     Lunar observation
      /proc/interrupts
      /proc/net/sockstat
      /proc/net/sockstat6

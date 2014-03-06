@@ -57,17 +57,31 @@ class XKB:
         self.__scroll = find(mods, lockkey('Scroll'))
     
     
+    # TODO add update listener
     def get_locks(self):
         '''
         Get the currently active lock keys (num lock, caps lock and scroll lock, but not compose)
         
         @return  :int  The bitwise OR of the active lock keys (XKB.NUM, XKB.CAPS, XKB.SCROLL)
         '''
-        # TODO add update listener
         mask = self.__root.query_pointer().mask
         rc = 0
         rc |= XKB.NUM    if (mask & self.__num)    == self.__num    else 0
         rc |= XKB.CAPS   if (mask & self.__caps)   == self.__caps   else 0
         rc |= XKB.SCROLL if (mask & self.__scroll) == self.__scroll else 0
+        return rc
+    
+    
+    def get_locks_str(self):
+        '''
+        Get the currently active lock keys (num lock, caps lock and scroll lock, but not compose)
+        
+        @return  :list<str>  A list of locks in title case ('Num', 'Caps', 'Scroll')
+        '''
+        mask = self.__root.query_pointer().mask
+        rc = []
+        if (mask & self.__num)    == self.__num:     rc.append('Num')
+        if (mask & self.__caps)   == self.__caps:    rc.append('Caps')
+        if (mask & self.__scroll) == self.__scroll:  rc.append('Scroll')
         return rc
 

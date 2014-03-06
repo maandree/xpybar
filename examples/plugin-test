@@ -18,6 +18,7 @@ from plugins.moc import MOC
 from plugins.cpu import CPU
 from plugins.clock import Clock
 from plugins.network import Network
+from plugins.xkb import XKB
 
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 3 * 12, 24, True
@@ -187,14 +188,18 @@ def redraw():
     net_total = '%.2fGB|%.2fGB' % (sum([rx for _, rx, tx in net_]), sum([tx for _, rx, tx in net_]))
     net = '%s : %s' % (' '.join(net_each), net_total)
     
+    xkb_ = XKB()
+    locks = ' '.join([x.lower() for x in xkb_.get_locks_str()])
+    xkb = 'Xkb:%s' % ('' if len(locks) == 0 else ' ' + locks)
+    
     
     text = ['%s │ %s │ %s │ %s │ %s │ %s %s │ %s │ %s │ %s │ %s'
            ,'%s │ %s │ %s'
-           ,'%s']
+           ,'%s │ %s']
     text = '\n'.join(text)
     text %= (date, uptime, idle, loadavg, users, uname, xdisplay, mem, swp, shm, moc,
              discs, discstats, cpu,
-             net)
+             net, xkb)
     bar.clear()
     bar.draw_coloured_text(0, 10, 0, 2, text)
 

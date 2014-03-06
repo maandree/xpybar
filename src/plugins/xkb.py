@@ -50,7 +50,7 @@ class XKB:
         '''
         self.__root = get_screen().root
         
-        lockkey = lambda lock : self.__display.keysym_to_keycode(Xlib.XK.string_to_keysym(lock + '_Lock'))
+        lockkey = lambda lock : get_display().keysym_to_keycode(Xlib.XK.string_to_keysym(lock + '_Lock'))
         find    = lambda array, item : (1 << array.index(item)) if item in array else -1
         mods    = [x[0] for x in get_display().get_modifier_mapping()]
         

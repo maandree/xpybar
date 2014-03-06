@@ -21,48 +21,56 @@ import math
 import time
 
 
-def julian_day(t):
+class Lunar:
     '''
-    Converts a POSIX time timestamp to a Julian Day timestamp
+    Lunar observation
     
-    @param   t:float  The time in POSIX time
-    @return  :float   The time in Julian Days
+    @variable  fraction:float      The phase of the moon increasing linearly. 0 on new moon, 0,5 on
+                                   full moon. ]0, 0,5[ when waxing and ]0m5, 1[ when waning.
+    @variable  waxing:bool         `True` when moon is waxing (increasing illumination) and `False`
+                                   when waning (decreasing). Not well defined on new moon (fraction = 0,
+                                   illumination = 0) and full moon (fraction = 0,5, illumination = 1).
+    @variable  terminator:float    The latitude, as seen from the northern hemisphere on Earth, of the
+                                   terminator. The terminator is the line delimiting the sunlit area
+                                   and the dark area.
+    @variable  illumination:float  The illumnation of the moon, the fraction of the visible side's
+                                   area that is sunlit
     '''
-    return t / 86400.0 + 2440587.5
-
-def radians(deg):
-    '''
-    Convert an angle from degrees to radians
     
-    @param   deg:float  The angle in degrees
-    @return  :float     The angle in radians
+    REFERENCE_NEW_MOON = 934329600 # 11 August 1999 00:00:00 UTC
     '''
-    return deg * math.pi / 180
+    :float  Time of last known new moon, in POSIX time
+    '''
+    
+    SYNODIC_MONTH = 29.530588853
+    '''
+    :float  The length of a lunar month, in days
+    '''
+    
+    def __init__(self):
+        '''
+        Constructor
+        '''
+        julian_day = lambda t   : t / 86400.0 + 2440587.5
+        radians    = lambda deg : deg * math.pi / 180
+        hacoversin = lambda deg : 0.5 - math.sin(radians(deg)) / 2
+        
+        ref = julian_day(Lunar.REFERENCE_NEW_MOON)
+        now = julian_day(time.time())
+        
+        # TODO how to we calculate the Moon's apparent geocentric celestial longitude
+        self.fraction = ((now - ref) / Lunar.SYNODIC_MONTH) % 1
+        self.waxing = self.fraction <= 0.5 # we get an off by one without equality
+        
+        self.terminator = 90 - 360 * fraction # sunlit trailing
+        if self.terminator < -90:
+            self.terminator += 180 # visible side
+        
+        inverted = self.terminator < 0
+        self.illumination = hacoversin(abs(self.terminator))
+        if (not self.waxing) != inverted:
+            self.illumination = 1 - self.illumination
 
-ref = julian_day(934329600) # 11 August 1999 00:00:00 UTC
-now = julian_day(time.time())
-synodic_month = 29.530588853
-
-# TODO how to we calculate the Moon's apparent geocentric celestial longitude
-fraction = ((now - ref) / synodic_month) % 1
-waxing = fraction <= 0.5 # we get an off by one without equality
-print('fraction: %f' % fraction)
-print('waxing' if waxing else 'waning')
-
-terminator = 90 - 360 * fraction # sunlit trailing
-if terminator < -90:
-    terminator += 180 # visible side
-print('terminator: %f°' % terminator)
-
-hacoversin = lambda deg : 0.5 - math.sin(radians(deg)) / 2
-
-inverted = terminator < 0
-illumination = hacoversin(abs(terminator))
-
-if (not waxing) != inverted:
-    illumination = 1 - illumination
-
-print('illumination: %.2f%%' % (illumination * 100))
 
 # TODO add libration
 # TODO add phase names

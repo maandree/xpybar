@@ -98,7 +98,7 @@ def reduce(f, items):
     @return  ¿E?               The output
     '''
     if len(items) < 2:
-        return items
+        return [] if len(items) == 0 else items[0]
     rc = items[0]
     for i in range(1, len(items)):
         rc = f(rc, items[i])

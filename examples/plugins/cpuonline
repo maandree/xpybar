@@ -1,0 +1,21 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.chase
+
+import time
+import threading
+
+from plugins.cpuonline import CPUOnline
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+def redraw():
+    cpu = CPUOnline()
+    s = lambda cpus : ', '.join([str(i) for i in cpus])
+    text = 'Online: %s │ Offline: %s │ Present: %s │ Possible: %s'
+    text %= s(cpu.online), s(cpu.offline), s(cpu.present), s(cpu.possible)
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

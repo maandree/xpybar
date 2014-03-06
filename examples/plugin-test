@@ -151,7 +151,8 @@ def redraw():
     discstats = ['%s:%s' % (d[2:], colourise(i)) for d, i in discstats]
     discstats = 'Disc stats: %s' % (' '.join(discstats))
     
-    xdisplay = ':%i' % XDisplay().display
+    xdisplay_ = XDisplay()
+    xdisplay = ':%i tty%i' % (xdisplay_.display, xdisplay_.vt)
     
     moc_ = MOC().state
     moc = {None : 'dead', MOC.STOPPED : 'stopped', MOC.PAUSED : 'paused', MOC.PLAYING : 'playing'}

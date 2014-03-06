@@ -19,6 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 
+import Xlib.Xatom
+
+from x import *
+
 
 class XDisplay:
     '''
@@ -27,7 +31,8 @@ class XDisplay:
     @variable  connection:str?  The full X display information, `None` if X is not running
     @variable  host:str?        The host, often `None` one local conncetions and "localhost" on remote oonnection
     @variable  display:int      The display number
-    @variable  screen:int?      The screen number , often `None`
+    @variable  screen:int?      The screen number, often `None`
+    @varaible  vt:int           The VT the X display is allocated to
     '''
     
     
@@ -42,5 +47,7 @@ class XDisplay:
         self.display, self.screen = (self.connection.split(':')[1] + '.').split('.')[:2]
         self.display = int(self.display)
         self.screen = None if self.screen == '' else int(self.screen)
-        # TODO get VT
+        r = get_screen().root
+        d = get_display()
+        self.vt = r.get_full_property(d.get_atom('XFree86_VT'), Xlib.Xatom.INTEGER).value[0]
 

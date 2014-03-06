@@ -56,24 +56,23 @@ def redraw():
     users = ['%s{%i}' % (colour_user(u) % u, len(users_[u])) for u in users_.keys()]
     users = 'Users: %s' % (' '.join(users))
     
-    have_linux_libre, have_pacman = True, True
-    linux_installed, linux_latest = None, None
-    try:
-        linux_installed = Pacman('linux-libre', True)
-    except:
-        have_linux_libre = False
-        try:
-            linux_installed = Pacman('linux', True)
-        except:
-            have_pacman = False
-    if have_pacman:
-        linux_latest = Pacman('linux-libre' if have_linux_libre else 'linux', False)
-    
     uname_ = Uname()
     nodename = uname_.nodename
     kernel_release = uname_.kernel_release
     operating_system = uname_.operating_system
+    lts = '-lts' if kernel_release.lower().endswith('-lts') else ''
+    have_linux_libre, have_pacman = True, True
+    linux_installed, linux_latest = None, None
+    try:
+        linux_installed = Pacman('linux-libre' + lts, True)
+    except:
+        have_linux_libre = False
+        try:
+            linux_installed = Pacman('linux' + lts, True)
+        except:
+            have_pacman = False
     if have_pacman:
+        linux_latest = Pacman('linux-libre' + lts if have_linux_libre else 'linux' + lts, False)
         linux_running = kernel_release.split('-')
         linux_running, kernel_release = linux_running[:2], linux_running[2:]
         linux_running = '-'.join(linux_running)

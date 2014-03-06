@@ -121,8 +121,17 @@ def network():
             value = 0
         value /= 128 * net_tdiff
         return colourise(value)
-    net = [(dev, kbps(dev, 'rx'), kbps(dev, 'tx')) for dev in net_]
-    net = ['%s: %skbps↓ %skbps↑' % (dev, down, up) for dev, down, up in net]
+    def KBps(device, direction):
+        direction += '_bytes'
+        value = net_[device][direction]
+        if device in net_last:
+            value -= net_last[device][direction]
+        else:
+            value = 0
+        value /= 1024 * net_tdiff
+        return value
+    net = [(dev, kbps(dev, 'rx'), KBps(dev, 'rx'), kbps(dev, 'tx'), KBps(dev, 'tx')) for dev in net_]
+    net = ['%s: %skbps(%.0fKB/s)↓ %skbps(%.0fKB/s)↑' % x for x in net]
     net = '%s' % ' '.join(net)
     net_last = net_
     return net

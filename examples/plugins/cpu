@@ -1,0 +1,73 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.chase
+
+import time
+import threading
+
+from plugins.cpu import CPU
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS / 2)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+last_cpu_idle, last_cpu_total = 0, 0
+last_cpus_idle, last_cpus_total = [], []
+
+def redraw():
+    global last_cpus_idle, last_cpus_total, last_cpu_idle, last_cpu_total
+    
+    cpu_ = CPU()
+    now_cpu_idle, now_cpus_idle = cpu_.cpu[CPU.idle], [cpu[CPU.idle] for cpu in cpu_.cpus]
+    now_cpu_total, now_cpus_total = sum(cpu_.cpu), [sum(cpu) for cpu in cpu_.cpus]
+    
+    def cpu_usage(now_idle, now_total, last_idle, last_total):
+        total = now_total - last_total
+        idle = now_idle - last_idle
+        return None if total == 0 else (total - idle) * 100 / total
+    
+    def colourise(value):
+        if value is None:
+            return '--%'
+        colour = '39'
+        if value >= 5:   colour = '32'
+        if value >= 50:  colour = '33'
+        if value >= 90:  colour = '31'
+        return '\033[%sm%2.0f\033[0m%%' % (colour, value)
+    
+    if len(now_cpus_idle) > len(last_cpus_idle):
+        last_cpus_idle += now_cpus_idle[len(last_cpus_idle):]
+        last_cpus_total += now_cpus_total[len(last_cpus_total):]
+    
+    cpus = zip(now_cpus_idle, now_cpus_total, last_cpus_idle, last_cpus_total)
+    cpus = ' '.join([colourise(cpu_usage(*c)) for c in cpus])
+    cpu = colourise(cpu_usage(now_cpu_idle, now_cpu_total, last_cpu_idle, last_cpu_total))
+    cpu = 'Cpu: %s : %s' % (cpus, cpu)
+    
+    last_cpus_idle, last_cpus_total = now_cpus_idle, now_cpus_total
+    last_cpu_idle, last_cpu_total = now_cpu_idle, now_cpu_total
+    
+    def s(title, value):
+        if value is None:
+            return ''
+        elif isinstance(value, list):
+            return ' │ %s: %s' % (title, ' '.join([str(v) for v in value]))
+        else:
+            return ' │ %s: %s' % (title, str(value))
+    
+    text = '%s │ Intr: %i │ Ctxt: %i │ Btime: %i │ Procs: %i%s%s%s%s'
+    text %= (cpu, cpu_.intr_total, cpu_.ctxt, cpu_.btime, cpu_.processes,
+             s('Run', cpu_.procs_running), s('Blck', cpu_.procs_blocked),
+             s('Softirq', cpu_.softirq_total), s('Softirq', cpu_.softirq))
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

@@ -56,7 +56,8 @@ def redraw():
                  d.inodes, d.iused, d.ifree, usage(100 * d.iused / d.inodes))
         texts.append(text)
     
-    bar.clear()
-    bar.draw_coloured_text(0, 10, 0, 2, '\n'.join(texts))
+    text = '\n'.join(texts)
+    bar.partial_clear(0, bar.width, 10, 0, 2, text)
+    bar.draw_coloured_text(0, 10, 0, 2, text)
     # TODO this is very flickery
 

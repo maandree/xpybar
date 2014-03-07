@@ -1,0 +1,48 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.chase
+
+import time
+import threading
+
+from plugins.lunar import Lunar
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    lunar_ = Lunar()
+    fraction = lunar_.fraction
+    waxing = lunar_.waxing
+    terminator = lunar_.terminator
+    illumination = lunar_.illumination * 100
+    if terminator == 0:
+        terminator = '0°'
+    elif terminator > 0:
+        terminator = '%.0f°E' % terminator
+    else:
+        terminator = '%.0f°W' % -terminator
+    phase = 'new moon'
+    if   fraction <  0.25:  phase = 'waxing crescent'
+    elif fraction == 0.25:  phase =  'first quarter'
+    elif fraction <  0.50:  phase = 'waxing gibbous'
+    elif fraction == 0.50:  phase =   'full moon'
+    elif fraction <  0.75:  phase = 'waning gibbous'
+    elif fraction == 0.75:  phase =   'last quarter'
+    else:                   phase = 'waning crescent'
+    colour = '34' if waxing else '31'
+    text = 'Lunar: \033[%sm%.0f\033[m%% %s %0.4f %s'
+    text %= (colour, illumination, terminator, fraction, phase)
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

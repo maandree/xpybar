@@ -62,7 +62,7 @@ class Lunar:
         self.fraction = ((now - ref) / Lunar.SYNODIC_MONTH) % 1
         self.waxing = self.fraction <= 0.5 # we get an off by one without equality
         
-        self.terminator = 90 - 360 * fraction # sunlit trailing
+        self.terminator = 90 - 360 * self.fraction # sunlit trailing
         if self.terminator < -90:
             self.terminator += 180 # visible side
         

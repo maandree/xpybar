@@ -1,0 +1,62 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.chase
+
+import time
+import threading
+
+from plugins.df import Discs
+from plugins.clock import Clock
+
+
+df_ = Discs()
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, len(df_.filesystems.keys()) * 12, 24, True
+
+
+clock = Clock(sync_to = 5 * Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    texts = []
+    
+    fs_ = max(len(df_.mountpoints[mp].filesystem) for mp in df_.mountpoints.keys())
+    mp_ = max(len(df_.mountpoints[mp].mountpoint) for mp in df_.mountpoints.keys())
+    ft_ = max(len(df_.mountpoints[mp].fstype)     for mp in df_.mountpoints.keys())
+    
+    def usage(value):
+        colour = '39'
+        if value < 50:  colour = '32'
+        if value > 75:  colour = '33'
+        if value > 95:  colour = '31'
+        if value > 99:  colour = '41;33'
+        return '\033[%sm%6.2f\033[m%%' % (colour, value)
+    
+    def u(b):
+        unit = 0
+        units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB']
+        while (unit < len(units)) and (b >= 1024):
+            b /= 1024
+            unit += 1
+        return '%7.2f%s' % (b, units[unit])
+    
+    for fs in sorted(df_.filesystems.keys()):
+        d = df_.filesystems[fs]
+        text = 'fs: %s%s │ mount: %s%s │ type: %s%s │ size: %9s │ used: %9s │ free: %9s │ usage: %s │ inodes: %10i │ iused: %10i │ ifree: %10i │ iusage: %s'
+        text %= (d.filesystem, ' ' * (fs_ - len(d.filesystem)),
+                 d.mountpoint, ' ' * (mp_ - len(d.mountpoint)),
+                 d.fstype,     ' ' * (ft_ - len(d.fstype)),
+                 u(d.blocks), u(d.used), u(d.available), usage(100 * d.used / d.blocks),
+                 d.inodes, d.iused, d.ifree, usage(100 * d.iused / d.inodes))
+        texts.append(text)
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, '\n'.join(texts))
+    # TODO this is very flickery
+

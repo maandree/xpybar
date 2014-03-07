@@ -1,0 +1,53 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.chase
+
+import time
+import threading
+
+from plugins.loadavg import AverageLoad
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    def s_load(mins, load):
+        load *= 100
+        colour = '39'
+        if load >= 10:  colour = '32'
+        if load >= 50:  colour = '33'
+        if load >= 90:  colour = '31'
+        return '\033[%sm%.0f\033[m%%' % (colour, load)
+    
+    def s_tasks(tasks):
+        pid_max = None
+        with open('/proc/sys/kernel/pid_max', 'r') as file:
+            pid_max = int(file.read()[:-1])
+        p = 100 * tasks / pid_max
+        colour = '39'
+        if p >= 25:  colour = '32'
+        if p >= 50:  colour = '33'
+        if p >= 90:  colour = '31'
+        return '\033[%sm%i\033[m' % (colour, tasks)
+    
+    loadavg_ = AverageLoad()
+    text = 'Load: %s %s %s : %.0f%% %.0f%% %.0f%% │ Task: %i/%s │ Pid: %i'
+    text %= (s_load(5, loadavg_.average_avg_5_min),
+             s_load(10, loadavg_.average_avg_10_min),
+             s_load(15, loadavg_.average_avg_15_min),
+             loadavg_.total_avg_5_min * 100, loadavg_.total_avg_10_min * 100, loadavg_.total_avg_15_min * 100,
+             loadavg_.active_tasks, s_tasks(loadavg_.total_tasks), loadavg_.last_pid)
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

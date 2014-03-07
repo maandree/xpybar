@@ -95,10 +95,10 @@ def reduce(f, items):
     
     @param   f:(¿E?, ¿E?)→¿E?  The function
     @param   item:itr<¿E?>     The input
-    @return  ¿E?               The output
+    @return  ¿E??              The output, `None` if `item` is empty
     '''
-    if len(items) < 2:
-        return [] if len(items) == 0 else items[0]
+    if len(items) == 0:
+        return None
     rc = items[0]
     for i in range(1, len(items)):
         rc = f(rc, items[i])

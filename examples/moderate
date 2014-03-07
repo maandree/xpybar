@@ -53,31 +53,34 @@ linux_installed, linux_latest = None, None
 def uname():
     global have_linux_libre, have_pacman, linux_installed, linux_latest
     
-    if have_pacman is None:
-        try:
-            linux_installed = Pacman('linux-libre', True)
-        except:
-            have_linux_libre = False
-            try:
-                linux_installed = Pacman('linux', True)
-            except:
-                have_pacman = False
-        if have_pacman:
-            try:
-                linux_latest = Pacman('linux-libre' if have_linux_libre else 'linux', False)
-            except:
-                have_pacman = None
-    elif have_pacman:
-        try:
-            linux_installed = Pacman('linux-libre' if have_linux_libre else 'linux', True)
-            linux_latest = Pacman('linux-libre' if have_linux_libre else 'linux', False)
-        except:
-            have_pacman = None
-    
     uname_ = Uname()
     nodename = uname_.nodename
     kernel_release = uname_.kernel_release
     operating_system = uname_.operating_system
+    
+    lts = '-lts' if kernel_release.lower().endswith('-lts') else ''
+    if have_pacman is None:
+        have_pacman = True
+        try:
+            linux_installed = Pacman('linux-libre' + lts, True)
+        except:
+            have_linux_libre = False
+            try:
+                linux_installed = Pacman('linux' + lts, True)
+            except:
+                have_pacman = False
+        if have_pacman:
+            try:
+                linux_latest = Pacman(('linux-libre' if have_linux_libre else 'linux') + lts, False)
+            except:
+                have_pacman = None
+    elif have_pacman:
+        try:
+            linux_installed = Pacman(('linux-libre' if have_linux_libre else 'linux') + lts, True)
+            linux_latest = Pacman(('linux-libre' if have_linux_libre else 'linux') + lts, False)
+        except:
+            have_pacman = None
+    
     if (have_pacman is not None) and have_pacman:
         linux_running = kernel_release.split('-')
         linux_running, kernel_release = linux_running[:2], linux_running[2:]

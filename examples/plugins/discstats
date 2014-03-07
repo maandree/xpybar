@@ -1,0 +1,41 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.chase
+
+import time
+import threading
+
+from plugins.discstats import DiscStats
+from plugins.clock import Clock
+
+
+stats_ = DiscStats()
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, len(stats_.devices.keys()) * 12, 24, True
+
+
+clock = Clock(sync_to = 5 * Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    texts = []
+    
+    for dev in sorted(stats_.devices.keys()):
+        d = stats_.devices[dev]
+        text = '%9s (%3i, %3i)  %10i %10i %10i %10i  %10i %10i %10i %10i  %10i %10i %10i'
+        text %= (d.device, d.major, d.minor,
+                 d.r_complete, d.r_merge, d.r_sectors, d.r_time,
+                 d.w_complete, d.w_merge, d.w_sectors, d.w_time,
+                 d.io_current, d.io_time, d.io_weighted_time)
+        texts.append(text)
+    
+    text = '\n'.join(texts)
+    bar.partial_clear(0, bar.width, 10, 0, 2, text)
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

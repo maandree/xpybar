@@ -1,0 +1,53 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.chase
+
+import time
+import threading
+
+from plugins.mem import Memory
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    def c(used, total):
+        value = used * 100 / total
+        colour = '39'
+        if value >= 20:  colour = '32'
+        if value >= 50:  colour = '33'
+        if value >= 90:  colour = '31'
+        return '\033[%sm%.0f\033[0m%%' % (colour, value)
+    
+    def u(b):
+        unit = 0
+        units = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB']
+        while (unit < len(units)) and (b >= 1024):
+            b /= 1024
+            unit += 1
+        return '%.0f%s' % (b, units[unit])
+    
+    mem_ = Memory()
+    text = 'Mem: %s (%s cached, %s buffers, %s free) │ Swp: %s (%s cached, %s free)'
+    text %= (c(mem_.mem_used, mem_.mem_total), u(mem_.cached), u(mem_.buffers), u(mem_.mem_free),
+             c(mem_.swap_used, mem_.swap_total), u(mem_.swap_cached), u(mem_.swap_free))
+    if mem_.shmem is not None:
+        text += ' │ Shm: %s' % c(mem_.shmem, mem_.mem_total)
+    if mem_.slab is not None:
+        text += ' │ Slab: %s' % c(mem_.slab, mem_.mem_total)
+    if mem_.hardware_corrupted is not None:
+        text += ' │ Crpt: %s' % c(mem_.hardware_corrupted, mem_.mem_total)
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

@@ -65,7 +65,7 @@ class DiscStat:
     @variable  w_sectors:int         Sectors written
     @variable  w_time:int            Time spent writing, in ms
     @variable  io_current:int        I/O:s currently in progress
-    @variable  io_time:int           Time spent doing I/Os:, in ms
+    @variable  io_time:int           Time spent doing I/O:s, in ms
     @variable  io_weighted_time:int  Weighted time spent doing I/O:s, in ms
     '''
     

@@ -1,0 +1,42 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.uname
+
+import time
+import threading
+
+from plugins.uname import Uname
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = 30 * Clock.MINUTES)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    u = Uname()
+    
+    proc, plat = u.processor, u.hardware_platform
+    if proc is not None:
+        proc = 'Proc: %s' % proc
+    else:
+        proc = 'Unknown processor'
+    if plat is not None:
+        plat = 'Plat: %s' % plat
+    else:
+        plat = 'Unknown hardware platform'
+    
+    text = 'Node: %s │ Kern name: %s │ Kern rel: %s │ Kern ver: %s │ OS: %s │ µarch: %s │ %s │ %s'
+    text %= (u.nodename, u.kernel_name, u.kernel_release, u.kernel_version,
+             u.operating_system, u.machine, proc, plat)
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

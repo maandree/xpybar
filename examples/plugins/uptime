@@ -1,0 +1,35 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.uptime
+
+import time
+import threading
+
+from plugins.uptime import Uptime
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    uptime_ = Uptime()
+    
+    text = 'Uptime: %s (%.0fs) │ Idle time: %s (%.0fs) : %s (%.0fs) │ Average load: %.2f%% : %.2f%%'
+    text %= ('%id %02i:%02i:%04.1f' % uptime_.uptime,        uptime_.uptime_seconds,
+             '%id %02i:%02i:%04.1f' % uptime_.average_idle,  uptime_.average_idle_seconds,
+             '%id %02i:%02i:%04.1f' % uptime_.total_idle,    uptime_.total_idle_seconds,
+             1 - uptime_.average_idle_seconds / uptime_.uptime_seconds,
+             Uptime.cpu_count - uptime_.total_idle_seconds / uptime_.uptime_seconds)
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

@@ -1,6 +1,6 @@
 # -*- python -*-
 
-# A xpybar configuration example testing the features of plugins.chase
+# A xpybar configuration example testing the features of plugins.cpu
 
 import time
 import threading

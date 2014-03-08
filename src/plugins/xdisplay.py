@@ -26,13 +26,17 @@ from x import *
 
 class XDisplay:
     '''
-    Retrieve information about the used X display
+    Retrieve information about the used X display as specified by the DISPLAY environment variable
     
     @variable  connection:str?  The full X display information, `None` if X is not running
     @variable  host:str?        The host, often `None` one local conncetions and "localhost" on remote oonnection
-    @variable  display:int      The display number
-    @variable  screen:int?      The screen number, often `None`
+    @variable  display:int?     The display number
+    @variable  screen:int?      The screen number, often `None` (default screen)
     @varaible  vt:int           The VT the X display is allocated to
+    
+    host, dispay and screen is None if connectiopn is None, which means that you
+    have started xpybar's DISPLAY environment variable is not set, and that a display
+    was configured in the settings.
     '''
     
     
@@ -41,12 +45,17 @@ class XDisplay:
         Constructor
         '''
         self.connection = os.environ['DISPLAY'] if 'DISPLAY' in os.environ else None
-        self.host = self.connection.split(':')[0]
-        if self.host == '':
+        if self.connection is None:
             self.host = None
-        self.display, self.screen = (self.connection.split(':')[1] + '.').split('.')[:2]
-        self.display = int(self.display)
-        self.screen = None if self.screen == '' else int(self.screen)
+            self.display = None
+            self.screen = None
+        else:
+            self.host = self.connection.split(':')[0]
+            if self.host == '':
+                self.host = None
+            self.display, self.screen = (self.connection.split(':')[1] + '.').split('.')[:2]
+            self.display = int(self.display)
+            self.screen = None if self.screen == '' else int(self.screen)
         r = get_screen().root
         d = get_display()
         self.vt = r.get_full_property(d.get_atom('XFree86_VT'), Xlib.Xatom.INTEGER).value[0]

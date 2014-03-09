@@ -1,0 +1,36 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.xdisplay
+
+import time
+import threading
+
+from plugins.users import Users
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    you = os.environ['USER']
+    def colour(user):
+        if user == 'root':     return '\033[31m%s\033[39m'
+        elif not user == you:  return '\033[33m%s\033[39m'
+        else:                  return '%s'
+    
+    users = Users(lambda : Users.devfs(True)).users
+    text = ['%s: %s' % (colour(u) % u, ' '.join(sorted(users[u]))) for u in users]
+    text = ' │ '.join(text)
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

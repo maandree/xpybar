@@ -23,7 +23,7 @@ import subprocess
 from util import *
 
 
-class MOC:
+class MOC: # TODO add support for waiting for events
     '''
     Music On Console interface
     

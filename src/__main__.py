@@ -149,7 +149,7 @@ class Bar:
         '''
         return self.font.query_text_extents(text).overall_width
     
-    def draw_text(self, x, y, descent, text):
+    def draw_text(self, x, y, descent, text): ## TODO fix support for text longer than 255 symbols
         '''
         Draw a text
         

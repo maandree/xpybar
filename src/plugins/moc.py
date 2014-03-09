@@ -77,7 +77,7 @@ class MOC: # TODO add support for waiting for events
     
     def __getitem__(self, key):
         '''
-        Get a detailing
+        Get a details
         
         @param   key:str  The key
         @return  :str     The value associated with the key
@@ -88,6 +88,15 @@ class MOC: # TODO add support for waiting for events
         CurrentSec, Bitrate.
         '''
         return self.__info[key]
+    
+    
+    def keys(self):
+        '''
+        Get available detail keys
+        
+        @return  :itr<str>  The keys
+        '''
+        return self.__info.keys()
     
     
     @staticmethod

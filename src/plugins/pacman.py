@@ -68,7 +68,7 @@ class Pacman:
         @param  installed:bool  Whether it is information about the installed version that should be fetched
         '''
         verb = '-Qi' if installed else '-Si' # -Sii and -Qii, while a bit different, would get us more info.
-        info = spawn_read('pacman', verb, package).split('\n') # TODO fixate locale
+        info = spawn_read('env', 'LOCALE=C', 'pacman', verb, package).split('\n')
         if len(info) == 1:
             raise Exception('Package `%s\' is not installed' % package)
         
@@ -86,7 +86,7 @@ class Pacman:
                         break
             field = last_field
             if colon >= 0:
-                field = ' '.join(line[:colon])
+                last_field = field = ' '.join(line[:colon])
                 line = line[colon + 1:]
             if field not in fields:
                 fields[field] = []

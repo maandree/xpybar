@@ -1,0 +1,37 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.moc
+
+import time
+import threading
+
+from plugins.moc import MOC
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    moc_ = MOC()
+    text = ''
+    if moc_.state in [MOC.PAUSED, MOC.PLAYING]:
+        text = ' │ ' + ' │ '.join(['%s: %s' % (key, moc_[keys]) for key in moc_.keys()])
+    text = 'State: %s%s' % ({MOC.NOT_RUNNING : 'not running',
+                                MOC.STOPPED     : 'stopped',
+                                MOC.PAUSED      : 'paused',
+                                MOC.PLAYING     : 'playing'}[moc_.state], text)
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+
+
+# TODO interaction with moc
+

@@ -1,0 +1,62 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.pacman
+
+import time
+import threading
+
+from plugins.pacman import Pacman
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 5 * 12, 24, True
+
+
+clock = Clock(sync_to = 30 * Clock.MINUTES)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    def opts(deps, req_installed):
+        rc = []
+        for pkg, desc, installed in deps:
+            text = pkg
+            if desc is not None:
+                text += '(%s)' % desc
+            if req_installed and not installed:
+                text = '\033[31m%s\033[m' % text
+            rc.append(text)
+        return rc
+        
+    def get(installed):
+        p = Pacman('python', installed)
+        
+        text = '%s=%s[%s] for %s (%s) from %s under %s provides (%s), replaces (%s) and conflicts with (%s)'
+        text += ' and depends on (%s) and\noptionally (%s), is validated by (%s) and packaged by %s at %s, '
+        text += 'with size %.2fKB'
+        
+        params = [p.name, p.version, ','.join(p.groups), p.architecture, p.description, p.url,
+                  ','.join(p.licenses), ','.join(p.provides), ','.join(p.replaces), ','.join(p.conflicts),
+                  ','.join(p.depends), ','.join(opts(p.optdepends, installed)), ','.join(p.validated_by),
+                  (p.packager if p.packager else '\033[31munknown\033[m'), p.build_date, p.installed_size]
+        
+        if not installed:
+            text += ', %.2fKB download from %s'
+            params += [p.download_size, p.repository]
+        
+        if installed:
+            text += ', installed %s %splicitly with%s script,\n'
+            text += 'required by %i packages and optionally by %i packages'
+            params += [p.install_date, ('ex' if p.installed_explicitly else 'im'),
+                       ('' if p.install_script else 'out'), len(p.required), len(p.optrequired)]
+        
+        return text % tuple(params)
+    
+    text = '%s\n%s' % (get(True), get(False))
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

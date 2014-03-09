@@ -29,7 +29,7 @@ class Pacman:
     @variable  required:list<str>                  Packages that require this package
     @variable  optrequired:list<str>               Packages that this package is optional for
     @variable  install_date:str                    The date and time the package was installed
-    @variable  install_explicitly:bool             Whether the package was installed explicitly
+    @variable  installed_explicitly:bool           Whether the package was installed explicitly
     @variable  install_script:bool                 Whether the package contains and install script
     
     Unique variables for not installed:
@@ -98,11 +98,11 @@ class Pacman:
         plur = lambda x : list(filter(lambda w : not w == 'None', fields[x][0]))
         
         if installed:
-            self.required           = plur('Required By')
-            self.optrequired        = plur('Optional For')
-            self.install_date       = text('Install Date')
-            self.install_explicitly = text('Install Reason') == 'Explicitly installed'
-            self.install_script     = text('Install Script') == 'Yes'
+            self.required             = plur('Required By')
+            self.optrequired          = plur('Optional For')
+            self.install_date         = text('Install Date')
+            self.installed_explicitly = text('Install Reason') == 'Explicitly installed'
+            self.install_script       = text('Install Script') == 'Yes'
         
         if not installed:
             self.repository    = word('Name')

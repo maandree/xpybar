@@ -26,6 +26,7 @@ List of plugins to implement:
          not observe leap seconds or uses smear seconds)
      Summer time / standard time announcement (should support double
          summer time and similar)
+     /proc/dri
      /proc/interrupts
      /proc/net/sockstat
      /proc/net/sockstat6

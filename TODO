@@ -20,6 +20,7 @@ List of plugins to implement:
      Keyboard layout
      EWMH
      Meteor Showers
+     Identify active and visible windows
      Calendars: holidays, birthdays, name days, events
      Clock plugin with timezone support
      Leap second announcement (should work (but tell) if the system does

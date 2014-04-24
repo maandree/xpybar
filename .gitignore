@@ -2,6 +2,9 @@ _/
 bin/
 obj/
 __pycache__/
+/dist/*/*/*
+!/dist/archlinux/*/PKGBUILD
+!/dist/archlinux/*/xpybar.install
 \#*\#
 .*
 !.git*

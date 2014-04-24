@@ -16,4 +16,5 @@ BUILD DEPENDENCIES:
 	zip
 	make
 	coreutils
+	sed
 

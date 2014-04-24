@@ -37,6 +37,11 @@ FONT = '-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*'
 BACKGROUND, FOREGROUND = (0, 0, 0), (192, 192, 192)
 
 
+PLUGIN_PATH = None
+if PLUGIN_PATH is not None:
+    sys.path.insert(0, PLUGIN_PATH)
+
+
 def redraw():
     '''
     Invoked when redraw is needed,

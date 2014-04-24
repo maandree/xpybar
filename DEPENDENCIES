@@ -10,3 +10,10 @@ OPTIONAL RUNTIME DEPENDENCIES:
 
 	linux: most of the monitors require Linux's procfs or sysfs
 
+
+BUILD DEPENDENCIES:
+
+	zip
+	make
+	coreutils
+

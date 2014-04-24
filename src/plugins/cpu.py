@@ -37,7 +37,7 @@ class CPU:
     '''
     
     
-    # These contants are index in the CPU statistcs, use for example `CPU_instance.cpu[UPC.user]`
+    # These contants are index in the CPU statistcs, use for example `CPU_instance.cpu[CPU.user]`
     
     user = 0
     '''

@@ -50,7 +50,7 @@ class Chase:
             page = page.decode('utf-8', 'replace').split('\n')
             page = filter(lambda line : line == 'NO', page)
             page = filter(lambda line : not line == 'NOVEMBER', page)
-            self.status = len(list(page)) == 1
+            self.status = len(list(page)) == 0
             return True
         return False
 

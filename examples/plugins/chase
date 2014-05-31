@@ -28,7 +28,7 @@ def redraw():
     if chase is None:
         chase = 'Waiting for doeschasehaveajobyet.com'
     elif chase:
-        chase = '\033[32mIt appears that Chase has a job, got to doeschasehaveajobyet.com to verify it\033[m'
+        chase = '\033[32mIt appears that Chase has a job, go to doeschasehaveajobyet.com to verify it\033[m'
     else:
         chase = '\033[31mSadly Chase does not appear to have a job yet\033[m'
     bar.clear()

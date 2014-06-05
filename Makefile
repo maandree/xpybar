@@ -60,7 +60,7 @@ install-command: bin/xpybar
 	install -m755 $< -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
 
 .PHONY: install-license
-install-license: COPYING LICENSE
+install-license: COPYING LICENSE.gpl3 LICENSE.agpl3
 	install -dm755   -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
 	install -m644 $^ -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
 
@@ -88,7 +88,8 @@ install-plugins: $(foreach F,$(PLUGINS),src/plugins/$(F).py)
 uninstall:
 	-rm -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
 	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/COPYING"
-	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/LICENSE"
+	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/LICENSE.gpl3"
+	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/LICENSE.agpl3"
 	-rmdir -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
 	-rm -- $(foreach F,$(PLUGIN_EXAMPLES),"$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/plugins/$(F)")
 	-rmdir -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/plugins"

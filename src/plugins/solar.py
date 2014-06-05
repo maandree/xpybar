@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from util import *
 
 
-class Solar:
+class Solar: # TODO add static functions that does not require blueshift
     '''
     Solar information using Blueshift
     

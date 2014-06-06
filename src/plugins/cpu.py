@@ -22,22 +22,22 @@ class CPU:
     '''
     Retrieve processor statistics
     
-    @variable  cpu_total:list<int>   Accumulative processors statistics
-    @variable  cpus:list<list<int>>  Individual processors statistics
-    @variable  intr:list<int>        Counts of individual interrupts serviced since boot time
-    @variable  intr_total:int        Sum of `intr`
-    @variable  ctxt:int              The number of context switches that the system underwent.
-    @variable  btime:int             Boot time, in seconds since the Epoch, 1970-01-01 00:00:00 UTC
-    @variable  processes:int         Number of forks and clones (and similar) created since boot
-    @variable  procs_running:int?    Number of processes in runnable state (linux>=2.5.45)
-    @variable  procs_blocked:int?    Number of processes blocked waiting for I/O to complete (linux>=2.5.45)
-    @variable  softirq:list<int>?    Counts of individual software IRQ since boot time
-    @variable  softirq_total:int?    Sum of `softirq`
+    @variable  cpu_total:list<int>          Accumulative processors statistics
+    @variable  cpus:list<list<int>>         Individual processors statistics
+    @variable  intr:list<int>               Counts of individual interrupts serviced since boot time
+    @variable  intr_total:int               Sum of `intr`
+    @variable  ctxt:int                     The number of context switches that the system underwent.
+    @variable  btime:int                    Boot time, in seconds since the Epoch, 1970-01-01 00:00:00 UTC
+    @variable  processes:int                Number of forks and clones (and similar) created since boot
+    @variable  procs_running:int?           Number of processes in runnable state (linux>=2.5.45)
+    @variable  procs_blocked:int?           Number of processes blocked waiting for I/O to complete (linux>=2.5.45)
+    @variable  softirq:list<int>?           Counts of individual software IRQ since boot time
+    @variable  softirq_total:int?           Sum of `softirq`
     @variable  fields:dict<str, list<int>>  Table with all information
     '''
     
     
-    # These contants are index in the CPU statistcs, use for example `CPU_instance.cpu[CPU.user]`
+    # These constants are index in the CPU statistcs, use for example `CPU_instance.cpu[CPU.user]`
     
     user = 0
     '''

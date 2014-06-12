@@ -27,8 +27,6 @@ List of plugins to implement:
      Identify active and visible windows
      Calendars: holidays, birthdays, name days, events
      Clock plugin with timezone support
-     Leap second announcement (should work (but tell) if the system does
-         not observe leap seconds or uses smear seconds)
      Summer time / standard time announcement (should support double
          summer time and similar)
      natural disaster reports

@@ -1,0 +1,68 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.leapsec
+
+import time
+import threading
+
+from plugins.leapsec import LeapSeconds
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = 0.5 * Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+leapsec_ = Sometimes(LeapSeconds, 30 * 24 * 60 * 2)
+
+
+def redraw():
+    announcements = leapsec_()
+    found = -1
+    now = time.time()
+    for index in range(len(announcements)):
+        if announcements[index][3] >= now:
+            found = index
+            break
+    announcement = announcements[found]
+    text = '\033[%sm%s\033[00m ago' if found < 0 else 'in \033[%sm%s\033[00m'
+    def dur(t):
+        s, t = t % 60, t // 60
+        m, t = t % 60, t // 60
+        h, d = t % 24, t // 24
+        if d > 0:
+            return '%id%ih%i\'%02i"' % (d, h, m, s)
+        elif h > 0:
+            return '%ih%i\'%02i"' % (h, m, s)
+        elif m > 0:
+            return '%i\'%02i"' % (m, s)
+        else:
+            return '%02is' % s
+    amount = ('+%i' if announcement[4] > 0 else '%i') % announcement[4]
+    c = '00'
+    time_until = announcement[3] - int(now)
+    if time_until >= 0:
+        if time_until < 10:
+            c = '41'
+        elif time_until < 60:
+            c = '31'
+        elif time_until < 60 * 60:
+            c = '33'
+        elif time_until < 24 * 60 * 60:
+            c = '32'
+    text %= (c, dur(abs(time_until)))
+    text = 'Leap: %s %s at end of UTC %s' % (amount, text, '%i-%02i-%0i' % announcement[:3])
+    if announcement[5] == LeapSeconds.SECONDARY:
+        text += ' (secondary)'
+    if announcement[5] == LeapSeconds.OUT_OF_BAND:
+        text += ' (out of band)'
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

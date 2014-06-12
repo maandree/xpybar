@@ -141,3 +141,40 @@ class Sometimes:
         self.counter -= 1
         return rc
 
+
+class DelayedSometimes:
+    '''
+    Function wrapper for only actually invoking
+    the function every n:th time, where n is a
+    customisable parameter, with an added
+    functionallity: the actual invocation will
+    take place at the first invocation and then
+    a number of invocations is required before
+    the second actual invocation after which
+    the normal interval will be used
+    '''
+    
+    def __init__(self, function, delay, interval):
+        '''
+        Constructor
+        
+        @param  function:(*?)→¿R?  The functiony
+        @param  delay:int          The of times needed to invoke between the first and second actual invocation
+        @param  interval:int       Invoke the function every `interval`:th time
+        '''
+        def f(*args, **kargs):
+            self.function = Sometimes(function, interval, initial = delay)
+            self.function.last_return = function(*args, **kargs)
+            return self.function.last_return
+        self.function = f
+    
+    def __call__(self, *args, **kargs):
+        '''
+        Invoke the function when scheduled
+        
+        @param   args:*?    The parameters of the function
+        @param   kargs:**?  The named parameters of the function
+        @return  :¿R?       The return value of the function, the last return if not invoked
+        '''
+        return self.function(*args, **kargs)
+

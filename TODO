@@ -17,6 +17,7 @@ List of plugins to implement:
      Backlight control
      hdparm
      Thermal monitoring
+     kernel console output
      ESSID and link quality for wireless interfaces
      News feed syndication
      Keyboard layout

@@ -1,0 +1,44 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.cpuinfo
+
+import time
+import threading
+
+from plugins.cpuinfo import CPUInfo
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = 2.5 * Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    cpuinfo_ = CPUInfo()
+    count = len(cpuinfo_.cpus)
+    def read(cpu):
+        cur = float(cpuinfo_.get(cpu, CPUInfo.CURRENT_FREQUENCY))
+        min = 0
+        max = float(cpuinfo_.get(cpu, CPUInfo.MAXIMUM_FREQUENCY))
+        p = (cur - min) / (max - min)
+        if p < 0.50:
+            c = '32'
+        elif p < 0.85:
+            c = '39'
+        elif p < 0.95:
+            c = '33'
+        else:
+            c = '31'
+        return '\033[%sm%2i\033[39m%%' % (c, int(p * 100))
+    text = 'Freq: %s' % ', '.join(read(cpu) for cpu in range(count))
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

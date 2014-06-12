@@ -31,6 +31,7 @@ List of plugins to implement:
      Summer time / standard time announcement (should support double
          summer time and similar)
      natural disaster reports
+     IRC
      /proc/dri
      /proc/interrupts
      /proc/net/sockstat

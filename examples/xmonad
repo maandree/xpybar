@@ -7,8 +7,6 @@ import threading
 
 from util import *
 
-import Xlib.X, Xlib.protocol.event
-
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 0, True
 

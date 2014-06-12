@@ -82,7 +82,7 @@ class Memory:
     
     def __getitem__(self, key):
         '''
-        Lookup a field from '/proc/meminfo'
+        Look up a field from '/proc/meminfo'
         
         @param   key:str  The field name
         @return  :int     The value of the field, without the unit (KB if any)

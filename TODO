@@ -67,3 +67,13 @@ List of plugins to implement:
          file handles. Since Linux 2.6, the kernel does deallocate freed file
          handles, and the "free file handles" value is always zero.
 
+Demo plugins:
+
+     snmp6
+     snmp
+     softirqs
+     solar
+     vmstat
+     weather
+
+Demo combination of linereader and clock

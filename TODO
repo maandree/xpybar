@@ -66,6 +66,7 @@ List of plugins to implement:
 
 Demo plugins:
 
+     linereader
      snmp6
      snmp
      softirqs
@@ -73,4 +74,3 @@ Demo plugins:
      vmstat
      weather
 
-Demo combination of linereader and clock

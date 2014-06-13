@@ -42,9 +42,11 @@ class LineReader:
             if isinstance(channel, str):
                 self.__channel = channel = os.open(channel, os.O_RDONLY)
             if isinstance(channel, int):
-                next__ = lambda : channel.read()
+                channel = os.fdopen(channel)
+                next__ = lambda : channel.read(1)
             buffer = ''
             def next_():
+                nonlocal buffer
                 while True:
                     got = next__()
                     if (got is None) or (len(got) == 0):

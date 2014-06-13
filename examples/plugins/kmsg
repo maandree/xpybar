@@ -1,0 +1,30 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.kmsg
+
+from plugins.kmsg import KMsg
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+text = ''
+kmsg_ = KMsg()
+
+start_ = start
+def start():
+    start_()
+    def refresh():
+        global text
+        text = kmsg_.next()
+        if text is None:
+            text = ''
+            bar.invalidate()
+            import sys
+            sys.exit() # kill thread
+        bar.invalidate()
+    async(lambda : forever(refresh))
+
+def redraw():
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

@@ -1,0 +1,29 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.ipaddress
+
+import time
+import threading
+
+from plugins.ipaddress import IPAddress
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = 30 * Clock.MINUTES)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    addr = IPAddress('lo')
+    text = 'Addr: %s' % ', '.join(addr.public().keys())
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

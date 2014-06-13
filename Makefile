@@ -16,16 +16,16 @@ PLUGIN_PATH = $(DATADIR)/$(PKGNAME)
 
 SRC = __main__ util x
 
-PLUGINS = chase clock cpu cpuonline df discstats linereader \
-          loadavg lunar mem moc network pacman snmp snmp6   \
-          softirqs solar uname uptime users vmstat weather  \
+PLUGINS = chase clock cpuifo cpuonline cpu df discstats leapsec   \
+          linereader loadavg lunar mem moc network pacman snmp    \
+          snmp6 softirqs solar uname uptime users vmstat weather  \
           xdisplay xkb
 
-PLUGIN_EXAMPLES = chase clock cpu cpuonline df discstats loadavg  \
-                  lunar mem moc network pacman uname uptime users \
-                  xdisplay xkb
+PLUGIN_EXAMPLES = chase clock cpu cpuinfo cpuonline df discstats  \
+                  loadavg lunar mem moc network pacman uname      \
+                  uptime users xdisplay xkb
 
-EXAMPLES = clock moderate plugin-test test xmonad
+EXAMPLES = clock mixed moderate plugin-test test xmonad
 
 
 

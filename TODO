@@ -36,11 +36,6 @@ List of plugins to implement:
      /proc/net/sockstat6
      /proc/net/wireless
      /sys/class/net/<nic>/duplex (half, full)
-     /proc/sys/fs/dentry-state
-         This file contains information about the status of the directory
-         cache (dcache). The file contains six numbers, nr_dentry, nr_unused,
-         age_limit (age in seconds), want_pages (pages requested by system)
-         and two dummy values.
      /proc/sys/fs/inode-state
          This file contains seven numbers: nr_inodes, nr_free_inodes,
          preshrink, and four dummy values. nr_inodes is the number of inodes

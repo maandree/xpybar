@@ -1,0 +1,35 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.dentrystate
+
+import time
+import threading
+
+from plugins.dentrystate import DentryState
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    dentry_ = DentryState()
+    
+    data = [('Alloced',   dentry_.nr_dentry),
+            ('Unused',    dentry_.nr_unused),
+            ('AgeLimit',  dentry_.age_limit),
+            ('WantPages', dentry_.want_pages)]
+    
+    text = ' │ '.join('%s: %i' % (text, value) for (text, value) in data)
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

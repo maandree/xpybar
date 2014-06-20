@@ -1,0 +1,32 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.alsa
+
+import time
+import threading
+
+from plugins.alsa import ALSA
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12 * len(ALSA.get_cards()), 24, True
+
+
+clock = Clock(sync_to = 0.25 * Clock.SECONDS)
+alsa_ = [[ALSA(ci, m) for m in ALSA.get_mixers(ci)] for ci in range(len(ALSA.get_cards()))]
+cardnames = ALSA.get_cards()
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+text_v = lambda v : '---' if v is None else ('%2i%%' % v)[:3]
+read_m = lambda m : '%s: %s' % (m.mixername, ' '.join(text_v(v) for v in m.get_volume()))
+read_c = lambda c : '%s │ %s' % (c[0].cardname, ' │ '.join(read_m(m) for m in c))
+
+def redraw():
+    text = '\n'.join(read_c(c) for c in alsa_)
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

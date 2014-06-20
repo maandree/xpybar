@@ -5,7 +5,6 @@ List of plugins to implement:
      iostat [-x] [-d] [-N] -zk [-p | <devices>...] <interval>
      SMART monitoring
      Battery
-     Volume control
      /proc/acpi (mute)
      System tray
      Eyes

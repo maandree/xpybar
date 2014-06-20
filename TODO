@@ -23,6 +23,7 @@ List of plugins to implement:
      Meteor showers
      pty for write/talk messages
      Lunar and solar eclipses
+     e-mail
      Identify active and visible windows
      Calendars: holidays, birthdays, name days, events
      Clock plugin with timezone support

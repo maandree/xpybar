@@ -36,19 +36,6 @@ List of plugins to implement:
      /proc/net/sockstat6
      /proc/net/wireless
      /sys/class/net/<nic>/duplex (half, full)
-     /proc/sys/fs/file-nr
-         This (read-only) file contains three numbers: the number of allocated
-         file handles (i.e., the number of files presently opened); the number
-         of free file handles; and the maximum number of file handles (i.e.,
-         the same value as /proc/sys/fs/file-max). If the number of allocated
-         file handles is close to the maximum, you should consider increasing
-         the maximum. Before Linux 2.6, the kernel allocated file handles
-         dynamically, but it didn't free them again. Instead the free file
-         handles were kept in a list for reallocation; the "free file handles"
-         value indicates the size of that list. A large number of free file
-         handles indicates that there was a past peak in the usage of open
-         file handles. Since Linux 2.6, the kernel does deallocate freed file
-         handles, and the "free file handles" value is always zero.
 
 Demo plugins:
 

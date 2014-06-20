@@ -1,0 +1,34 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.files
+
+import time
+import threading
+
+from plugins.files import Files
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    files_ = Files()
+    
+    data = [('Files', files_.nr_files),
+            ('Free',  files_.nr_free_files),
+            ('Max',   files_.file_max)]
+    
+    text = ' │ '.join('%s: %i' % (text, value) for (text, value) in data)
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

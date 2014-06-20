@@ -36,14 +36,6 @@ List of plugins to implement:
      /proc/net/sockstat6
      /proc/net/wireless
      /sys/class/net/<nic>/duplex (half, full)
-     /proc/sys/fs/inode-state
-         This file contains seven numbers: nr_inodes, nr_free_inodes,
-         preshrink, and four dummy values. nr_inodes is the number of inodes
-         the system has allocated. This can be slightly more than inode-max
-         because Linux allocates them one page full at a time. nr_free_inodes
-         represents the number of free inodes. preshrink is nonzero when the
-         nr_inodes > inode-max and the system needs to prune the inode list
-         instead of allocating more.
      /proc/sys/fs/file-nr
          This (read-only) file contains three numbers: the number of allocated
          file handles (i.e., the number of files presently opened); the number

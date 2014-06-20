@@ -1,0 +1,34 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.inodestate
+
+import time
+import threading
+
+from plugins.inodestate import InodeState
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    inode_ = InodeState()
+    
+    data = [('Inodes',   inode_.nr_inodes),
+            ('Free',    inode_.nr_free_inodes),
+            ('Preshrink',  inode_.preshrink)]
+    
+    text = ' │ '.join('%s: %i' % (text, value) for (text, value) in data)
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

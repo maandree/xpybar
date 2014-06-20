@@ -25,7 +25,7 @@ class InodeState:
     @variable  nr_inodes:int        The number of inodes the system has allocated.
                                     This can be slightly more than inode-max because
                                     Linux allocates them one page full at a time.
-    @variable  nr_free_inodes:int   Tthe number of free inodes
+    @variable  nr_free_inodes:int   The number of free inodes
     @variable  preshrink:int        Nonzero when the `nr_inodes` is more than inode-max
                                     and the system needs to prune the inode list instead
                                     of allocating more

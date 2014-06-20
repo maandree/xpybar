@@ -14,4 +14,8 @@ __pycache__/
 *.swp
 *.swo
 *.bak
+*.out
+*.o
+*.su
+*.gch
 

@@ -14,7 +14,6 @@ List of plugins to implement:
      UPS
      Blueshift integration
      Backlight control
-     hdparm
      Thermal monitoring
      ESSID and link quality for wireless interfaces
      News feed syndication
@@ -36,7 +35,6 @@ List of plugins to implement:
      /proc/net/sockstat
      /proc/net/sockstat6
      /proc/net/wireless
-     /sys/class/net/<nic>/duplex (half, full)
 
 Demo plugins:
 
@@ -47,4 +45,5 @@ Demo plugins:
      solar
      vmstat
      weather
+     hdparm
 

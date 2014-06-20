@@ -1,0 +1,5 @@
+After running `make install`, you
+should run `chmod 4755 /usr/bin/restricted-hdparm`
+assuming DESTDIR=, PREFIX=/usr and BIN=/bin
+or DESTDIR= and BINDIR=/usr/bin.
+

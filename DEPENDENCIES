@@ -11,6 +11,7 @@ OPTIONAL RUNTIME DEPENDENCIES:
 	linux: most of the monitors require Linux's procfs or sysfs
 	wget: for Internet services
 	python-pyalsaaudio: for ALSA volume control
+	hdparm: for hdparm support
 
 
 BUILD DEPENDENCIES:

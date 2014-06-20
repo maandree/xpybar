@@ -13,6 +13,18 @@ COMMAND = xpybar
 PKGNAME = xpybar
 PLUGIN_PATH = $(DATADIR)/$(PKGNAME)
 
+WARN = -Wall -Wextra -pedantic -Wdouble-promotion -Wformat=2 -Winit-self       \
+       -Wmissing-include-dirs -Wtrampolines -Wfloat-equal -Wshadow             \
+       -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls           \
+       -Wnested-externs -Winline -Wno-variadic-macros -Wsign-conversion        \
+       -Wswitch-default -Wconversion -Wsync-nand -Wunsafe-loop-optimizations   \
+       -Wcast-align -Wstrict-overflow -Wdeclaration-after-statement -Wundef    \
+       -Wbad-function-cast -Wcast-qual -Wwrite-strings -Wlogical-op            \
+       -Waggregate-return -Wstrict-prototypes -Wold-style-definition -Wpacked  \
+       -Wvector-operation-performance -Wunsuffixed-float-constants             \
+       -Wsuggest-attribute=const -Wsuggest-attribute=noreturn                  \
+       -Wsuggest-attribute=pure -Wsuggest-attribute=format -Wnormalized=nfkc
+
 
 SRC = __main__ util x
 
@@ -20,19 +32,19 @@ PLUGINS = chase clock cpuifo cpuonline cpu df discstats ipaddress  \
           kmsg leapsec linereader loadavg lunar mem moc network    \
           pacman snmp snmp6 softirqs solar uname uptime users      \
           vmstat weather xdisplay xkb alsa dentrystate inodestate  \
-          files
+          files hdparm
 
 PLUGIN_EXAMPLES = chase clock cpu cpuinfo cpuonline df discstats   \
                   ipaddress kmsg loadavg lunar mem moc network     \
                   pacman uname uptime users xdisplay xkb slsa      \
-                  dentrystate inodestate files
+                  dentrystate inodestate files hdparm
 
 EXAMPLES = clock mixed moderate plugin-test test xmonad
 
 
 
 .PHONY: all
-all: bin/xpybar
+all: bin/xpybar bin/restricted-hdparm
 
 bin/xpybar: obj/xpybar.zip
 	mkdir -p bin
@@ -48,6 +60,11 @@ obj/%.py: src/%.py
 	cp $< $@
 	sed -i "s:PLUGIN_PATH = None:PLUGIN_PATH = '$(PLUGIN_PATH)':g" $@
 
+bin/restricted-hdparm: obj/restricted-hdparm.o
+	$(CC) -std=c89 -Ofast $(WARN) -o $@ $^
+
+obj/%.o: src/%.c
+	$(CC) -std=c89 -Ofast $(WARN) -c -o $@ $<
 
 
 .PHONY: install
@@ -57,9 +74,10 @@ install: install-base
 install-base: install-command install-license install-all-examples install-plugins
 
 .PHONY: install-command
-install-command: bin/xpybar
+install-command: bin/xpybar bin/restricted-hdparm
 	install -dm755   -- "$(DESTDIR)$(BINDIR)"
-	install -m755 $< -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
+	install -m755 bin/xpybar -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
+	install -m755 bin/restricted-hdparm -- "$(DESTDIR)$(BINDIR)/restricted-hdparm"
 
 .PHONY: install-license
 install-license: COPYING LICENSE.gpl3 LICENSE.agpl3
@@ -89,6 +107,7 @@ install-plugins: $(foreach F,$(PLUGINS),src/plugins/$(F).py)
 .PHONY: uninstall
 uninstall:
 	-rm -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
+	-rm -- "$(DESTDIR)$(BINDIR)/restricted-hdparm"
 	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/COPYING"
 	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/LICENSE.gpl3"
 	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/LICENSE.agpl3"

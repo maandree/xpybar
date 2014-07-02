@@ -39,7 +39,7 @@ PLUGIN_EXAMPLES = chase clock cpu cpuinfo cpuonline df discstats   \
                   pacman uname uptime users xdisplay xkb alsa      \
                   dentrystate inodestate files
 
-EXAMPLES = clock mixed moderate plugin-test test xmonad
+EXAMPLES = mixed moderate test xmonad
 
 
 

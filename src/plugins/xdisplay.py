@@ -50,7 +50,7 @@ class XDisplay:
             self.display = None
             self.screen = None
         else:
-            self.host = self.connection.split(':')[:-1]
+            self.host = ':'.join(self.connection.split(':')[:-1])
             if self.host.startswith('[') and self.host.endswith(']'):
                 self.host = self.host[1 : -1]
             if self.host == '':

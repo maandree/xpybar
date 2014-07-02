@@ -21,7 +21,7 @@ def start():
     start_()
     async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
 
-text_v = lambda v : '---' if v is None else ('%2i%%' % v)[:3]
+text_v = lambda v : '--%' if v is None else ('%2i%%' % v)[:3]
 read_m = lambda m : '%s: %s' % (m.mixername, ' '.join(text_v(v) for v in m.get_volume()))
 read_c = lambda c : '%s │ %s' % (c[0].cardname, ' │ '.join(read_m(m) for m in c))
 

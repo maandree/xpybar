@@ -8,10 +8,13 @@ arch=(any)
 url="https://github.com/maandree/xpybar"
 license=('GPL3' 'AGPL3')
 depends=(python3 argparser python3-xlib xorg-xrandr)
-optdepends=("linux: most of the monitors require Linux's procfs or sysfs")
+optdepends=("linux: most of the monitors require Linux's procfs or sysfs"
+            "wget: for Internet services"
+	    "python-pyalsaaudio: for ALSA volume control"
+	    "hdparm: hdparm: for hdparm support")
 makedepends=(make coreutils sed zip)
 source=($url/archive/$pkgver.tar.gz)
-sha256sums=(2c8a0dea2ac41c36f7c23ecb3cee0b38007db2c6b373b2e460c4cf712b7f8ddc)
+sha256sums=(a73c5d99346e05dda3392a4ebb9a573058380bf234a2d83a6ba4126594f7e8b3)
 
 
 build() {
@@ -23,5 +26,6 @@ build() {
 package() {
   cd "$srcdir/$pkgname-$pkgver"
   make PREFIX=/usr install DESTDIR="$pkgdir"
+  chmod 4755 "$pkgdir/usr/bin/restricted-hdparm"
 }
 

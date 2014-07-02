@@ -36,7 +36,7 @@ PLUGINS = chase clock cpuifo cpuonline cpu df discstats ipaddress  \
 
 PLUGIN_EXAMPLES = chase clock cpu cpuinfo cpuonline df discstats   \
                   ipaddress kmsg loadavg lunar mem moc network     \
-                  pacman uname uptime users xdisplay xkb slsa      \
+                  pacman uname uptime users xdisplay xkb alsa      \
                   dentrystate inodestate files hdparm
 
 EXAMPLES = clock mixed moderate plugin-test test xmonad

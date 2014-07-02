@@ -154,20 +154,27 @@ class Bar:
         '''
         return self.font.query_text_extents(text).overall_width
     
-    def draw_text(self, x, y, descent, text):
+    def draw_text(self, x, y, descent, text, *, colour = None, clear = None):
         '''
         Draw a text
         
-        @param  x:int        The left position of the text
-        @param  y:int        The Y position of the bottom of the text
-        @param  descent:int  Extra height under the text on each line
-        @param  text:str     The text to draw
+        @param  x:int                             The left position of the text
+        @param  y:int                             The Y position of the bottom of the text
+        @param  descent:int                       Extra height under the text on each line
+        @param  text:str                          The text to draw
+        @param  colour:(foreground, background)?  The colour to draw with
+        @param  clear:(y:int, height:int)?        Vertical clearing area
         '''
         special = '─│┌┐└┘├┤┬┴┼╱╲╳←↓→↑\0'
         buf = ''
         w = self.font_width - 1
         h = self.font_height + descent - 1
         y_ = y - self.font_height
+        if colour is not None:
+            (fc, bc) = colour
+            self.gc.change(foreground = fc, background = bc)
+        if clear is not None:
+            (clear_y, line_height) = clear
         for c in text + '\0':
             if c in special:
                 if not buf == '':
@@ -212,6 +219,10 @@ class Bar:
                         x1, x2 = x1 * w, x2 * w
                         y1, y2 = y1 * h, y2 * h
                         segs_.append((int(x1) + x, int(y1) + y_, int(x2) + x, int(y2) + y_))
+                    if clear is not None:
+                        self.change_colour(self.background)
+                        self.window.fill_rectangle(self.gc, x, clear_y, w + 1, line_height)
+                        self.gc.change(foreground = fc, background = bc)
                     self.window.poly_segment(self.gc, segs_)
                     x += w + 1
             else:
@@ -279,9 +290,7 @@ class Bar:
                     self.change_colour(bc)
                     h = self.font_height + ascent
                     w = self.font_width * len(buf)
-                    self.window.fill_rectangle(self.gc, x, y - h, w, line_height)
-                    self.gc.change(foreground = fc, background = bc)
-                    self.draw_text(x, y + ascent, descent, buf)
+                    self.draw_text(x, y + ascent, descent, buf, colour = (fc, bc), clear = (y - h, line_height))
                     x += w
                     buf = ''
                 if c == '\n':
@@ -400,14 +409,25 @@ class Bar:
         self.change_colour(self.foreground)
         self.change_font(self.font)
     
-    def clear(self):
+    def clear_rectangle(self, x, y, width, height):
         '''
-        Fill the panel with its background colour and reset the colour and font
+        Clear a rectangle on the panel
+        
+        @param  x:int       The X-component of the coordinate of the rectangle's top left corner
+        @param  y:int       The Y-component of the coordinate of the rectangle's top left corner
+        @param  width:int   The width of the rectangle
+        @param  height:int  The height of the rectangle
         '''
         self.change_colour(self.background)
         self.window.fill_rectangle(self.gc, 0, 0, self.width, self.panel_height)
         self.change_colour(self.foreground)
         self.change_font(self.font)
+    
+    def clear(self):
+        '''
+        Fill the panel with its background colour and reset the colour and font
+        '''
+        self.clear_rectangle(0, 0, self.width, self.panel_height)
     
     def invalidate(self):
         '''

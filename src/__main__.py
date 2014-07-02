@@ -175,9 +175,15 @@ class Bar:
             self.gc.change(foreground = fc, background = bc)
         if clear is not None:
             (clear_y, line_height) = clear
+            ascent = line_height - self.font_height
         for c in text + '\0':
             if c in special:
                 if not buf == '':
+                    text_width = self.font_width * len(buf)
+                    if clear is not None:
+                        self.change_colour(self.background)
+                        self.window.fill_rectangle(self.gc, x, clear_y, text_width, ascent)
+                        self.gc.change(foreground = fc, background = bc)
                     if len(buf.encode('utf-8')) > 255:
                         while not buf == '':
                             sbuf, buf = buf[:42], buf[42:]
@@ -185,7 +191,7 @@ class Bar:
                             x += self.font_width * len(sbuf)
                     else:
                         draw_text(self.window, self.gc, x, y, buf)
-                        x += self.font_width * len(buf)
+                        x += text_width
                         buf = ''
                 if not c == '\0':
                     segs = []

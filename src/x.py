@@ -145,7 +145,7 @@ def create_panel(width, height, left, ypos, panel_height, at_top):
 def draw_text(window, gc, x, y, text):
     '''
     Draw a text on a window
-
+    
     @param  window    The window
     @param  gc        The window's graphics context
     @param  x:int     The left position of the text

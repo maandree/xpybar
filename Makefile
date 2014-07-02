@@ -75,8 +75,8 @@ install-base: install-command install-license install-all-examples install-plugi
 
 .PHONY: install-command
 install-command: bin/xpybar bin/restricted-hdparm
-	install -dm755   -- "$(DESTDIR)$(BINDIR)"
-	install -m755 bin/xpybar -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
+	install -dm755                      -- "$(DESTDIR)$(BINDIR)"
+	install -m755 bin/xpybar            -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
 	install -m755 bin/restricted-hdparm -- "$(DESTDIR)$(BINDIR)/restricted-hdparm"
 
 .PHONY: install-license

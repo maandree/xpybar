@@ -125,17 +125,17 @@ class Sometimes:
         self.counter = initial
         self.last_return = None
     
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         '''
         Invoke the function, every `interval`:th time
         
-        @param   args:*?    The parameters of the function
-        @param   kargs:**?  The named parameters of the function
-        @return  :¿R?       The return value of the function, the last return if not invoked
+        @param   args:*?     The parameters of the function
+        @param   kwargs:**?  The named parameters of the function
+        @return  :¿R?        The return value of the function, the last return if not invoked
         '''
         rc = self.last_return
         if self.counter == 0:
-            rc = self.function(*args, **kargs)
+            rc = self.function(*args, **kwargs)
             self.last_return = rc
             self.counter = self.interval
         self.counter -= 1
@@ -162,19 +162,67 @@ class DelayedSometimes:
         @param  delay:int          The of times needed to invoke between the first and second actual invocation
         @param  interval:int       Invoke the function every `interval`:th time
         '''
-        def f(*args, **kargs):
+        def f(*args, **kwargs):
             self.function = Sometimes(function, interval, initial = delay)
-            self.function.last_return = function(*args, **kargs)
+            self.function.last_return = function(*args, **kwargs)
             return self.function.last_return
         self.function = f
     
-    def __call__(self, *args, **kargs):
+    def __call__(self, *args, **kwargs):
         '''
         Invoke the function when scheduled
         
-        @param   args:*?    The parameters of the function
-        @param   kargs:**?  The named parameters of the function
-        @return  :¿R?       The return value of the function, the last return if not invoked
+        @param   args:*?     The parameters of the function
+        @param   kwargs:**?  The named parameters of the function
+        @return  :¿R?        The return value of the function, the last return if not invoked
         '''
-        return self.function(*args, **kargs)
+        return self.function(*args, **kwargs)
+
+
+class Clocked:
+    '''
+    `Sometimes` wrapper that needs explicit re-evaluation before
+    its `Sometimes` functionallity is invoked. That is, it needs
+    a selected number of explicit re-evaluation before the value
+    is actually re-evaluted.
+    
+    The rationale for this class is that you may want to update
+    somethings more often than other things, periodically, but
+    you may also want to update other things when certain events
+    occur.
+    '''
+    
+    def __init__(self, *args, **kwargs):
+        '''
+        Constructor
+        
+        @param  args:*     Positional arguments for the `Sometimes` constructor
+        @param  kwargs:**  Keyworkd arguments for the `Sometimes` constructor
+        '''
+        self.sometimes = Sometimes(*args, **kwargs)
+        self.text = self.sometimes()
+    
+    
+    def __call__(self, update = False):
+        '''
+        Return the most recently evaluated value
+        
+        @param   update:bool  Whether to re-evalute the value and return the new value
+        @return  :¿T?         The most recently evaluated value
+        '''
+        if update:
+            self.text = self.sometimes()
+        return self.text
+    
+    
+    @staticmethod
+    def update_all(functions):
+        '''
+        Update all elements in an iteratable that is of the type `Clocked`
+        
+        @param  functions:itr<¿T?>  The iteratable
+        '''
+        for f in functions:
+            if isinstance(f, Clocked):
+                f(True)
 

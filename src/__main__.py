@@ -394,7 +394,8 @@ class Bar:
         for line in text.split('\n'):
             if '\0' not in line:
                 x_ = Bar.coloured_length(line)
-                areas.append((x + x_, y, width - x_, line_height))
+                if width > x_:
+                    areas.append((x + x_, y, width - x_, line_height))
             else:
                 areas_ = []
                 parts = line.split('\0')
@@ -402,11 +403,13 @@ class Bar:
                 for part in parts:
                     w = Bar.coloured_length(part) * self.font_width
                     x_ = int((width - w) * i / n)
-                    areas_.append((x_, x_ + w))
+                    if w > 0:
+                        areas_.append((x_, x_ + w))
                     i += 1
                 x1 = areas_[0][1]
                 for x2, x3 in areas_[1:]:
-                    areas.append((x + x1, y, x2 - x1, line_height))
+                    if x2 > x1:
+                        areas.append((x + x1, y, x2 - x1, line_height))
                     x1 = x3
             y += line_height
         

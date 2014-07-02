@@ -28,10 +28,10 @@ WARN = -Wall -Wextra -pedantic -Wdouble-promotion -Wformat=2 -Winit-self       \
 
 SRC = __main__ util x
 
-PLUGINS = chase clock cpuifo cpuonline cpu df discstats ipaddress  \
-          kmsg leapsec linereader loadavg lunar mem moc network    \
-          pacman snmp snmp6 softirqs solar uname uptime users      \
-          vmstat weather xdisplay xkb alsa dentrystate inodestate  \
+PLUGINS = chase clock cpuinfo cpuonline cpu df discstats ipaddress  \
+          kmsg leapsec linereader loadavg lunar mem moc network     \
+          pacman snmp snmp6 softirqs solar uname uptime users       \
+          vmstat weather xdisplay xkb alsa dentrystate inodestate   \
           files hdparm
 
 PLUGIN_EXAMPLES = chase clock cpu cpuinfo cpuonline df discstats   \

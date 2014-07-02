@@ -154,7 +154,7 @@ class Bar:
         '''
         return self.font.query_text_extents(text).overall_width
     
-    def draw_text(self, x, y, descent, text): ## TODO fix support for text longer than 255 symbols
+    def draw_text(self, x, y, descent, text):
         '''
         Draw a text
         
@@ -171,9 +171,15 @@ class Bar:
         for c in text + '\0':
             if c in special:
                 if not buf == '':
-                    draw_text(self.window, self.gc, x, y, buf)
-                    x += self.font_width * len(buf)
-                    buf = ''
+                    if len(buf.encode('utf-8')) > 255:
+                        while not buf == '':
+                            sbuf, buf = buf[:42], buf[42:]
+                            draw_text(self.window, self.gc, x, y, sbuf)
+                            x += self.font_width * len(sbuf)
+                    else:
+                        draw_text(self.window, self.gc, x, y, buf)
+                        x += self.font_width * len(buf)
+                        buf = ''
                 if not c == '\0':
                     segs = []
                     if c in '─┼┬┴':  segs.append((0, 1,  2, 1))

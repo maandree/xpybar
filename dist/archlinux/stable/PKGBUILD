@@ -11,7 +11,8 @@ depends=(python3 argparser python3-xlib xorg-xrandr)
 optdepends=("linux: most of the monitors require Linux's procfs or sysfs"
             "wget: for Internet services"
 	    "python-pyalsaaudio: for ALSA volume control"
-	    "hdparm: hdparm: for hdparm support")
+	    "hdparm: hdparm: for hdparm support"
+	    "python-pytz: for timezone support")
 makedepends=(make coreutils sed zip)
 source=($url/archive/$pkgver.tar.gz)
 sha256sums=(af97eafabdffb593d6ea3ee87fd2bb70d5b105201314d20ed9abb1741a7b29b7)

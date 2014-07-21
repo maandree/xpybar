@@ -12,6 +12,7 @@ OPTIONAL RUNTIME DEPENDENCIES:
 	wget: for Internet services
 	python-pyalsaaudio: for ALSA volume control
 	hdparm: for hdparm support
+	python-pytz: for timezone support
 
 
 BUILD DEPENDENCIES:

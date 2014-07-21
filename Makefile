@@ -32,12 +32,12 @@ PLUGINS = chase clock cpuinfo cpuonline cpu df discstats ipaddress  \
           kmsg leapsec linereader loadavg lunar mem moc network     \
           pacman snmp snmp6 softirqs solar uname uptime users       \
           vmstat weather xdisplay xkb alsa dentrystate inodestate   \
-          files hdparm
+          files hdparm tzclock
 
 PLUGIN_EXAMPLES = chase clock cpu cpuinfo cpuonline df discstats   \
                   ipaddress kmsg loadavg lunar mem moc network     \
                   pacman uname uptime users xdisplay xkb alsa      \
-                  dentrystate inodestate files
+                  dentrystate inodestate files tzclock
 
 EXAMPLES = mixed moderate test xmonad
 

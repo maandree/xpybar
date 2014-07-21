@@ -1,0 +1,33 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.tzclock
+
+from plugins.tzclock import TZClock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+pacific = TZClock(timezone = 'US/Pacific',         format = '%T %Z')
+central = TZClock(timezone = 'US/Central',         format = '%T %Z')
+utc     = TZClock(timezone = 'UTC',                format = '%T %Z', sync_to = TZClock.SECONDS)
+sthlm   = TZClock(timezone = 'Europe/Stockholm',   format = '%T %Z')
+kalinin = TZClock(timezone = 'Europe/Kaliningrad', format = '%T %Z')
+tokyo   = TZClock(timezone = 'Asia/Tokyo',         format = '%T %Z')
+
+
+timezones = [pacific, central, utc, sthlm, kalinin, tokyo]
+
+
+start_ = start
+def start():
+    start_()
+    async(lambda : utc.continuous_sync(lambda : bar.invalidate()))
+
+
+def redraw():
+    time = TZClock.posix_time()
+    text = ' │ '.join([tz.from_posix_time(time) for tz in timezones])
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

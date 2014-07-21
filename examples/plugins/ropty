@@ -1,0 +1,30 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.kmsg
+
+from plugins.ropty import ROPTY
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+text = ''
+pty_ = None
+
+start_ = start
+def start():
+    global pty_
+    start_()
+    def refresh():
+        if pty_.size() == 0:
+            text = ''
+        else:
+            line = pty_.next
+            text = '\033[37;41m%i\033[00m%s'
+            text %= (pty_.size(), line)
+        bar.invalidate()
+    pty_ = ROPTY(refresh)
+
+def redraw():
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

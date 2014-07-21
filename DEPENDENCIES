@@ -13,6 +13,7 @@ OPTIONAL RUNTIME DEPENDENCIES:
 	python-pyalsaaudio: for ALSA volume control
 	hdparm: for hdparm support
 	python-pytz: for timezone support
+	python-sysv-ipc: for ropty example
 
 
 BUILD DEPENDENCIES:

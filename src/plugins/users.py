@@ -30,7 +30,7 @@ class Users:
     '''
     
     
-    def __init__(self, method = 'who'):
+    def __init__(self, method = 'devfs'):
         '''
         Constructor
         

@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
 import time
+from datetime import datetime, timezone
 
 from util import *
 
@@ -47,10 +48,9 @@ class Clock:
         @param  utc:bool       Show time in UTC, otherwise local time
         @param  sync_to:float  The time parameter to sync to, the number of seconds between the reads
         '''
-        self.format = format
+        self.format = format if not utc else format.replace('%Z', 'UTC')
         self.utc = utc
         self.sync_to = sync_to
-        self.command = ['date'] + (['--utc'] if utc else []) + ['+' + format]
     
     
     def read(self):
@@ -59,7 +59,10 @@ class Clock:
         
         @return  :str  The time and date in the format specified at construction
         '''
-        return spawn_read(*(self.command))
+        if not self.utc:
+            return time.strftime(self.format)
+        else:
+            datetime.fromtimestamp(time.time(), tz = timezone.utc).strftime(self.format))
     
     
     def sync(self):

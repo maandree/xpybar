@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
+import os
+
 from util import *
 
 
@@ -40,11 +42,7 @@ class Uname:
         Constructor
         '''
         u = lambda s : None if s == 'unknown' else s
-        self.kernel_name       = spawn_read('uname', '-s')
-        self.nodename          = spawn_read('uname', '-n')
-        self.kernel_release    = spawn_read('uname', '-r')
-        self.kernel_version    = spawn_read('uname', '-v')
-        self.machine           = spawn_read('uname', '-m')
+        (self.kernel_name, self.nodename, self.kernel_release, self.kernel_version, self.machine) = os.uname()
         self.processor         = u(spawn_read('uname', '-p'))
         self.hardware_platform = u(spawn_read('uname', '-i'))
         self.operating_system  = spawn_read('uname', '-o')

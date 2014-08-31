@@ -33,6 +33,7 @@ List of plugins to implement:
      /proc/net/sockstat
      /proc/net/sockstat6
      /proc/net/wireless
+     /proc/sysvipc
 
 Demo plugins:
 

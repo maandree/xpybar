@@ -62,7 +62,7 @@ class Clock:
         if not self.utc:
             return time.strftime(self.format)
         else:
-            datetime.fromtimestamp(time.time(), tz = timezone.utc).strftime(self.format))
+            return datetime.fromtimestamp(time.time(), tz = timezone.utc).strftime(self.format)
     
     
     def sync(self):

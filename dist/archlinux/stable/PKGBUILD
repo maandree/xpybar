@@ -15,7 +15,7 @@ optdepends=("linux: most of the monitors require Linux's procfs or sysfs"
 	    "python-pytz: for timezone support")
 makedepends=(make coreutils sed zip)
 source=($url/archive/$pkgver.tar.gz)
-sha256sums=(244c9500e72d56506022c5bc26e7b11d6ce05e6cff023829541be9e564627a03)
+sha256sums=(1b2ab7b7b349ba5889bebacfc66251dff17fcba55dc3f1002e0c36b2a712fe8a)
 
 
 build() {

@@ -101,7 +101,10 @@ class Users:
             if user in users:
                 user = users[user]
             else:
-                users[user] = user = pwd.getpwuid(user).pw_name
+                try:
+                    users[user] = user = pwd.getpwuid(user).pw_name
+                except:
+                    users[user] = user = str(user)
             rc.append((user, tty))
         return rc
 

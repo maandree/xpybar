@@ -93,7 +93,10 @@ class Users:
         
         users, rc = {}, []
         for tty in ttys:
-            attr = os.stat('/dev/' + tty)
+            try:
+                attr = os.stat('/dev/' + tty)
+            except:
+                continue
             if ('/' not in tty) and (attr.st_uid == 0):
                 if not (try_to_find_root and (attr.st_mode == 0o20600)):
                     continue

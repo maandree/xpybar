@@ -22,7 +22,7 @@ def start():
 
 def redraw():
     addr = IPAddress('lo')
-    text = 'Addr: %s' % ', '.join(addr.public().keys())
+    text = 'Addr: %s' % ', '.join(addr for addr in addr.public().keys() if addr is not None)
     
     bar.clear()
     bar.draw_coloured_text(0, 10, 0, 2, text)

@@ -71,22 +71,23 @@ class IPAddress:
             for info in infos:
                 if info.startswith(nic + ': '):
                     info = [i.lstrip().split(' ') for i in info.split('\n')[1:]]
-                    info = dict((i[0], i[1]) for i in info)
+                    info = dict((i[0], i[1]) for i in info if len(i) > 1)
                     private = info['inet'] if 'inet' in info else None
                     private6 = info['inet6'] if 'inet6' in info else None
                     state = IPAddress.ISOLATED
                     break
             if not state == IPAddress.DOWN:
                 self.__isolated = True
-                public = self.__site_0()
-                if public is None:  public = self.__site_1()
-                if public is None:  public = self.__site_2()
-                if public is None:  public = self.__site_3()
-                if public is None:  public = self.__site_4()
-                if public is None:  public = self.__site_5()
-                if public is None:  public = self.__site_6()
-                if public is None:  public = self.__site_7()
-                if public is None:  public = self.__site_8()
+                download = lambda page : ('curl', '--interface', nic, page)
+                public = self.__site_0(download)
+                if public is None:  public = self.__site_1(download)
+                if public is None:  public = self.__site_2(download)
+                if public is None:  public = self.__site_3(download)
+                if public is None:  public = self.__site_4(download)
+                if public is None:  public = self.__site_5(download)
+                if public is None:  public = self.__site_6(download)
+                if public is None:  public = self.__site_7(download)
+                if public is None:  public = self.__site_8(download)
                 if public is not None:
                     state = IPAddress.UP
                 elif not self.__isolated:
@@ -109,18 +110,18 @@ class IPAddress:
         return rc
     
     
-    def __site_0(self):
+    def __site_0(self, download):
         try:
-            data = spawn_read('curl', 'http://checkip.dyndns.org')
+            data = spawn_read(*download('http://checkip.dyndns.org'))
             if not data == '':
                 self.__isolated = False
             return data.split('<body>')[1].split('</body>')[0].split(': ')[1]
         except:
             return None
     
-    def __site_1(self):
+    def __site_1(self, download):
         try:
-            data = spawn_read('curl', 'http://ipecho.net/plain')
+            data = spawn_read(*download('http://ipecho.net/plain'))
             if not data == '':
                 self.__isolated = False
             data = data.strip()
@@ -128,9 +129,9 @@ class IPAddress:
         except:
             return None
     
-    def __site_2(self):
+    def __site_2(self, download):
         try:
-            data = spawn_read('curl', 'http://www.checkmyipaddress.org')
+            data = spawn_read(*download('http://www.checkmyipaddress.org'))
             if not data == '':
                 self.__isolated = False
             data = [line.strip() for line in data.replace('\r\n', '\n').split('\n') if '</h3>' in line]
@@ -140,9 +141,9 @@ class IPAddress:
         except:
             return None
     
-    def __site_3(self):
+    def __site_3(self, download):
         try:
-            data = spawn_read('curl', 'http://www.ip-address.org')
+            data = spawn_read(*download('http://www.ip-address.org'))
             if not data == '':
                 self.__isolated = False
             data = [line.strip(' \t') for line in data.replace('\r\n', '\n').split('\n') if 'ip += ' in line]
@@ -159,9 +160,9 @@ class IPAddress:
         except:
             return None
     
-    def __site_4(self):
+    def __site_4(self, download):
         try:
-            data = spawn_read('curl', 'http://www.myipnumber.com/my-ip-address.asp')
+            data = spawn_read(*download('http://www.myipnumber.com/my-ip-address.asp'))
             if not data == '':
                 self.__isolated = False
             data = data.replace('\r\n', '\n').split('\nThe IP Address of this machine is:\n')[1]
@@ -169,36 +170,36 @@ class IPAddress:
         except:
             return None
     
-    def __site_5(self):
+    def __site_5(self, download):
         try:
-            data = spawn_read('curl', 'http://www.findipinfo.com')
+            data = spawn_read(*download('http://www.findipinfo.com'))
             if not data == '':
                 self.__isolated = False
             return data.split('Your IP Address Is: ')[1].split('<')[0]
         except:
             return None
     
-    def __site_6(self):
+    def __site_6(self, download):
         try:
-            data = spawn_read('curl', 'http://what-ip.net')
+            data = spawn_read(*download('http://what-ip.net'))
             if not data == '':
                 self.__isolated = False
             return data.split('Your IP Address is : ')[1].split('<b>')[1].split('</b>')[0]
         except:
             return None
     
-    def __site_7(self):
+    def __site_7(self, download):
         try:
-            data = spawn_read('curl', 'http://my-ip-address.com')
+            data = spawn_read(*download('http://my-ip-address.com'))
             if not data == '':
                 self.__isolated = False
             return data.split('<input ')[1].split('>')[0].split('value=')[1].split('"')[1]
         except:
             return None
     
-    def __site_8(self):
+    def __site_8(self, download):
         try:
-            data = spawn_read('curl', 'https://duckduckgo.com?q=what is my ip address')
+            data = spawn_read(*download('https://duckduckgo.com?q=what is my ip address'))
             if not data == '':
                 self.__isolated = False
             return data.split('"Answer":"Your IP address is ')[1].split(' ')[0]

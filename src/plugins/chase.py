@@ -42,7 +42,7 @@ class Chase:
         
         @return  :bool  Whether information could be fetched
         '''
-        command = ['wget', 'http://www.doeschasehaveajobyet.com', '-O', '-']
+        command = ['curl', 'http://www.doeschasehaveajobyet.com']
         proc = subprocess.Popen(command, stderr = sys.stderr, stdout = subprocess.PIPE)
         page = proc.stdout.read()
         proc.wait()

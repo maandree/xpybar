@@ -55,7 +55,7 @@ class Weather:
         '''
         self.icao = station
         url = 'http://weather.noaa.gov/pub/data/observations/metar/decoded/%s.TXT' % station
-        decoded = spawn_read('wget', url, '-O', '-').split('\n')
+        decoded = spawn_read('curl', url).split('\n')
         # How to parse: http://www.wunderground.com/metarFAQ.asp
         
         station_header, self.headers, decoded = decoded[0].split(', '), decoded[:2], decoded[2:]

@@ -111,7 +111,7 @@ class IPAddress:
     
     def __site_0(self):
         try:
-            data = spawn_read('wget', 'http://checkip.dyndns.org', '-O', '-')
+            data = spawn_read('curl', 'http://checkip.dyndns.org')
             if not data == '':
                 self.__isolated = False
             return data.split('<body>')[1].split('</body>')[0].split(': ')[1]
@@ -120,7 +120,7 @@ class IPAddress:
     
     def __site_1(self):
         try:
-            data = spawn_read('wget', 'http://ipecho.net/plain', '-O', '-')
+            data = spawn_read('curl', 'http://ipecho.net/plain')
             if not data == '':
                 self.__isolated = False
             data = data.strip()
@@ -130,7 +130,7 @@ class IPAddress:
     
     def __site_2(self):
         try:
-            data = spawn_read('wget', 'http://www.checkmyipaddress.org', '-O', '-')
+            data = spawn_read('curl', 'http://www.checkmyipaddress.org')
             if not data == '':
                 self.__isolated = False
             data = [line.strip() for line in data.replace('\r\n', '\n').split('\n') if '</h3>' in line]
@@ -142,7 +142,7 @@ class IPAddress:
     
     def __site_3(self):
         try:
-            data = spawn_read('wget', 'http://www.ip-address.org', '-O', '-')
+            data = spawn_read('curl', 'http://www.ip-address.org')
             if not data == '':
                 self.__isolated = False
             data = [line.strip(' \t') for line in data.replace('\r\n', '\n').split('\n') if 'ip += ' in line]
@@ -161,7 +161,7 @@ class IPAddress:
     
     def __site_4(self):
         try:
-            data = spawn_read('wget', 'http://www.myipnumber.com/my-ip-address.asp', '-O', '-')
+            data = spawn_read('curl', 'http://www.myipnumber.com/my-ip-address.asp')
             if not data == '':
                 self.__isolated = False
             data = data.replace('\r\n', '\n').split('\nThe IP Address of this machine is:\n')[1]
@@ -171,7 +171,7 @@ class IPAddress:
     
     def __site_5(self):
         try:
-            data = spawn_read('wget', 'http://www.findipinfo.com', '-O', '-')
+            data = spawn_read('curl', 'http://www.findipinfo.com')
             if not data == '':
                 self.__isolated = False
             return data.split('Your IP Address Is: ')[1].split('<')[0]
@@ -180,7 +180,7 @@ class IPAddress:
     
     def __site_6(self):
         try:
-            data = spawn_read('wget', 'http://what-ip.net', '-O', '-')
+            data = spawn_read('curl', 'http://what-ip.net')
             if not data == '':
                 self.__isolated = False
             return data.split('Your IP Address is : ')[1].split('<b>')[1].split('</b>')[0]
@@ -189,7 +189,7 @@ class IPAddress:
     
     def __site_7(self):
         try:
-            data = spawn_read('wget', 'http://my-ip-address.com', '-O', '-')
+            data = spawn_read('curl', 'http://my-ip-address.com')
             if not data == '':
                 self.__isolated = False
             return data.split('<input ')[1].split('>')[0].split('value=')[1].split('"')[1]
@@ -198,7 +198,7 @@ class IPAddress:
     
     def __site_8(self):
         try:
-            data = spawn_read('wget', 'https://duckduckgo.com?q=what is my ip address', '-O', '-')
+            data = spawn_read('curl', 'https://duckduckgo.com?q=what is my ip address')
             if not data == '':
                 self.__isolated = False
             return data.split('"Answer":"Your IP address is ')[1].split(' ')[0]

@@ -9,7 +9,7 @@ RUNTIME DEPENDENCIES:
 OPTIONAL RUNTIME DEPENDENCIES:
 
 	linux: most of the monitors require Linux's procfs or sysfs
-	wget: for Internet services
+	curl: for Internet services
 	python-pyalsaaudio: for ALSA volume control
 	hdparm: for hdparm support
 	python-pytz: for timezone support

@@ -49,7 +49,7 @@ class LeapSeconds:
         Constructor
         '''
         url = 'http://maia.usno.navy.mil/ser7/leapsec.dat'
-        announcements = spawn_read('wget', url, '-O', '-')
+        announcements = spawn_read('curl', url)
         while '  ' in announcements:
             announcements = announcements.replace('  ', ' ')
         announcements = announcements.replace('= ', '=').replace('=JD ', '=JD')

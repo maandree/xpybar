@@ -14,6 +14,7 @@ OPTIONAL RUNTIME DEPENDENCIES:
 	hdparm: for hdparm support
 	python-pytz: for timezone support
 	python-sysv-ipc: for ropty example
+	iputils: for ping support
 
 
 BUILD DEPENDENCIES:

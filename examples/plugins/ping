@@ -1,0 +1,53 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.ping
+
+import time
+import threading
+
+from plugins.ping import Ping
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS)
+ping_ = Ping(targets = Ping.get_nics(Ping.DEFAULT_GATEWAY), interval = 2)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+def colourise_latency(latency):
+    if latency is None:
+        return '????'
+    colour = '31'
+    if   latency <  5:  colour = '32'
+    elif latency < 10:  colour = '00'
+    elif latency < 20:  colour = '33'
+    return '\033[%sm%.2f\033[00m' % (colour, latency)
+
+def status(monitor):
+    monitor.semaphore.acquire()
+    try:
+        latency = monitor.get_latency(True)
+        dropped = monitor.dropped(True)
+        droptime = monitor.dropped_time(True)
+        latency = ' '.join(colourise_latency(latency[i]) for i in (1, 2, 4, 8))
+        if dropped == 0:
+            return latency
+        return '%s \033[31m-%i\033[00m(%is)' % (latency, dropped, droptime)
+    finally:
+        monitor.semaphore.release()
+
+
+def redraw():
+    text = ['%s: %s' % (nic, status(ping_.monitors[nic][0])) for nic in ping_.monitors.keys()]
+    text = ' │ '.join(text)
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

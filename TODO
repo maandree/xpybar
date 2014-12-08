@@ -34,7 +34,6 @@ List of plugins to implement:
      /proc/net/sockstat6
      /proc/net/wireless
      /proc/sysvipc
-     ping
 
 Demo plugins:
 

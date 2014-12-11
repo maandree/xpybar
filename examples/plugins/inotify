@@ -1,0 +1,46 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.inotify
+# It also shows how you can monitor `featherweight`
+
+import os
+import threading
+
+from plugins.inotify import Inotify
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+def inotify(_line):
+    global news
+    semaphore.acquire()
+    try:
+        news = news_update_()
+        bar.invalidate()
+    finally:
+        semaphore.release()
+
+def news_update_():
+    try:
+        with open(featherweight_status_file, 'rb') as file:
+            status = int(file.read().decode('utf-8', 'replace').replace('\n', ''))
+    except:
+        status = 0
+    colour = '31'
+    if   status <=  0:  colour = '0'
+    elif status <=  5:  colour = '32'
+    elif status <= 10:  colour = '33'
+    return 'News: \033[%sm%i\033[0m' % (colour, status)
+
+featherweight_status_file = '%s/.var/lib/featherweight/status' % os.environ['HOME']
+news = news_update_()
+semaphore = threading.Semaphore()
+
+Inotify(inotify, featherweight_status_file, events = ['close_write'])
+
+
+def redraw():
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, news)
+

@@ -15,6 +15,7 @@ OPTIONAL RUNTIME DEPENDENCIES:
 	python-pytz: for timezone support
 	python-sysv-ipc: for ropty example
 	iputils: for ping support
+	inotify-tools: for inotify support
 
 
 BUILD DEPENDENCIES:

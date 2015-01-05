@@ -2,6 +2,7 @@ Add SIGUSR1 for update
 
 List of plugins to implement:
 
+     Alarm clock
      portage
      iostat [-x] [-d] [-N] -zk [-p | <devices>...] <interval>
      SMART monitoring

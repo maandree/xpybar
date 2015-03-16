@@ -48,8 +48,11 @@ class LeapSeconds:
         '''
         Constructor
         '''
-        url = 'http://maia.usno.navy.mil/ser7/leapsec.dat'
+        #url = 'http://maia.usno.navy.mil/ser7/leapsec.dat' ## gone!
+        url = 'http://oceandata.sci.gsfc.nasa.gov/Ancillary/LUTs/modis/leapsec.dat'
         announcements = spawn_read('curl', url)
+        while not announcements.startswith(' '):
+            announcements = '\n'.join(announcements.split('\n')[1:])
         while '  ' in announcements:
             announcements = announcements.replace('  ', ' ')
         announcements = announcements.replace('= ', '=').replace('=JD ', '=JD')

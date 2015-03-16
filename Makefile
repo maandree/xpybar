@@ -96,7 +96,7 @@ install-examples: $(foreach F,$(EXAMPLES),examples/$(F))
 	install -m644 $^ -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples"
 
 .PHONY: install-trick-examples
-install-trick-examples: $(foreach F,$(EXAMPLES),examples/tricks/$(F))
+install-trick-examples: $(foreach F,$(TRICK_EXAMPLES),examples/tricks/$(F))
 	install -dm755   -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/tricks"
 	install -m644 $^ -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/tricks"
 

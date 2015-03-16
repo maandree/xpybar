@@ -40,6 +40,8 @@ PLUGIN_EXAMPLES = chase clock cpu cpuinfo cpuonline df discstats   \
                   dentrystate inodestate files tzclock ropty ping  \
                   inotify
 
+TRICK_EXAMPLES = localutcclock anytzclock
+
 EXAMPLES = mixed moderate test xmonad
 
 
@@ -86,12 +88,17 @@ install-license: COPYING LICENSE.gpl3 LICENSE.agpl3
 	install -m644 $^ -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
 
 .PHONY: install-all-examples
-install-all-examples: install-examples install-plugin-examples
+install-all-examples: install-examples install-trick-examples install-plugin-examples
 
 .PHONY: install-examples
 install-examples: $(foreach F,$(EXAMPLES),examples/$(F))
 	install -dm755   -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples"
 	install -m644 $^ -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples"
+
+.PHONY: install-trick-examples
+install-trick-examples: $(foreach F,$(EXAMPLES),examples/tricks/$(F))
+	install -dm755   -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/tricks"
+	install -m644 $^ -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/tricks"
 
 .PHONY: install-plugin-examples
 install-plugin-examples: $(foreach F,$(PLUGIN_EXAMPLES),examples/plugins/$(F))
@@ -115,6 +122,8 @@ uninstall:
 	-rmdir -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
 	-rm -- $(foreach F,$(PLUGIN_EXAMPLES),"$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/plugins/$(F)")
 	-rmdir -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/plugins"
+	-rm -- $(foreach F,$(TRICK_EXAMPLES),"$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/tricks/$(F)")
+	-rmdir -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/tricks"
 	-rm -- $(foreach F,$(EXAMPLES),"$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/$(F)")
 	-rmdir -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples"
 	-rmdir -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)"

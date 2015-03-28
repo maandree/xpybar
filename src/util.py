@@ -105,6 +105,69 @@ def reduce(f, items):
     return rc
 
 
+def colour_aware_len(string, original_len = len):
+    '''
+    Colour-aware object length measurement function
+    
+    It is suggested to redefine `len` with this
+    function in the following way.
+    
+        len_ = len
+        len = lambda string : colour_aware_len(string, len_)
+    
+    @param   string:object              The object to measure
+    @param   original_len:(object)→int  The original implementation of `len`
+    @return  :int                       The length of `string`
+    '''
+    if not isinstance(string, str):
+        return original_len(string)
+    rc, esc = 0, False
+    for c in string:
+        if esc:
+            if c == 'm':
+                esc = False
+        elif c == '\033':
+            esc = True
+        else:
+            rc += 1
+    return rc
+
+
+def sprintf(format, *args):
+    '''
+    Alternative to the %-operator for strings, with support for '%n'
+    
+    @param   format:str                    The format string
+    @param   args:*object                  The arguments to include in place of
+                                           the placeholders in the format string
+    @return  :(text:str, stops:list<int>)  The text after formatting, and locations of all '%n':s.
+                                           Locations of '%n':s are measured using `len`, meaning that
+                                           this function is aware of redefinitions of `len`.
+    '''
+    rc, measurements, curlen, esc, buf, args, argc = '', [], 0, False, '', tuple(args), 0
+    for c in format:
+        if esc:
+            esc = False
+            if c == 'n':
+                buf %= args[:argc]
+                curlen += len(buf)
+                rc += buf
+                buf = ''
+                args = args[argc:]
+                argc = 0
+                measurements.append(curlen)
+            else:
+                buf += '%'
+                buf += c
+                argc += 1
+        elif c == '%':
+            esc = True
+        else:
+            buf += c
+    rc += buf % args
+    return (rc, measurements)
+
+
 class Sometimes:
     '''
     Function wrapper for only actually invoking

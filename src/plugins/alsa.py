@@ -76,7 +76,10 @@ class ALSA:
             self.mixer.setmute(1, channel)
         else:
             self.mixer.setvolume(volume, channel)
-            self.mixer.setmute(0, channel)
+            try:
+                self.mixer.setmute(0, channel)
+            except:
+                pass # some mixers do not have mute switch
     
     
     @staticmethod

@@ -67,7 +67,7 @@ class ALSA:
     
     def set_volume(self, volume, channel = -1):
         '''
-        set the volume for a channel on the mixer
+        Set the volume for a channel on the mixer
         
         @param  volume:int?  The [0, 100] volume for the channel, `None` to mute the channel
         @param  channel:int  The index of the channel, `ALSA.ALL_CHANNELS` (-1) for all channels
@@ -80,6 +80,29 @@ class ALSA:
                 self.mixer.setmute(0, channel)
             except:
                 pass # some mixers do not have mute switch
+    
+    
+    def get_mute(self):
+        '''
+        Get the mute status for each channel on the mixer
+        
+        @return  :list<bool>  Whether mixer is muted for each channel
+        '''
+        self.mixer = alsaaudio.Mixer(self.mixername, 0, self.cardindex)
+        try:
+            return [m == 1 for m in self.mixer.getmute()]
+        except:
+            return [False] * len(self.mixer.getvolume())
+    
+    
+    def set_mute(self, mute, channel = -1):
+        '''
+        Set the mute status on the mixer
+        
+        @param  mute:bool    Whether the mixer should be muted on the channel
+        @param  channel:int  The index of the channel, `ALSA.ALL_CHANNELS` (-1) for all channels
+        '''
+        self.mixer.setmute(mute, channel)
     
     
     @staticmethod

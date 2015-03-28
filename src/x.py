@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import subprocess
+import os, subprocess
 import Xlib.display, Xlib.Xatom, Xlib.ext.randr, Xlib.X
 
 
@@ -121,7 +121,8 @@ def create_panel(width, height, left, ypos, panel_height, at_top):
                                            Xlib.X.ButtonReleaseMask |
                                            Xlib.X.ExposureMask
                                        ),
-                                       colormap = Xlib.X.CopyFromParent)
+                                       colormap = Xlib.X.CopyFromParent,
+                                       override_redirect = True)
     
     top_    = lambda x, y, w, h : [0, 0, y + h, 0, 0, 0, 0, 0, x, x + w, 0, 0]
     bottom_ = lambda x, y, w, h : [0, 0, 0, y + h, 0, 0, 0, 0, 0, 0, x, x + w]
@@ -129,10 +130,18 @@ def create_panel(width, height, left, ypos, panel_height, at_top):
     window.set_wm_name('xpybar')
     window.set_wm_icon_name('xpybar')
     window.set_wm_class('bar', 'xpybar')
+    window.set_wm_client_machine(os.uname().nodename)
     
-    _CARD = display.intern_atom("CARDINAL")
-    _PSTRUT = display.intern_atom("_NET_WM_STRUT_PARTIAL")
-    window.change_property(_PSTRUT, _CARD, 32, (top_ if at_top else bottom_)(left, ypos, width, panel_height))
+    position = (top_ if at_top else bottom_)(left, ypos, width, panel_height)
+    _CARD    = display.intern_atom("CARDINAL")
+    _PSTRUT  = display.intern_atom("_NET_WM_STRUT_PARTIAL")
+    _STRUT   = display.intern_atom("_NET_WM_STRUT")
+    _DESKTOP = display.intern_atom("_NET_WM_DESKTOP")
+    _PID     = display.intern_atom("_NET_WM_PID")
+    window.change_property(_PSTRUT,  _CARD, 32, position)
+    window.change_property(_STRUT,   _CARD, 32, position[:4])
+    window.change_property(_DESKTOP, _CARD, 32, [0xFFFFFFFF])
+    window.change_property(_PID,     _CARD, 32, [os.getpid()])
     
     _ATOM = display.intern_atom("ATOM")
     _TYPE = display.intern_atom("_NET_WM_WINDOW_TYPE")

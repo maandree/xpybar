@@ -29,7 +29,7 @@ PROGRAM_VERSION = '1.0'
 
 
 global OUTPUT, HEIGHT, YPOS, TOP, FONT, BACKGROUND, FOREGROUND
-global dislay, outputs, redraw, Bar, start, stop
+global display, outputs, redraw, Bar, start, stop
 global conf_opts, config_file, parser
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 0, True

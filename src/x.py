@@ -118,6 +118,7 @@ def create_panel(width, height, left, ypos, panel_height, at_top):
                                        Xlib.X.CopyFromParent,
                                        event_mask = (
                                            Xlib.X.StructureNotifyMask |
+                                           Xlib.X.ButtonPressMask |
                                            Xlib.X.ButtonReleaseMask |
                                            Xlib.X.ExposureMask
                                        ),

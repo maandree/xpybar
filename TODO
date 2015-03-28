@@ -16,7 +16,7 @@ List of plugins to implement:
      UPS
      Blueshift integration
      Backlight control
-     Thermal monitoring
+     Thermal monitoring (`sensors`)
      ESSID and link quality for wireless interfaces
      News feed syndication
      Keyboard layout

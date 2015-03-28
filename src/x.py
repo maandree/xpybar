@@ -98,6 +98,31 @@ def get_screen():
     return screen
 
 
+def get_event_mask():
+    '''
+    For `create_panel`, return which events should be caught
+    
+    @return  :int  Mask of events that should be caught
+    '''
+    return (Xlib.X.StructureNotifyMask |
+            Xlib.X.ButtonPressMask |
+            Xlib.X.ButtonReleaseMask |
+            Xlib.X.ExposureMask)
+
+
+def get_override_redirect():
+    '''
+    For `create_panel`, figure out whether override_redirect should be set
+    
+    @return  :bool  Whether override_redirect should be set
+    '''
+    if 'DESKTOP_SESSION' in os.environ:
+        desktop = os.environ['DESKTOP_SESSION']
+        if desktop in ('xmonad',):
+            return False
+    return True
+
+
 def create_panel(width, height, left, ypos, panel_height, at_top):
     '''
     Create a docked panel, not mapped yet
@@ -116,14 +141,9 @@ def create_panel(width, height, left, ypos, panel_height, at_top):
                                        Xlib.X.CopyFromParent,
                                        Xlib.X.InputOutput,
                                        Xlib.X.CopyFromParent,
-                                       event_mask = (
-                                           Xlib.X.StructureNotifyMask |
-                                           Xlib.X.ButtonPressMask |
-                                           Xlib.X.ButtonReleaseMask |
-                                           Xlib.X.ExposureMask
-                                       ),
+                                       event_mask = get_event_mask(),
                                        colormap = Xlib.X.CopyFromParent,
-                                       override_redirect = True)
+                                       override_redirect = get_override_redirect())
     
     top_    = lambda x, y, w, h : [0, 0, y + h, 0, 0, 0, 0, 0, x, x + w, 0, 0]
     bottom_ = lambda x, y, w, h : [0, 0, 0, y + h, 0, 0, 0, 0, 0, 0, x, x + w]

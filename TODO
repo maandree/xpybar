@@ -18,8 +18,7 @@ List of plugins to implement:
      Blueshift integration
      Backlight control
      Thermal monitoring (`sensors`)
-     ESSID and link quality for wireless interfaces
-     News feed syndication
+     ESSID
      Keyboard layout
      EWMH
      Meteor showers
@@ -31,12 +30,22 @@ List of plugins to implement:
          summer time and similar)
      natural disaster reports
      IRC
-     /proc/dri
      /proc/interrupts
      /proc/net/sockstat
      /proc/net/sockstat6
      /proc/net/wireless
+     /proc/net/arp
+     /proc/net/rarp (requires RARP to be configured into the kernel)
+     /proc/net/igmp
+     /proc/net/raw
+     /proc/net/snmp
+     /proc/net/tcp
+     /proc/net/udp
+     /proc/net/unix
      /proc/sysvipc
+     /proc/locks
+     /proc/swaps
+     /proc/sys/kernel/random/
 
 Demo plugins:
 

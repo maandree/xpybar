@@ -57,6 +57,5 @@ Demo plugins:
      vmstat
      weather
      hdparm
-     alsa :: get_mute, set_mute, set_volume
 
 Terminal mode

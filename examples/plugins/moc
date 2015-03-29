@@ -35,5 +35,5 @@ def redraw():
     bar.draw_coloured_text(0, 10, 0, 2, text)
 
 
-# TODO interaction with moc
+# See examples/moderate for interation support.
 

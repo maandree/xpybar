@@ -9,7 +9,7 @@ from plugins.moc import MOC
 from plugins.clock import Clock
 
 
-OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
 
 
 clock = Clock(sync_to = Clock.SECONDS)
@@ -20,15 +20,17 @@ def start():
     async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
 
 
+line2 = ['File', 'Title', 'SongTitle', 'Album', 'Artist']
 def redraw():
     moc_ = MOC()
     text = ''
     if moc_.state in [MOC.PAUSED, MOC.PLAYING]:
-        text = ' │ ' + ' │ '.join(['%s: %s' % (key, moc_[keys]) for key in moc_.keys()])
+        text = ' │ ' + ' │ '.join(['%s: %s' % (key, moc_[key]) for key in moc_.keys() if key not in line2])
     text = 'State: %s%s' % ({MOC.NOT_RUNNING : 'not running',
                                 MOC.STOPPED     : 'stopped',
                                 MOC.PAUSED      : 'paused',
                                 MOC.PLAYING     : 'playing'}[moc_.state], text)
+    text += '\n' + ' │ '.join(['%s: %s' % (key, moc_[key]) for key in moc_.keys() if key in line2])
     bar.clear()
     bar.draw_coloured_text(0, 10, 0, 2, text)
 

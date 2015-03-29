@@ -13,7 +13,7 @@ OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
 
 def redraw():
     cpu = CPUOnline()
-    s = lambda cpus : ', '.join([str(i) for i in cpus])
+    s = lambda cpus : '(none)' if len(cpus) == 0 else ', '.join([str(i) for i in cpus])
     text = 'Online: %s │ Offline: %s │ Present: %s │ Possible: %s'
     text %= s(cpu.online), s(cpu.offline), s(cpu.present), s(cpu.possible)
     bar.clear()

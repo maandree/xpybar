@@ -43,12 +43,13 @@ class CPUOnline:
         
         data = []
         for filename in ('offline', 'online', 'possible', 'present'):
-            with open('/sys/devices/system/cpu/online', 'rb') as file:
+            with open('/sys/devices/system/cpu/' + filename, 'rb') as file:
                 data.append(file.read())
         
         data = [x.decode('utf-8', 'replace').replace('\n', ' ').replace(',', ' ') for x in data]
         data = [map(expand, filter(lambda item : not item == '', x.split(' '))) for x in data]
         data = [reduce(lambda x, y : x + y, list(x)) for x in data]
+        data = [x if x is not None else [] for x in data]
         
         (self.offline, self.online, self.possible, self.present) = data
 

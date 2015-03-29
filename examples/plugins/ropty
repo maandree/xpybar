@@ -1,6 +1,6 @@
 # -*- python -*-
 
-# A xpybar configuration example testing the features of plugins.kmsg
+# A xpybar configuration example testing the features of plugins.ropty
 
 from plugins.ropty import ROPTY
 
@@ -15,12 +15,11 @@ def start():
     global pty_
     start_()
     def refresh():
-        if pty_.size() == 0:
-            text = ''
-        else:
-            line = pty_.next
-            text = '\033[37;41m%i\033[00m%s'
-            text %= (pty_.size(), line)
+        global text
+        line = pty_.next()
+        if line == '':
+            return
+        text = '\033[37;41m%i\033[00m%s' % (pty_.size(), line.replace('\x07', ''))
         bar.invalidate()
     pty_ = ROPTY(refresh)
 

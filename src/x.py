@@ -68,15 +68,18 @@ def get_monitors():
             s = int(line[len('Screen '):].split(':')[0])
         elif s == screen_i:
             if ' connected ' in line:
-                m = line.replace('-', '+-').replace('++', '+')
-                p = ' primary ' in m
-                m = m.replace(' primary ', ' ')
-                m = m.split(' ')[2].replace('+', 'x').split('x')
-                m = [int(x) for x in m]
-                if p and (prim is None):
-                    prim = m
-                else:
-                    rc.append(m)
+                try:
+                    m = line.replace('-', '+-').replace('++', '+')
+                    p = ' primary ' in m
+                    m = m.replace(' primary ', ' ')
+                    m = m.split(' ')[2].replace('+', 'x').split('x')
+                    m = [int(x) for x in m]
+                    if p and (prim is None):
+                        prim = m
+                    else:
+                        rc.append(m)
+                except:
+                    pass # Output not used
     if prim is not None:
         rc = [prim] + rc
     return rc

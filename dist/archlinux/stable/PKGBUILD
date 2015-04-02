@@ -2,12 +2,12 @@
 
 pkgname=xpybar
 pkgver=1.10
-pkgrel=1
+pkgrel=2
 pkgdesc="A highly extensible minimalistic dock panel configured in Python 3"
 arch=(any)
 url="https://github.com/maandree/xpybar"
 license=('GPL3' 'AGPL3')
-depends=(python3 argparser python3-xlib xorg-xrandr)
+depends=(python3 argparser python-xlib xorg-xrandr)
 optdepends=("linux: most of the monitors require Linux's procfs or sysfs"
             "curl: for Internet services"
 	    "python-pyalsaaudio: for ALSA volume control"

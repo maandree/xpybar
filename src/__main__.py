@@ -529,11 +529,7 @@ elif parser.opts['--copyright'] is not None:
     print(copyright[1 : -1])
     sys.exit(0)
 elif parser.opts['--warranty'] is not None:
-    print('This program is distributed in the hope that it will be useful,')
-    print('but WITHOUT ANY WARRANTY; without even the implied warranty of')
-    print('MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the')
-    print('GNU General Public License amd GNU Affero General Public License')
-    print('for more details.')
+    print(copyright.split('\n\n')[2])
     sys.exit(0)
 elif parser.opts['--version'] is not None:
     print('%s %s' % (PROGRAM_NAME, PROGRAM_VERSION))

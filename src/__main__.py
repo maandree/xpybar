@@ -16,6 +16,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
+import os, sys, pwd
+
 import Xlib.threaded # IMPORTANT (threading do not work otherwise, see XInitThreads)
 import Xlib.display, Xlib.Xatom, Xlib.ext.randr, Xlib.X
 from argparser import *
@@ -543,8 +545,11 @@ config_file = a(parser.opts['--configurations'])
 
 ## Load extension and configurations via xpybarrc
 if config_file is None:
-    for file in ('$XDG_CONFIG_HOME/%/%rc', '$HOME/.config/%/%rc', '$HOME/.%rc', '/etc/%rc'):
-        file = file.replace('%', 'xpybarrc')
+    # TODO add support for $XDG_CONFIG_DIRS
+    files = ('$XDG_CONFIG_HOME/%/%rc', '$HOME/.config/%/%rc', '$HOME/.%rc',
+             '$~/.config/%/%rc', '$~/.%rc', '/etc/%rc')
+    for file in files:
+        file = file.replace('%', 'xpybar')
         for arg in ('XDG_CONFIG_HOME', 'HOME'):
             if '$' + arg in file:
                 if arg in os.environ:
@@ -553,6 +558,8 @@ if config_file is None:
                     file = None
                     break
         if file is not None:
+            if file.startswith('$~'):
+                file = pwd.getpwuid(os.getuid()).pw_dir + file[2:]
             file = file.replace('\0', '$')
             if os.path.exists(file):
                 config_file = file

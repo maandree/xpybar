@@ -32,13 +32,13 @@ PLUGINS = chase clock cpuinfo cpuonline cpu df discstats ipaddress  \
           kmsg leapsec linereader loadavg lunar mem moc network     \
           pacman snmp snmp6 softirqs solar uname uptime users       \
           vmstat weather xdisplay xkb alsa dentrystate inodestate   \
-          files hdparm tzclock ropty ping inotify random
+          files hdparm tzclock ropty ping inotify random swaps
 
 PLUGIN_EXAMPLES = chase clock cpu cpuinfo cpuonline df discstats   \
                   ipaddress kmsg loadavg lunar mem moc network     \
                   pacman uname uptime users xdisplay xkb alsa      \
                   dentrystate inodestate files tzclock ropty ping  \
-                  inotify random
+                  inotify random swaps
 
 TRICK_EXAMPLES = localutcclock anytzclock
 

@@ -1,0 +1,35 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.swaps
+
+import time
+import threading
+
+from plugins.swaps import Swaps
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+swaps_ = Swaps()
+HEIGHT *= len(swaps_.swaps)
+def redraw():
+    def title_and_extend(swap):
+        data = list(zip(swaps_.headers, swap))
+        usage = int(swap[swaps_.header_map['Used']]) / int(swap[swaps_.header_map['Size']])
+        usage = '%i%%' % int(usage * 100 + 0.5)
+        data.append(('Usage', usage))
+        return data
+    text = '\n'.join(' │ '.join('%s: %s' % (h, v) for (h, v) in title_and_extend(swap)) for swap in swaps_.swaps)
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

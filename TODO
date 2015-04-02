@@ -44,7 +44,6 @@ List of plugins to implement:
      /proc/net/unix
      /proc/sysvipc
      /proc/locks
-     /proc/swaps
 
 Demo plugins:
 

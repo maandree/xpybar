@@ -16,6 +16,8 @@ OPTIONAL RUNTIME DEPENDENCIES:
 	python-sysv-ipc: for ropty example
 	iputils: for ping support
 	inotify-tools: for inotify support
+	alarm: for limiting the time of a file search in locks
+	findutils: for file search in locks
 
 
 BUILD DEPENDENCIES:

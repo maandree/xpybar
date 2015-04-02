@@ -43,7 +43,6 @@ List of plugins to implement:
      /proc/net/udp
      /proc/net/unix
      /proc/sysvipc
-     /proc/locks
 
 Demo plugins:
 

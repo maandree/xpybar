@@ -492,7 +492,7 @@ def setproctitle(title):
         # of slashes in the title. At least that is
         # the observed behaviour when using procps-ng.
         title = title.split('/')[-1]
-        # Create strng buffer with title
+        # Create string buffer with title
         title = title.encode(sys.getdefaultencoding(), 'replace')
         title = ctypes.create_string_buffer(title)
         if 'linux' in sys.platform:

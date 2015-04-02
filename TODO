@@ -45,7 +45,6 @@ List of plugins to implement:
      /proc/sysvipc
      /proc/locks
      /proc/swaps
-     /proc/sys/kernel/random/
 
 Demo plugins:
 

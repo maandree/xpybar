@@ -1,0 +1,36 @@
+# -*- python -*-
+
+# A xpybar configuration example testing the features of plugins.random
+
+import time
+import threading
+
+from plugins.random import Random
+from plugins.clock import Clock
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 24, True
+
+
+clock = Clock(sync_to = Clock.SECONDS)
+
+start_ = start
+def start():
+    start_()
+    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+
+
+random_ = Random()
+def redraw():
+    data = [('Avail', random_.entropy_avail),
+            ('Size', lambda : random_.poolsize),
+            ('Read', lambda : random_.read_wakeup_threshold),
+            ('Write', lambda : random_.write_wakeup_threshold),
+            ('Reseed', lambda : random_.urandom_min_reseed_secs),
+            ('Boot', lambda : random_.boot_id)]
+    
+    text = ' │ '.join('%s: %s' % (text, str(value())) for (text, value) in data)
+    
+    bar.clear()
+    bar.draw_coloured_text(0, 10, 0, 2, text)
+

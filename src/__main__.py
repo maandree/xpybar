@@ -541,21 +541,26 @@ config_file = a(parser.opts['--configurations'])
 
 ## Load extension and configurations via xpybarrc
 if config_file is None:
-    # TODO add support for $XDG_CONFIG_DIRS
-    files = ('$XDG_CONFIG_HOME/%/%rc', '$HOME/.config/%/%rc', '$HOME/.%rc',
-             '$~/.config/%/%rc', '$~/.%rc', '/etc/%rc')
+    dirs = os.environ['XDG_CONFIG_DIRS'].split(':') if 'XDG_CONFIG_DIRS' in os.environ else []
+    files = ['$XDG_CONFIG_DIRS/%rc'] * len(dirs)
+    files = ['$XDG_CONFIG_HOME/%/%rc', '$HOME/.config/%/%rc', '$HOME/.%rc',
+             '$~/.config/%/%rc', '$~/.%rc'] + files + ['/etc/%rc']
+    home = pwd.getpwuid(os.getuid()).pw_dir.replace('$', '\0')
     for file in files:
         file = file.replace('%', 'xpybar')
-        for arg in ('XDG_CONFIG_HOME', 'HOME'):
+        for arg in ('XDG_CONFIG_HOME', 'XDG_CONFIG_DIRS', 'HOME', '~'):
             if '$' + arg in file:
-                if arg in os.environ:
+                if arg == 'XDG_CONFIG_DIRS':
+                    dir, dirs = dirs[0].replace('$', '\0'), dirs[1:]
+                    file = file.replace('$' + arg, dir)
+                elif arg == '~':
+                    file = file.replace('$' + arg, home)
+                elif arg in os.environ:
                     file = file.replace('$' + arg, os.environ[arg].replace('$', '\0'))
                 else:
                     file = None
                     break
         if file is not None:
-            if file.startswith('$~'):
-                file = pwd.getpwuid(os.getuid()).pw_dir + file[2:]
             file = file.replace('\0', '$')
             if os.path.exists(file):
                 config_file = file

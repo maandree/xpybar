@@ -22,6 +22,35 @@ import threading
 import subprocess
 
 
+def setproctitle(title):
+    '''
+    Set process title
+    
+    @param  title:str  The title of the process
+    '''
+    import ctypes
+    try:
+        # Remove path, keep only the file,
+        # otherwise we get really bad effects, namely
+        # the name title is truncates by the number
+        # of slashes in the title. At least that is
+        # the observed behaviour when using procps-ng.
+        title = title.split('/')[-1]
+        # Create string buffer with title
+        title = title.encode(sys.getdefaultencoding(), 'replace')
+        title = ctypes.create_string_buffer(title)
+        if 'linux' in sys.platform:
+            # Set process title on Linux
+            libc = ctypes.cdll.LoadLibrary('libc.so.6')
+            libc.prctl(15, ctypes.byref(title), 0, 0, 0)
+        elif 'bsd' in sys.platform:
+            # Set process title on at least FreeBSD
+            libc = ctypes.cdll.LoadLibrary('libc.so.7')
+            libc.setproctitle(ctypes.create_string_buffer(b'-%s'), title)
+    except:
+        pass
+
+
 def async(target, name = None, group = None):
     '''
     Start a function asynchronously
@@ -30,7 +59,11 @@ def async(target, name = None, group = None):
     @param   name:str?       The name of the thread
     @return  :Thread         A running deamon-thread running `target`, with the name `name`
     '''
-    t = threading.Thread(target = target, name = name)
+    def target_wrapper():
+        if 'linux' in sys.platform: ## XXX I only know that will happen on Linux
+            setproctitle(name)
+        target()
+    t = threading.Thread(target = target_wrapper if name is not None else target, name = name)
     t.setDaemon(True)
     t.start()
     return t

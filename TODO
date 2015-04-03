@@ -58,4 +58,5 @@ Demo plugins:
 Terminal mode
 
 workspace and layout switching in xmonad
+fix so that ropty works with wall too
 

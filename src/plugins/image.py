@@ -205,7 +205,23 @@ class Image:
                             return files[0]
             return None
         
-        best = [f for f in [find_best(d) for d in directories] if f is not None]
+        best = [(f, d) for f, d in zip([find_best(d) for d in directories], directories) if f is not None]
+        if len(best) == 0:
+            return None
         
-        return None if len(best) == 0 else best[0]
+        best = [(f, t(lambda : int(f[len(d):].split('/')[2]).split('x')[0], -1)) for f, d in best]
+        max_size = 1 + max(s for _f, s in best)
+        best = [(f, max_size if s < 0 else s) for (f, s) in best]
+        if preferred_size is None:
+            preferred_size = max_size
+        
+        high = [(f, s) for f, s in best if (s >= preferred_size)]
+        low  = [(f, s) for f, s in best if (s <  preferred_size)]
+        high.sort()
+        low.sort()
+        high = [(f, s) for f, s in high]
+        low  = [(f, s) for f, s in reversed(low)]
+        best = high + low
+        
+        return best[0][0]
 

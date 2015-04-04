@@ -1,0 +1,56 @@
+# -*- python -*-
+'''
+xpybar – xmobar replacement written in python
+Copyright © 2014, 2015  Mattias Andrée (maandree@member.fsf.org)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
+# A xpybar configuration example when application launchers
+
+import time
+import threading
+
+from plugins.image import Image
+
+
+OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
+
+
+class Launcher:
+    def __init__(self, icon, *command):
+        self.icon = Image(icon, height = HEIGHT, icon = '/' not in icon)
+        self.command = list(command)
+
+
+launchers = [ ('dia',                             'dia')
+            , ('inkscape',                        'inkscape')
+            , ('gimp',                            'gimp')
+            , ('calligrakrita',                   'krita')
+            , ('blender',                         'blender')
+            , ('/usr/share/pixmaps/openscad.png', 'openscad')
+            ]
+
+
+
+launchers = [Launcher(x[0], *x[1:]) for x in launchers]
+
+
+def redraw():
+    bar.clear()
+    offset = 0
+    for launcher in launchers:
+        launcher.icon.draw(bar, offset, 0)
+        offset += HEIGHT
+

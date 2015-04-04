@@ -109,8 +109,8 @@ class Image:
         i = 0
         for _i in range(len(buf) // 3):
             self.data.append(buf[i])
-            self.data.append(buf[i + 1])
             self.data.append(buf[i + 2])
+            self.data.append(buf[i + 1])
             self.data.append(0)
             i += 3
         self.data = bytes(self.data)
@@ -154,7 +154,7 @@ class Image:
         
         dname = name.split('/')[0] if '/' in name else None
         iname = name.split('/')[-1]
-        preferred_size = int((width ** 2 + height ** 2) ** 0.5) if width is not None else None
+        preferred_size = (width + height) // 2 if width is not None else None
         
         def order_themes(themes):
             themes, pre, post, state = set(themes), [], [], 0
@@ -169,13 +169,13 @@ class Image:
         def order_sizes(sizes):
             sizes = [t(lambda : int(s.split('x')[0]), -1) for s in sizes]
             if preferred_size is not None:
-                high = [s for s in sizes if (s > 0) and (s > preferred_size)]
-                low  = [s for s in sizes if (s > 0) and (s < preferred_size)]
+                high = [s for s in sizes if (s > 0) and (s >= preferred_size)]
+                low  = [s for s in sizes if (s > 0) and (s <  preferred_size)]
                 high.sort()
                 low.sort()
                 high = ['%ix%i' % (s, s) for s in high]
                 low  = ['%ix%i' % (s, s) for s in reversed(low)]
-                return ['%ix%i' % (preferred_size, preferred_size)] + high + ['scalable'] + low
+                return high + ['scalable'] + low
             else:
                 sizes.sort()
                 return ['scalable'] + reversed(sizes)

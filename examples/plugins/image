@@ -28,9 +28,11 @@ from plugins.image import Image
 OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
 
 
-#image_ = Image('/usr/share/icons/hicolor/scalable/apps/mate-panel-clock.svg', 'rgb(0, 0, 0)', 24)
-#image_ = Image('/usr/share/icons/oxygen/256x256/apps/clock.png', 'rgb(0, 0, 0)', 24)
-image_ = Image('/usr/share/icons/ContrastHigh/48x48/apps/clock.png', 'rgb(0, 0, 0)', 24)
+#image_ = Image('/usr/share/icons/hicolor/scalable/apps/mate-panel-clock.svg', 'rgb(0, 0, 0)', 24, icon = False)
+#image_ = Image('/usr/share/icons/oxygen/256x256/apps/clock.png', 'rgb(0, 0, 0)', 24, icon = False)
+#image_ = Image('/usr/share/icons/ContrastHigh/48x48/apps/clock.png', 'rgb(0, 0, 0)', 24, icon = False)
+#image_ = Image('mate-panel-clock', 'rgb(0, 0, 0)', 24, icon = True)
+image_ = Image('clock', 'rgb(0, 0, 0)', 24, icon = True)
 
 
 def redraw():

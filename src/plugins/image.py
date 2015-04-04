@@ -23,8 +23,13 @@ class Image:
     Images and icons
     '''
     
+    theme_preferences = ['hicolor', ..., 'ContrastHigh']
+    '''
+    :list<str|...>   List of themes in order of preference, `...` marks any that is not listed
+    '''
     
-    def __init__(self, file, background = 'black', width = None, height = None):
+    
+    def __init__(self, file, background = 'black', width = None, height = None, icon = True):
         '''
         Constructor
         
@@ -32,6 +37,8 @@ class Image:
         @param  background:str  ImageMagick understandable string for the background colour
         @param  width:int?      The width the image should have, `None` to not resize or use `height`
         @param  height:int?     The height the image should have, `None` to not resize or use `width`
+        @parma  icon:bool       Whether to search for an icon among installed icons rather than
+                                load the image via its pathname
         '''
         import Xlib.X, sys
         from subprocess import Popen, PIPE
@@ -42,6 +49,11 @@ class Image:
         height = width if height is None else height
         width = height if width  is None else width
         raster = None
+        
+        if icon:
+            file = Image.find_icon(file, width, height, Image.theme_preferences)
+            if file is None:
+                raise Exception('No icon found')
         
         convert = ['file', '-']
         convert = Popen(convert, stdin = open(file, 'rb'), stdout = PIPE, stderr = sys.stderr)
@@ -111,4 +123,89 @@ class Image:
         @param  y:int    The top position of the image
         '''
         bar.window.put_image(bar.gc, x, y, self.width, self.height, self.format, self.depth, 0, self.data)
+    
+    
+    @staticmethod
+    def find_icon(name, width, height, preferences):
+        '''
+        Find and image for in abstract icon
+        
+        @param   name:str                    The name of the icon
+        @param   width:int?                  The preferred width of the icon, `None` for as large as possible
+        @param   height:int?                 The preferred height of the icon, `None` for as large as possible
+        @param   preferences:list<str|...>   List of themes in order of preference, `...` marks any that is not listed
+        @return  :str?                       A pathname for the icon, `None` if none found
+        '''
+        import os, pwd
+        directories = []
+        home = pwd.getpwuid(os.getuid()).pw_dir
+        directories.append('%s/.icons' % home)
+        if 'HOME' in os.environ:
+            if not os.environ['HOME'] == home:
+                home = os.environ['HOME']
+                directories.append('%s/.icons' % home)
+        directories += ['/usr/local/share/icons', '/usr/share/icons', '/share/icons']
+        directories = [d for d in directories if os.path.exists(d) and os.path.isdir(d)]
+        
+        height = width if height is None else height
+        width = height if width  is None else width
+        
+        dname = name.split('/')[0] if '/' in name else None
+        iname = name.split('/')[-1]
+        preferred_size = int((width ** 2 + height ** 2) ** 0.5) if width is not None else None
+        
+        def order_themes(themes):
+            themes, pre, post, state = set(themes), [], [], 0
+            for theme in preferences:
+                if theme is ...:
+                    state = 1
+                elif theme in themes:
+                    themes.remove(theme)
+                    (pre if state == 0 else post).append(theme)
+            return pre + ([] if state == 0 else list(themes)) + post
+        
+        def order_sizes(sizes):
+            sizes = [t(lambda : int(s.split('x')[0]), -1) for s in sizes]
+            if preferred_size is not None:
+                high = [s for s in sizes if (s > 0) and (s > preferred_size)]
+                low  = [s for s in sizes if (s > 0) and (s < preferred_size)]
+                high.sort()
+                low.sort()
+                high = ['%ix%i' % (s, s) for s in high]
+                low  = ['%ix%i' % (s, s) for s in reversed(low)]
+                return ['%ix%i' % (preferred_size, preferred_size)] + high + ['scalable'] + low
+            else:
+                sizes.sort()
+                return ['scalable'] + reversed(sizes)
+        
+        def t(f, default):
+            try:
+                return f()
+            except:
+                return default
+        
+        def check(file):
+            return ('.'.join(file.split('.')[:-1]) if '.' in file else file) == name
+        
+        def find_best(directory):
+            j = lambda *f : '/'.join(list(f))
+            for theme in order_themes(t(lambda : os.listdir(directory), [])):
+                for size in order_sizes(t(lambda : os.listdir(j(directory, theme)), [])):
+                    if dname is not None:
+                        categories = [dname]
+                    else:
+                        categories = t(lambda : os.listdir(j(directory, theme, size)), [])
+                    for cat in ['.'] + categories:
+                        dir = j(directory, theme, size, cat)
+                        files = t(lambda : os.listdir(dir), [])
+                        files = [j(dir, f) for f in files if check(f)]
+                        files = [f for f in files if os.path.isfile(f)]
+                        if len(files) > 0:
+                            files.sort()
+                            return files[0]
+            return None
+        
+        best = [f for f in [find_best(d) for d in directories] if f is not None]
+        
+        return None if len(best) == 0 else best[0]
 

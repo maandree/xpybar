@@ -19,8 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # A xpybar configuration example when application launchers
 
+import os
+import sys
 import time
-import threading
 
 from plugins.image import Image
 
@@ -28,23 +29,82 @@ from plugins.image import Image
 OUTPUT, HEIGHT, YPOS, TOP = 0, 24, 24, True
 
 
+Image.theme_preferences = ['hicolor', 'mate', 'gnome', 'Adwaita', ..., 'ContrastHigh']
+
+
 class Launcher:
     def __init__(self, icon, *command):
         self.icon = Image(icon, height = HEIGHT, icon = '/' not in icon)
         self.command = list(command)
+    def launch(self):
+        if os.fork() == 0:
+            if os.fork() == 0:
+                os.setpgrp()
+                os.execvp(self.command[0], self.command)
+            sys.exit(0)
+    def scroll_up(self):
+        pass
+    def scroll_down(self):
+        pass
 
 
-launchers = [ ('dia',                             'dia')
-            , ('inkscape',                        'inkscape')
-            , ('gimp',                            'gimp')
-            , ('calligrakrita',                   'krita')
-            , ('blender',                         'blender')
-            , ('/usr/share/pixmaps/openscad.png', 'openscad')
+class LauncherSet:
+    def __init__(self, launchers):
+        self.launchers = [Launcher(x[0], *x[1:]) for x in launchers]
+        self.current = 0
+        self.icon = self.launchers[self.current].icon
+    def launch(self):
+        self.launchers[self.current].launch()
+    def scroll_up(self):
+        self.current = (self.current - 1) % len(self.launchers)
+        self.icon = self.launchers[self.current].icon
+        bar.invalidate()
+    def scroll_down(self):
+        self.current = (self.current + 1) % len(self.launchers)
+        self.icon = self.launchers[self.current].icon
+        bar.invalidate()
+
+
+launchers = [ [ ('accessories-calculator',                         'mate-calc')
+              , ('accessories-character-map',                      'mucharmap')
+              , ('scanner',                                        'simple-scan')
+              ]
+            , [ ('dia',                                            'dia')
+              , ('inkscape',                                       'inkscape')
+              , ('gimp',                                           'gimp')
+              , ('calligrakrita',                                  'krita')
+              , ('blender',                                        'blender')
+              , ('/usr/share/pixmaps/openscad.png',                'openscad')
+              ]
+            , ('emacs',                                            'emacs')
+            , ('meld',                                             'meld')
+            , [ ('audacity',                                       'audacity')
+              , ('/usr/share/ardour3/icons/ardour_icon_48px.png',  'ardour3')
+              ]
+            , ('vlc',                                              'vlc')
+            , [ ('deluge',                                         'deluge')
+              , ('/usr/share/pixmaps/amule.xpm',                   'amule')
+              ]
+            , ('claws-mail',                                       'claws-mail')
+            , [ ('terminator',                                     'terminator')
+              , ('/usr/share/pixmaps/xterm-color_48x48.xpm',       'xterm')
+              ]
             ]
 
 
+launchers = [Launcher(x[0], *x[1:]) if isinstance(x, tuple) else LauncherSet(x) for x in launchers]
 
-launchers = [Launcher(x[0], *x[1:]) for x in launchers]
+
+start_ = start
+def start():
+    start_()
+    def reaper():
+        while True:
+            try:
+                os.wait()
+            except:
+                time.sleep(3)
+    async(reaper, name = 'reaper')
 
 
 def redraw():
@@ -53,4 +113,30 @@ def redraw():
     for launcher in launchers:
         launcher.icon.draw(bar, offset, 0)
         offset += HEIGHT
+
+
+LEFT_BUTTON = 1
+RIGHT_BUTTON = 3
+SCROLL_UP = 4
+SCROLL_DOWN = 5
+
+
+def unhandled_event(e):
+    '''
+    Invoked when an unrecognised even is polled,
+    feel free to replace this completely
+    
+    @param  e  The event
+    '''
+    if isinstance(e, Xlib.protocol.event.ButtonPress):
+        x = e.event_x // HEIGHT
+        button = e.detail
+        if 0 <= x < len(launchers):
+            if   button == LEFT_BUTTON:   launchers[x].launch()
+            elif button == RIGHT_BUTTON:  launchers[x].scroll_down()
+            elif button == SCROLL_UP:     launchers[x].scroll_up()
+            elif button == SCROLL_DOWN:   launchers[x].scroll_down()
+
+
+# TODO support for droping files onto the launchers to open with those files would be nice
 

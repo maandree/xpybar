@@ -55,6 +55,8 @@ class Image:
             if file is None:
                 raise Exception('No icon found')
         
+        # ImageMagick (and GraphicsMagick) forces white background when converting SVG images
+        # so we need to sue rsvg-convert if we encounter an SVG image.
         convert = ['file', '-']
         convert = Popen(convert, stdin = open(file, 'rb'), stdout = PIPE, stderr = sys.stderr)
         if 'Scalable Vector Graphics' in convert.communicate()[0].decode('utf-8', 'replace'):

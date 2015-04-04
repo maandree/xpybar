@@ -68,6 +68,7 @@ class LauncherSet:
 launchers = [ [ ('accessories-calculator',                         'mate-calc')
               , ('accessories-character-map',                      'mucharmap')
               , ('scanner',                                        'simple-scan')
+              , ('meld',                                           'meld')
               ]
             , [ ('dia',                                            'dia')
               , ('inkscape',                                       'inkscape')
@@ -76,13 +77,12 @@ launchers = [ [ ('accessories-calculator',                         'mate-calc')
               , ('blender',                                        'blender')
               , ('/usr/share/pixmaps/openscad.png',                'openscad')
               ]
-            , ('emacs',                                            'emacs')
-            , ('meld',                                             'meld')
-            , [ ('audacity',                                       'audacity')
+            , [ ('emacs',                                          'emacs')
+              , ('audacity',                                       'audacity')
               , ('/usr/share/ardour3/icons/ardour_icon_48px.png',  'ardour3')
               ]
-            , ('vlc',                                              'vlc')
-            , [ ('deluge',                                         'deluge')
+            , [ ('vlc',                                            'vlc')
+              , ('deluge',                                         'deluge')
               , ('/usr/share/pixmaps/amule.xpm',                   'amule')
               ]
             , ('claws-mail',                                       'claws-mail')

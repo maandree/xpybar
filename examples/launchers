@@ -87,6 +87,7 @@ launchers = [ [ ('accessories-calculator',                         'mate-calc')
               ]
             , ('claws-mail',                                       'claws-mail')
             , [ ('terminator',                                     'terminator')
+              , ('cool-retro-term',                                'cool-retro-term')
               , ('/usr/share/pixmaps/xterm-color_48x48.xpm',       'xterm')
               ]
             ]

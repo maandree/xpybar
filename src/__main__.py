@@ -111,7 +111,7 @@ class Bar:
         @param  output:int                                 The index of the output within the screen as printed by xrandr, except primary is first
         @param  height:int                                 The height of the panel
         @param  ypos:int                                   The position of the panel in relation the either the top or bottom edge of the output
-        @param  top:int                                    Whether the panel is to be docked to the top of the output, otherwise to the bottom
+        @param  top:bool                                   Whether the panel is to be docked to the top of the output, otherwise to the bottom
         @param  font:str                                   The default font
         @param  background:(red:int, green:int, blue:int)  The default background
         @param  foreground:(red:int, green:int, blue:int)  The default foreground
@@ -333,7 +333,7 @@ class Bar:
                     self.draw_coloured_text(int(x), y, ascent, descent, part)
                     i += 1
             y += line_height
-        
+    
     def create_colour(self, red, green, blue):
         '''
         Create a colour instance

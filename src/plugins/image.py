@@ -21,6 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class Image:
     '''
     Images and icons
+    
+    @variable  width:int   The width of the image
+    @variable  height:int  The height of the image
     '''
     
     theme_preferences = ['hicolor', ..., 'ContrastHigh']

@@ -18,8 +18,7 @@ OPTIONAL RUNTIME DEPENDENCIES:
 	inotify-tools: for inotify support
 	alarm: for limiting the time of a file search in locks
 	findutils: for file search in locks
-	graphicsmagick: for image support
-	imagemagick: for image support (used if graphicmagick is not installed)
+	imagemagick: for image support
 	file: for image support
 	librsvg: for image support
 

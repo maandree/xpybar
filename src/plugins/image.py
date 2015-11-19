@@ -71,19 +71,24 @@ class Image:
             if not convert.wait() == 0:
                 raise Exception('Image could not be converted')
         
-        convert = ['gm'] if Image.have_graphicsmagick() else []
-        convert += ['convert', '-', '-background', background, '-alpha', 'remove', '-depth', '8']
-        if width is not None:
-            convert += ['-resize', '%ix%i!' % (width, height)]
-        convert += ['ppm:-']
+        convert = ['convert', '-', '-background', background, '-alpha', 'remove', '-depth', '8', 'ppm:-']
         convert = Popen(convert, stdin = PIPE if raster is not None else open(file, 'rb'),
                         stdout = PIPE, stderr = sys.stderr)
         if raster is not None:
-            self.data = list(convert.communicate(raster)[0])
+            self.data = convert.communicate(raster)[0]
         else:
-            self.data = list(convert.communicate()[0])
+            self.data = convert.communicate()[0]
         if not convert.wait() == 0:
             raise Exception('Image could not be converted')
+        
+        if width is not None:
+            convert = ['gm', 'convert', '-', '-resize', '%ix%i!' % (width, height), 'ppm:-']
+            convert = Popen(convert, stdin = PIPE, stdout = PIPE, stderr = sys.stderr)
+            self.data = convert.communicate(self.data)[0]
+            if not convert.wait() == 0:
+                raise Exception('Image could not be resized')
+        
+        self.data = list(self.data)
         
         self.width, self.height, state, comment = [], [], 0, False
         for i in range(len(self.data)):
@@ -129,21 +134,6 @@ class Image:
         @param  y:int    The top position of the image
         '''
         bar.window.put_image(bar.gc, x, y, self.width, self.height, self.format, self.depth, 0, self.data)
-    
-    
-    @staticmethod
-    def have_graphicsmagick():
-        '''
-        Figure out whether graphicsmagick is installed
-        
-        @return  :bool  Whether graphicsmagick is installed
-        '''
-        import os
-        path = os.environ['PATH'] if 'PATH' in os.environ else '/usr/local/bin:/usr/bin:/bin';
-        for p in [p + '/gm'  for p in path.split(':') if not p == '']:
-            if os.access(p, os.X_OK):
-                return True
-        return False
     
     
     @staticmethod

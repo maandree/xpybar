@@ -58,7 +58,7 @@ int main(int argc, char** argv)
   else
     return 1;
   
-  execv("hdparm", argv);
+  execv(HDPARM_PATH, argv);
   perror(*argv);
   
   return 1;

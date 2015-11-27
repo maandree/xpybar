@@ -11,6 +11,7 @@ INFODIR = $(DATADIR)/info
 LICENSEDIR = $(DATADIR)/licenses
 
 PY3_SHEBANG = "/usr/bin/env python3"
+HDPARM_PATH = /usr/sbin/hdparm
 
 COMMAND = xpybar
 PKGNAME = xpybar
@@ -78,7 +79,7 @@ bin/restricted-hdparm: obj/restricted-hdparm.o
 	$(CC) -std=c89 -Ofast $(WARN) -o $@ $^
 
 obj/%.o: src/%.c
-	$(CC) -std=c89 -Ofast $(WARN) -c -o $@ $<
+	$(CC) -std=c89 -Ofast $(WARN) -c -o $@ $< -D'HDPARM_PATH="$(HDPARM_PATH)"'
 
 .PHONY: doc
 doc: info pdf dvi ps

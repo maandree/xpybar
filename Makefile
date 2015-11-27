@@ -8,6 +8,7 @@ EXAMPLEDIR = $(PREFIX)$(EXAMPLE)
 MANDIR = $(DATADIR)/man
 MAN1DIR = $(MANDIR)/man1
 INFODIR = $(DATADIR)/info
+DOCDIR = $(DATADIR)/doc
 LICENSEDIR = $(DATADIR)/licenses
 
 PY3_SHEBANG = "/usr/bin/env python3"
@@ -139,10 +140,10 @@ bin/xpybar.%sh-completion: obj/xpybar.auto-completion
 
 
 .PHONY: install
-install: install-base install-doc install-shell
+install: install-base install-info install-man install-shell
 
 .PHONY: install-all
-install-all: install-base install-man install-shell
+install-all: install-base install-doc install-shell
 
 .PHONY: install-base
 install-base: install-command install-license install-all-examples install-plugins
@@ -244,7 +245,7 @@ uninstall:
 	-rm -- $(foreach F,$(EXAMPLES),"$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples/$(F)")
 	-rmdir -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples"
 	-rmdir -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)"
-	-rm -- $(foreach F,$(PLUGINS),"$(DESTDIR)$(DATADIR)/$(PKGNAME)/plugins/$(F)")
+	-rm -- $(foreach F,$(PLUGINS),"$(DESTDIR)$(DATADIR)/$(PKGNAME)/plugins/$(F).py")
 	-rmdir -- "$(DESTDIR)$(DATADIR)/$(PKGNAME)/plugins"
 	-rmdir -- "$(DESTDIR)$(DATADIR)/$(PKGNAME)"
 	-rm -- "$(DESTDIR)$(MAN1DIR)/$(COMMAND).1"

@@ -53,9 +53,10 @@ Texts. A copy of the license is included in the section entitled
 
 
 @menu
-* Overview::                        Brief overview of @command{xpybar}.
-* Invoking::                        Executing @command{xpybar}.
-* GNU Free Documentation License::  Copying and sharing this manual.
+* Overview::                           Brief overview of @command{xpybar}.
+* Invoking::                           Executing @command{xpybar}.
+* Configuration scripting interface::  Configuring @command{xpybar}.
+* GNU Free Documentation License::     Copying and sharing this manual.
 @end menu
 
 
@@ -113,6 +114,25 @@ Print non-warranty information.
 Anything after @option{--} will be available to the configuration
 script via the variable @code{config_file}, which is a list.
 @end table
+
+
+
+@node Configuration scripting interface
+@chapter Configuration scripting interface
+
+@code{xpybar} is configured by reimplement functions (and
+running some code.) You can find the source code and read it at
+@url{https://github.com/maandree/xpybar/tree/master/src/}.
+If the documentation is not clear enough, please file a bug
+att @url{https://github.com/maandree/xpybar/issues} or to
+@code{maandree@@member.fsf.org}.
+
+Graphic-functions are found in @file{x.py} and @file{__main__.py}.
+You will also find some basic functions @file{__main__.py}.
+Functions and classes that are useful for configurations
+are located in @file{util.py}.
+
+Please also refer to the example configuration scripts.
 
 
 

@@ -1,0 +1,83 @@
+.TH XPYBAR 1 XPYBAR
+.SH NAME
+xpybar - A highly extensible minimalistic dock panel configured in Python 3
+.SH SYNOPSIS
+.BR xpybar
+.IR "" [ OPTION ]...
+[\-\-
+.IR CONFIGURATION_OPTION ...]
+.SH DESCRIPTION
+.BR xpybar
+is a minimalistic dock panel with high extensibility.
+It is source code is designed so that all parts of it can
+be replaced by a configuration script. This is one of the
+reasons
+.BR xpybar
+is written in Python.
+.PP
+.BR xpybar
+itself is very small, but it comes with a large array of
+extensions (installed to </usr/share/xpybar/plugins>).
+The extensions come with associated configuration script
+examples (installed to </usr/share/xpybar/examples/plugins>.)
+There are some additional examples in </usr/share/xpybar/examples>.
+.PP
+The configuration script must be written in Python 3,
+it will be loaded as part of the
+.BR xpybar 's
+source code itself.
+.IR CONFIGURATION_OPTION
+will be available to the configuration script via the
+variable \fBconfig_file\fP, which is a list.
+.SH OPTIONS
+.TP
+.BR \-c ,\  \-\-configurations \ \fIFILE\fP
+Select configuration script. If not used, the program
+will search for a file named \fIxpybarrc\fP or \fI.xpybarrc\fP
+(depending on the directory) in the usual configuration
+directories.
+.TP
+.BR \-h ,\  \-? ,\  \-\-help
+Print this help information.
+.TP
+.BR \-v ,\  \-\-version
+Print program name and version.
+.TP
+.BR \-C ,\  \-\-copying ,\  \-\-copyright
+Print copyright information.
+.TP
+.BR \-W ,\  \-\-warranty
+Print non-warranty information.
+.SH RATIONALE
+There are a lot of panel projects, too many for me to
+have tried all of them.
+.BR xpybar
+is intended to replace
+.BR dzen2 ,
+.BR xmobar ,
+and eventually
+.BR mate-panel ,
+for me, with one single panel. This makes it ease to
+pack data into a much smaller space.
+.BR xpybar
+is also designed to be easier to extend and customise than
+.BR xmobar ,
+in a language understood by more users.
+.SH "SEE ALSO"
+.BR dmenu (1),
+.BR stlarch_icons
+.SH AUTHORS
+Principal author, Mattias Andrée.  See the COPYING file for the full
+list of authors.
+.SH LICENSE
+Copyright \(co 2013, 2015  Mattias Andrée
+.br
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>, and
+License AGPLv3+: GNU AGPL version 3 or later <http://gnu.org/licenses/agpl.html>.
+.br
+This is free software: you are free to change and redistribute it.
+.br
+There is NO WARRANTY, to the extent permitted by law.
+.SH BUGS
+Please report bugs to https://github.com/maandree/xpybar/issues or to
+maandree@member.fsf.org

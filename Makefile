@@ -5,6 +5,8 @@ EXAMPLE = /share
 BINDIR = $(PREFIX)$(BIN)
 DATADIR = $(PREFIX)$(DATA)
 EXAMPLEDIR = $(PREFIX)$(EXAMPLE)
+MANDIR = $(DATADIR)/man
+MAN1DIR = $(MANDIR)/man1
 LICENSEDIR = $(DATADIR)/licenses
 
 PY3_SHEBANG = "/usr/bin/env python3"
@@ -73,7 +75,10 @@ obj/%.o: src/%.c
 
 
 .PHONY: install
-install: install-base
+install: install-base install-doc
+
+.PHONY: install-all
+install-all: install-base install-man
 
 .PHONY: install-base
 install-base: install-command install-license install-all-examples install-plugins
@@ -112,6 +117,14 @@ install-plugins: $(foreach F,$(PLUGINS),src/plugins/$(F).py)
 	install -dm755   -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/plugins"
 	install -m644 $^ -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/plugins"
 
+.PHONY: install-doc
+install-doc: install-man
+
+.PHONY: install-man
+install-man: doc/man/xpybar.1
+	install -dm755   -- "$(DESTDIR)$(MAN1DIR)"
+	install -m644 $< -- "$(DESTDIR)$(MAN1DIR)/$(COMMAND).1"
+
 
 
 .PHONY: uninstall
@@ -132,6 +145,7 @@ uninstall:
 	-rm -- $(foreach F,$(PLUGINS),"$(DESTDIR)$(DATADIR)/$(PKGNAME)/plugins/$(F)")
 	-rmdir -- "$(DESTDIR)$(DATADIR)/$(PKGNAME)/plugins"
 	-rmdir -- "$(DESTDIR)$(DATADIR)/$(PKGNAME)"
+	-rm -- "$(DESTDIR)$(MAN1DIR)/$(COMMAND).1"
 
 
 

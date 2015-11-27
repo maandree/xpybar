@@ -2,7 +2,7 @@ NAME
 	xpybar - A highly extensible minimalistic dock panel configured in Python 3
 
 SYNOPSIS
-	xpybar - [OPTION]... [-- CONFIGURATION_OPTION...]
+	xpybar [OPTION]... [-- CONFIGURATION_OPTION...]
 
 DESCRIPTION
 	xpybar is a minimalistic dock panel with high extensibility.

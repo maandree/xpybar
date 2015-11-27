@@ -7,6 +7,7 @@ DATADIR = $(PREFIX)$(DATA)
 EXAMPLEDIR = $(PREFIX)$(EXAMPLE)
 MANDIR = $(DATADIR)/man
 MAN1DIR = $(MANDIR)/man1
+INFODIR = $(DATADIR)/info
 LICENSEDIR = $(DATADIR)/licenses
 
 PY3_SHEBANG = "/usr/bin/env python3"
@@ -51,10 +52,10 @@ EXAMPLES = mixed moderate test xmonad launchers
 
 
 .PHONY: default
-default: base shell
+default: base info shell
 
 .PHONY: all
-all: base shell
+all: base doc shell
 
 .PHONY: base
 base: bin/xpybar bin/restricted-hdparm
@@ -78,6 +79,40 @@ bin/restricted-hdparm: obj/restricted-hdparm.o
 
 obj/%.o: src/%.c
 	$(CC) -std=c89 -Ofast $(WARN) -c -o $@ $<
+
+.PHONY: doc
+doc: info pdf dvi ps
+
+.PHONY: info
+info: bin/xpybar.info
+bin/%.info: doc/info/%.texinfo
+	@mkdir -p bin
+	$(MAKEINFO) $<
+	mv $*.info $@
+
+.PHONY: pdf
+pdf: bin/xpybar.pdf
+bin/%.pdf: doc/info/%.texinfo
+	@! test -d obj/pdf || rm -rf obj/pdf
+	@mkdir -p bin obj/pdf
+	cd obj/pdf && texi2pdf ../../"$<" < /dev/null
+	mv obj/pdf/$*.pdf $@
+
+.PHONY: dvi
+dvi: bin/xpybar.dvi
+bin/%.dvi: doc/info/%.texinfo
+	@! test -d obj/dvi || rm -rf obj/dvi
+	@mkdir -p bin obj/dvi
+	cd obj/dvi && $(TEXI2DVI) ../../"$<" < /dev/null
+	mv obj/dvi/$*.dvi $@
+
+.PHONY: ps
+ps: bin/xpybar.ps
+bin/%.ps: doc/info/%.texinfo
+	@! test -d obj/ps || rm -rf obj/ps
+	@mkdir -p bin obj/ps
+	cd obj/ps && texi2pdf --ps ../../"$<" < /dev/null
+	mv obj/ps/$*.ps $@
 
 .PHONY: shell
 shell: bash fish zsh
@@ -146,7 +181,27 @@ install-plugins: $(foreach F,$(PLUGINS),src/plugins/$(F).py)
 	install -m644 $^ -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/plugins"
 
 .PHONY: install-doc
-install-doc: install-man
+install-doc: install-info install-pdf install-dvi install-ps install-man
+
+.PHONY: install-info
+install-info: bin/xpybar.info
+	install -dm755 -- "$(DESTDIR)$(INFODIR)"
+	install -m644 $< -- "$(DESTDIR)$(INFODIR)/$(PKGNAME).info"
+
+.PHONY: install-pdf
+install-pdf: bin/xpybar.pdf
+	install -dm755 -- "$(DESTDIR)$(DOCDIR)"
+	install -m644 -- "$<" "$(DESTDIR)$(DOCDIR)/$(PKGNAME).pdf"
+
+.PHONY: install-dvi
+install-dvi: bin/xpybar.dvi
+	install -dm755 -- "$(DESTDIR)$(DOCDIR)"
+	install -m644 -- "$<" "$(DESTDIR)$(DOCDIR)/$(PKGNAME).dvi"
+
+.PHONY: install-ps
+install-ps: bin/xpybar.ps
+	install -dm755 -- "$(DESTDIR)$(DOCDIR)"
+	install -m644 -- "$<" "$(DESTDIR)$(DOCDIR)/$(PKGNAME).ps"
 
 .PHONY: install-man
 install-man: doc/man/xpybar.1
@@ -195,6 +250,10 @@ uninstall:
 	-rm -- "$(DESTDIR)$(DATADIR)/bash-completion/completions/$(COMMAND)"
 	-rm -- "$(DESTDIR)$(DATADIR)/fish/completions/$(COMMAND).fish"
 	-rm -- "$(DESTDIR)$(DATADIR)/zsh/site-functions/_$(COMMAND)"
+	-rm -- "$(DESTDIR)$(INFODIR)/$(PKGNAME).info"
+	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).pdf"
+	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).dvi"
+	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).ps"
 
 
 

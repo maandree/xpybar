@@ -6,7 +6,7 @@ SYNOPSIS
 
 DESCRIPTION
 	xpybar is a minimalistic dock panel with high extensibility.
-	It is source code is designed so that all parts of it can
+	Its source code is designed so that all parts of it can
 	be replaced by a configuration script. This is one of the
 	reasons xpybar is written in Python.
 
@@ -58,4 +58,6 @@ RATIONALE
 
 SEE ALSO
 	dmenu(1), stlarch_icons
+
+	Full documentation available locally via: info '(xpybar)'
 

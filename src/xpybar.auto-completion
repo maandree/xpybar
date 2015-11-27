@@ -1,0 +1,17 @@
+(xpybar
+	(argumented  (options -c --configurations)  (complete --configurations)  (files -f)  (arg FILE)
+	(desc 'Select configuration script'))
+
+	(unargumented  (options -h -? --help)  (complete --help)
+	(desc 'Print this help information'))
+
+	(unargumented  (options -v --version)  (complete --version)
+	(desc 'Print program name and version'))
+
+	(unargumented  (options -C --copying --copyright)  (complete --copying)
+	(desc 'Print copyright information'))
+
+	(unargumented  (options -W --warranty)  (complete --warranty)
+	(desc 'Print non-warranty information'))
+)
+

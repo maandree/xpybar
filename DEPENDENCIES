@@ -30,4 +30,5 @@ BUILD DEPENDENCIES:
 	make
 	coreutils
 	sed
+	auto-auto-complete (optional)
 

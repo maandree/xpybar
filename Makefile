@@ -50,8 +50,14 @@ EXAMPLES = mixed moderate test xmonad launchers
 
 
 
+.PHONY: default
+default: base shell
+
 .PHONY: all
-all: bin/xpybar bin/restricted-hdparm
+all: base shell
+
+.PHONY: base
+base: bin/xpybar bin/restricted-hdparm
 
 bin/xpybar: obj/xpybar.zip
 	mkdir -p bin
@@ -73,12 +79,34 @@ bin/restricted-hdparm: obj/restricted-hdparm.o
 obj/%.o: src/%.c
 	$(CC) -std=c89 -Ofast $(WARN) -c -o $@ $<
 
+.PHONY: shell
+shell: bash fish zsh
+
+.PHONY: bash
+bash: bin/xpybar.bash-completion
+
+.PHONY: fish
+fish: bin/xpybar.fish-completion
+
+.PHONY: zsh
+zsh: bin/xpybar.zsh-completion
+
+obj/xpybar.auto-completion: src/xpybar.auto-completion
+	@mkdir -p obj
+	cp $< $@
+	sed -i 's/^(xpybar/($(COMMAND)/' $@
+
+bin/xpybar.%sh-completion: obj/xpybar.auto-completion
+	@mkdir -p bin
+	auto-auto-complete $*sh --output $@ --source $<
+
+
 
 .PHONY: install
-install: install-base install-doc
+install: install-base install-doc install-shell
 
 .PHONY: install-all
-install-all: install-base install-man
+install-all: install-base install-man install-shell
 
 .PHONY: install-base
 install-base: install-command install-license install-all-examples install-plugins
@@ -125,6 +153,24 @@ install-man: doc/man/xpybar.1
 	install -dm755   -- "$(DESTDIR)$(MAN1DIR)"
 	install -m644 $< -- "$(DESTDIR)$(MAN1DIR)/$(COMMAND).1"
 
+.PHONY: install-shell
+install-shell: install-bash install-fish install-zsh
+
+.PHONY: install-bash
+install-bash: bin/xpybar.bash-completion
+	install -dm755 -- "$(DESTDIR)$(DATADIR)/bash-completion/completions"
+	install -m644 $< -- "$(DESTDIR)$(DATADIR)/bash-completion/completions/$(COMMAND)"
+
+.PHONY: install-fish
+install-fish: bin/xpybar.fish-completion
+	install -dm755 -- "$(DESTDIR)$(DATADIR)/fish/completions"
+	install -m644 $< -- "$(DESTDIR)$(DATADIR)/fish/completions/$(COMMAND).fish"
+
+.PHONY: install-zsh
+install-zsh: bin/xpybar.zsh-completion
+	install -dm755 -- "$(DESTDIR)$(DATADIR)/zsh/site-functions"
+	install -m644 $< -- "$(DESTDIR)$(DATADIR)/zsh/site-functions/_$(COMMAND)"
+
 
 
 .PHONY: uninstall
@@ -146,6 +192,9 @@ uninstall:
 	-rmdir -- "$(DESTDIR)$(DATADIR)/$(PKGNAME)/plugins"
 	-rmdir -- "$(DESTDIR)$(DATADIR)/$(PKGNAME)"
 	-rm -- "$(DESTDIR)$(MAN1DIR)/$(COMMAND).1"
+	-rm -- "$(DESTDIR)$(DATADIR)/bash-completion/completions/$(COMMAND)"
+	-rm -- "$(DESTDIR)$(DATADIR)/fish/completions/$(COMMAND).fish"
+	-rm -- "$(DESTDIR)$(DATADIR)/zsh/site-functions/_$(COMMAND)"
 
 
 

@@ -1,11 +1,11 @@
-PREFIX ?= /usr
-BIN ?= /bin
-BINDIR ?= $(PREFIX)$(BIN)
-DATA ?= /share
-DATADIR ?= $(PREFIX)$(DATA)
-DOC ?= /share
-DOCDIR ?= $(PREFIX)$(DOC)
-LICENSEDIR ?= $(DATADIR)/licenses
+PREFIX = /usr
+BIN = /bin
+DATA = /share
+EXAMPLE = /share
+BINDIR = $(PREFIX)$(BIN)
+DATADIR = $(PREFIX)$(DATA)
+EXAMPLEDIR = $(PREFIX)$(EXAMPLE)
+LICENSEDIR = $(DATADIR)/licenses
 
 PY3_SHEBANG = "/usr/bin/env python3"
 
@@ -94,23 +94,23 @@ install-all-examples: install-examples install-trick-examples install-plugin-exa
 
 .PHONY: install-examples
 install-examples: $(foreach F,$(EXAMPLES),examples/$(F))
-	install -dm755   -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples"
-	install -m644 $^ -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples"
+	install -dm755   -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples"
+	install -m644 $^ -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples"
 
 .PHONY: install-trick-examples
 install-trick-examples: $(foreach F,$(TRICK_EXAMPLES),examples/tricks/$(F))
-	install -dm755   -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/tricks"
-	install -m644 $^ -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/tricks"
+	install -dm755   -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples/tricks"
+	install -m644 $^ -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples/tricks"
 
 .PHONY: install-plugin-examples
 install-plugin-examples: $(foreach F,$(PLUGIN_EXAMPLES),examples/plugins/$(F))
-	install -dm755   -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/plugins"
-	install -m644 $^ -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/plugins"
+	install -dm755   -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples/plugins"
+	install -m644 $^ -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples/plugins"
 
 .PHONY: install-plugins
 install-plugins: $(foreach F,$(PLUGINS),src/plugins/$(F).py)
-	install -dm755   -- "$(DESTDIR)$(DATADIR)/$(PKGNAME)/plugins"
-	install -m644 $^ -- "$(DESTDIR)$(DATADIR)/$(PKGNAME)/plugins"
+	install -dm755   -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/plugins"
+	install -m644 $^ -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/plugins"
 
 
 
@@ -122,13 +122,13 @@ uninstall:
 	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/LICENSE.gpl3"
 	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/LICENSE.agpl3"
 	-rmdir -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
-	-rm -- $(foreach F,$(PLUGIN_EXAMPLES),"$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/plugins/$(F)")
-	-rmdir -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/plugins"
-	-rm -- $(foreach F,$(TRICK_EXAMPLES),"$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/tricks/$(F)")
-	-rmdir -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/tricks"
-	-rm -- $(foreach F,$(EXAMPLES),"$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples/$(F)")
-	-rmdir -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)/examples"
-	-rmdir -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME)"
+	-rm -- $(foreach F,$(PLUGIN_EXAMPLES),"$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples/plugins/$(F)")
+	-rmdir -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples/plugins"
+	-rm -- $(foreach F,$(TRICK_EXAMPLES),"$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples/tricks/$(F)")
+	-rmdir -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples/tricks"
+	-rm -- $(foreach F,$(EXAMPLES),"$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples/$(F)")
+	-rmdir -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)/examples"
+	-rmdir -- "$(DESTDIR)$(EXAMPLEDIR)/$(PKGNAME)"
 	-rm -- $(foreach F,$(PLUGINS),"$(DESTDIR)$(DATADIR)/$(PKGNAME)/plugins/$(F)")
 	-rmdir -- "$(DESTDIR)$(DATADIR)/$(PKGNAME)/plugins"
 	-rmdir -- "$(DESTDIR)$(DATADIR)/$(PKGNAME)"

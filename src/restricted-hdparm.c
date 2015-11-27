@@ -22,10 +22,16 @@
 
 int main(int argc, char** argv)
 {
-  char* act = argv[1];
+  char* act;
   int i;
   
-  setuid(0);
+  if (argc < 2)
+    return 1;
+  
+  if (setuid(0))
+    perror(*argv);
+  
+  act = argv[1];
   
   for (i = 2; i < argc; i++)
     if (argv[i][0] == '/')

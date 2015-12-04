@@ -246,7 +246,7 @@ class Bar:
         @param  descent:int  Extra height under the text on each line
         @param  text:str     The text to draw
         '''
-        buf, bc, fc, xx = '', self.background, self.foreground, x
+        buf, bc, fc, xx, reverse = '', self.background, self.foreground, x, False
         line_height = ascent + self.font_height + descent
         esc = False
         for c in text + '\033[m':
@@ -282,7 +282,7 @@ class Bar:
                                         fc = ((fc >> 16) & 255, (fc >> 8) & 255, fc & 255)
                                         fc = self.create_colour(*fc)
                                 fci += 1
-                            elif b == 0:           bc, fc = self.background, self.foreground
+                            elif b == 0:           bc, fc, reverse = self.background, self.foreground, False
                             elif b == 39:          fc = self.foreground
                             elif b == 49:          bc = self.background
                             elif 30 <= b <= 37:    fc = self.palette[b - 30]
@@ -291,14 +291,17 @@ class Bar:
                             elif 100 <= b <= 107:  bc = self.palette[b - 100 + 8]
                             elif b == 38:          fci = 1
                             elif b == 48:          bci = 1
+                            elif b == 7:           reverse = True
+                            elif b == 27:          reverse = False
                     buf = ''
                     esc = False
             elif c in ('\033', '\n'):
                 if not buf == '':
-                    self.change_colour(bc)
+                    self.change_colour(bc if not reverse else fc)
                     h = self.font_height + ascent
                     w = self.font_width * len(buf)
-                    self.draw_text(x, y + ascent, descent, buf, colour = (fc, bc), clear = (y - h, line_height))
+                    colours = (fc, bc) if not reverse else (bc, fc)
+                    self.draw_text(x, y + ascent, descent, buf, colour = colours, clear = (y - h, line_height))
                     x += w
                     buf = ''
                 if c == '\n':

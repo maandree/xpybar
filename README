@@ -57,7 +57,7 @@ RATIONALE
 	understood by more users.
 
 SEE ALSO
-	dmenu(1), stlarch_icons
+	dmenu(1), metar(1), stlarch_icons
 
 	Full documentation available locally via: info '(xpybar)'
 

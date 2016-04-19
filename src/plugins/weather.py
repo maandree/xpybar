@@ -47,12 +47,27 @@ class Weather:
     '''
     
     
-    def __init__(self, station):
+    def __init__(self, station = None):
         '''
         Constructor
         
-        @param  station:str  The station's ICAO code (International Civil Aviation Organization airport code)
+        @param  station:str?  The station's ICAO code (International Civil Aviation Organization airport code),
+                              if `None`, ~/.config/metar or /etc/metar will be used (see metar(1))
         '''
+        import os, pwd
+        if station is None:
+            try:
+                filename = os.environ['HOME'] if 'HOME' in os.environ else ''
+                if len(filename) == 0:
+                    filename = pwd.getpwuid(os.getuid()).pw_dir
+                filename = '%s/.config/metar' % filename
+                if not os.path.isfile(filename):
+                    filename = '/etc/metar'
+            except:
+                filename = '/etc/metar'
+            with open(filename, 'rb') as file:
+                station = file.read()
+            station = station.decode('utf-8', 'strict').split('\n')[0]
         self.icao = station
         url = 'http://weather.noaa.gov/pub/data/observations/metar/decoded/%s.TXT' % station
         decoded = spawn_read('curl', url).split('\n')

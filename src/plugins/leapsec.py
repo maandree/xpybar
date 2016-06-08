@@ -48,7 +48,7 @@ class LeapSeconds:
         '''
         Constructor
         '''
-        #url = 'http://maia.usno.navy.mil/ser7/leapsec.dat' ## gone!
+        #url = 'http://maia.usno.navy.mil/ser7/leapsec.dat'
         url = 'http://oceandata.sci.gsfc.nasa.gov/Ancillary/LUTs/modis/leapsec.dat'
         announcements = spawn_read('curl', url)
         while not announcements.startswith(' '):

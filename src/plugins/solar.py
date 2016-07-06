@@ -86,6 +86,21 @@ class Solar:
                      amateur astronomical twilight, measured in degrees
     '''
     
+    SOLAR_ELEVATION_RANGE_GOLDEN_HOUR = solar_python.SOLAR_ELEVATION_RANGE_GOLDEN_HOUR
+    '''
+    :(float, float)  The Sun's lowest and highest elevation during
+                     the golden "hour" (also known as magic hour),
+                     measured in degrees. These elevations are
+                     approximate.
+    '''
+    
+    SOLAR_ELEVATION_RANGE_BLUE_HOUR = solar_python.SOLAR_ELEVATION_RANGE_BLUE_HOUR
+    '''
+    :(float, float)  The Sun's lowest and highest elevation during
+                     the blue "hour", measured in degrees. These
+                     elevations are approximate.
+    '''
+    
     
     EQUINOX = 0
     SUMMER = 1

@@ -26,61 +26,61 @@ class Solar:
     '''
     
     
-    SOLAR_ELEVATION_SUNSET_SUNRISE = 0.0
+    SOLAR_ELEVATION_SUNSET_SUNRISE = solar_python.SOLAR_ELEVATION_SUNSET_SUNRISE
     '''
     :float  The Sun's elevation at sunset and sunrise,
             measured in degrees
     '''
     
-    SOLAR_ELEVATION_CIVIL_DUSK_DAWN = -6.0
+    SOLAR_ELEVATION_CIVIL_DUSK_DAWN = solar_python.SOLAR_ELEVATION_CIVIL_DUSK_DAWN
     '''
     :float  The Sun's elevation at civil dusk and civil
             dawn, measured in degrees
     '''
     
-    SOLAR_ELEVATION_NAUTICAL_DUSK_DAWN = -12.0
+    SOLAR_ELEVATION_NAUTICAL_DUSK_DAWN = solar_python.SOLAR_ELEVATION_NAUTICAL_DUSK_DAWN
     '''
     :float  The Sun's elevation at nautical dusk and
             nautical dawn, measured in degrees
     '''
     
-    SOLAR_ELEVATION_ASTRONOMICAL_DUSK_DAWN = -18.0
+    SOLAR_ELEVATION_ASTRONOMICAL_DUSK_DAWN = solar_python.SOLAR_ELEVATION_ASTRONOMICAL_DUSK_DAWN
     '''
     :float  The Sun's elevation at astronomical dusk
             and astronomical dawn, measured in degrees
     '''
     
-    SOLAR_ELEVATION_AMATEUR_ASTRONOMICAL_DUSK_DAWN = -15.0
+    SOLAR_ELEVATION_AMATEUR_ASTRONOMICAL_DUSK_DAWN = solar_python.SOLAR_ELEVATION_AMATEUR_ASTRONOMICAL_DUSK_DAWN
     '''
     :float  The Sun's elevation at amateur astronomical dusk
             and amateur astronomical dawn, measured in degrees
     '''
     
-    SOLAR_ELEVATION_RANGE_TWILIGHT = (-18.0, 0.0)
+    SOLAR_ELEVATION_RANGE_TWILIGHT = solar_python.SOLAR_ELEVATION_RANGE_TWILIGHT
     '''
     :(float, float)  The Sun's lowest and highest elevation during
                      all periods of twilight, measured in degrees
     '''
     
-    SOLAR_ELEVATION_RANGE_CIVIL_TWILIGHT = (-6.0, 0.0)
+    SOLAR_ELEVATION_RANGE_CIVIL_TWILIGHT = solar_python.SOLAR_ELEVATION_RANGE_CIVIL_TWILIGHT
     '''
     :(float, float)  The Sun's lowest and highest elevation
                      during civil twilight, measured in degrees
     '''
     
-    SOLAR_ELEVATION_RANGE_NAUTICAL_TWILIGHT = (-12.0, 0.0)
+    SOLAR_ELEVATION_RANGE_NAUTICAL_TWILIGHT = solar_python.SOLAR_ELEVATION_RANGE_NAUTICAL_TWILIGHT
     '''
     :(float, float)  The Sun's lowest and highest elevation
                      during nautical twilight, measured in degrees
     '''
     
-    SOLAR_ELEVATION_RANGE_ASTRONOMICAL_TWILIGHT = (-18.0, 0.0)
+    SOLAR_ELEVATION_RANGE_ASTRONOMICAL_TWILIGHT = solar_python.SOLAR_ELEVATION_RANGE_ASTRONOMICAL_TWILIGHT
     '''
     :(float, float)  The Sun's lowest and highest elevation during
                      astronomical twilight, measured in degrees
     '''
     
-    SOLAR_ELEVATION_RANGE_AMATEUR_ASTRONOMICAL_TWILIGHT = (-15.0, -18.0)
+    SOLAR_ELEVATION_RANGE_AMATEUR_ASTRONOMICAL_TWILIGHT = solar_python.SOLAR_ELEVATION_RANGE_AMATEUR_ASTRONOMICAL_TWILIGHT
     '''
     :(float, float)  The Sun's lowest and highest elevation during
                      amateur astronomical twilight, measured in degrees

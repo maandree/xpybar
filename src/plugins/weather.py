@@ -69,7 +69,8 @@ class Weather:
                 station = file.read()
             station = station.decode('utf-8', 'strict').split('\n')[0]
         self.icao = station
-        url = 'http://weather.noaa.gov/pub/data/observations/metar/decoded/%s.TXT' % station
+        #url = 'http://weather.noaa.gov/pub/data/observations/metar/decoded/%s.TXT' % station
+        url = 'http://tgftp.nws.noaa.gov/data/observations/metar/decoded/%s.TXT' % station
         decoded = spawn_read('curl', url).split('\n')
         # How to parse: http://www.wunderground.com/metarFAQ.asp
         

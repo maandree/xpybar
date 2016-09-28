@@ -58,7 +58,7 @@ def redraw():
     def u(b):
         unit = 0
         units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB']
-        while (unit < len(units)) and (b >= 1024):
+        while (unit + 1 < len(units)) and (b >= 1024):
             b /= 1024
             unit += 1
         return '%7.2f%s' % (b, units[unit])

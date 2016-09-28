@@ -37,6 +37,7 @@ class Memory:
     @variable  shmem:int?               Amount of memory allocated as shared memory, in KB
     @variable  slab:int?                In-kernel data structures cache, in KB
     @variable  hardware_corrupted:int?  Hardware corrupted memory, in KB
+    @variable  keys:frozenset           List of all keys
     '''
     
     
@@ -55,6 +56,8 @@ class Memory:
             line = filter(lambda x : not x == '', line.replace(':', ' ').split(' '))
             line = list(line)[:2]
             self.__info[line[0]] = int(line[1])
+
+        self.keys = self.__info.keys()
         
         self.mem_total = self['MemTotal']
         self.mem_free = self['MemFree']

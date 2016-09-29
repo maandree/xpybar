@@ -408,7 +408,7 @@ class Bar:
                 for part in parts:
                     w = Bar.coloured_length(part) * self.font_width
                     x_ = int((width - w) * i / n)
-                    if w > 0:
+                    if w >= 0:
                         areas_.append((x_, x_ + w))
                     i += 1
                 x1 = areas_[0][1]

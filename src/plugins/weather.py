@@ -42,6 +42,8 @@ class Weather:
     @variable  wind_var:(float, float)?  The wind direction range, `None` if less than 60° variation
     @variable  temp:float                The temperature in °C
     @variable  dew:float                 The dew point in °C
+    @variable  wind_chill:float          The wind chill in °C
+    @variable  humidity:float            The relative humidity in %
     @variable  pressure:flaot            The pressure in hPa
     @variable  visibility:float          The visibility in statute miles
     '''
@@ -92,8 +94,9 @@ class Weather:
             line = line.split(': ')
             self.fields[line[0]] = ': '.join(line[1:])
         
-        self.wind_dir, self.wind_speed, self.wind_gusts, self.wind_var = None, None, None, None
-        self.temp, self.dew, self.pressure, self.visibility            = None, None, None, None
+        self.wind_dir, self.wind_speed, self.wind_gusts     = None, None, None
+        self.wind_var, self.temp, self.dew, self.wind_chill = None, None, None, None
+        self.pressure, self.visibility, self.humidity       = None, None, None
         
         for ob in self.fields['ob'].split(' ')[1:]:
             self.__time(ob)
@@ -106,15 +109,35 @@ class Weather:
             # BKN070-Sky Condition                      from  http://www.wunderground.com/metarFAQ.asp
             # (p46, p49, p59(7,8,9). p61-65, p67-77, p91+96)
         
+        if 'Relative Humidity' in self.fields:
+            try:
+                self.humidity = float(self.fields['Relative Humidity'].replace('%', ''))
+            except:
+                pass
+        
+        get_celsius = lambda text : float(text.split('(')[1].split(')')[0])
+        if 'Windchill' in self.fields:
+            try:
+                self.windchill = get_celsius(self.fields['Windchill'])
+            except:
+                pass
+        if self.dew is None and 'Dew Point' in self.fields:
+            try:
+                self.dew = get_celsius(self.fields['Dew Point'])
+            except:
+                pass
+        if self.temp is None and 'Temperature' in self.fields:
+            try:
+                self.temp = get_celsius(self.fields['Temperature'])
+            except:
+                pass
+        
         #Wind: from the N (010 degrees) at 18 MPH (16 KT):0
         #Visibility: 3 mile(s):0
         #Sky conditions: overcast
         #Weather: precipitation
         #Precipitation last hour: A trace  -- sometimes
-        #Temperature: 10.0 F (-12.2 C)
         #Windchill: -7 F (-22 C):2  -- sometimes
-        #Dew Point: 3.9 F (-15.6 C)
-        #Relative Humidity: 75%
         #Pressure (altimeter): 30.19 in. Hg (1022 hPa)
     
     

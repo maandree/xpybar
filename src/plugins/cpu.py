@@ -22,7 +22,7 @@ class CPU:
     '''
     Retrieve processor statistics
     
-    @variable  cpu_total:list<int>          Accumulative processors statistics
+    @variable  cpu:list<int>                Accumulative processors statistics
     @variable  cpus:list<list<int>>         Individual processors statistics
     @variable  intr:list<int>               Counts of individual interrupts serviced since boot time
     @variable  intr_total:int               Sum of `intr`

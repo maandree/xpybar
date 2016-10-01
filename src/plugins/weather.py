@@ -157,7 +157,7 @@ class Weather:
     def __wind_var(self, ob):
         if (len(ob) == 7) and (ob[3] == 'V'):
             if len(list(filter(lambda c : not ('0' <= c <= '9'), ob))) == 1:
-                self.wind_dir = (float(ob[:3]), float(ob[-3:]))
+                self.wind_var = (float(ob[:3]), float(ob[-3:]))
     
     def __temp(self, ob):
         if '/' in ob:

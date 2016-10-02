@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from util import *
 
 
-class CPUOnline:
+class CPUOnline: # TODO make it possible to turn CPU:s on and off
     '''
     Online CPU listing
     

@@ -27,7 +27,7 @@ class IPAddress:
     Multi-home aware retrieval of public and private IP addresses
     
     @variable  nics:dict<str,            The state and IP address for a network interface card
-                         (state:int      Either of: `IPAddress.{DOWN,UNKOWN,ISOLATED,UP}`
+                         (state:int      Either of: `IPAddress.{DOWN,UNKNOWN,ISOLATED,UP}`
                           private:str?   The interface's private IPv4 address
                           private6:str?  The interface's private IPv6 address
                           public:str?)>  The interface's public IP address on the Internet

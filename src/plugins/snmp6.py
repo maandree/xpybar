@@ -23,6 +23,8 @@ from util import *
 class SNMP6:
     '''
     IPv6 SNMP data
+    
+    @variable  keys:list<str>  List of avaiable keys
     '''
     
     
@@ -38,8 +40,10 @@ class SNMP6:
         snmp6 = map(lambda x : filter_(x.split(' ')), filter_(snmp6.split('\n')))
         
         self.__info = {}
+        self.keys = []
         for field, value in snmp6:
             self.__info[field] = int(value)
+            self.keys.append(field)
     
     
     def __contains__(self, key):

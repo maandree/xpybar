@@ -23,6 +23,8 @@ from util import *
 class SNMP:
     '''
     IPv4 SNMP data
+    
+    @variable  keys:list<str>  List of avaiable keys
     '''
     
     
@@ -44,10 +46,13 @@ class SNMP:
         snmp = zip(snmp_h, snmp_d)
         
         self.__info = {}
+        self.keys = []
         for header_list, data_list in snmp:
             prefix = header_list[0][:-1]
             for suffix, value in zip(header_list[1:], data_list[1:]):
-                self.__info[prefix + suffix] = int(value)
+                key = prefix + suffix
+                self.__info[key] = int(value)
+                self.keys.append(key)
     
     
     def __contains__(self, key):

@@ -34,9 +34,9 @@ class XDisplay:
     @variable  screen:int?      The screen number, often `None` (default screen)
     @varaible  vt:int           The VT the X display is allocated to
     
-    host, dispay and screen is None if connectiopn is None, which means that you
-    have started xpybar's DISPLAY environment variable is not set, and that a display
-    was configured in the settings.
+    host, dispay and screen is None if connection is None, which means that when
+    you started, xpybar's DISPLAY environment variable is not set, and that a
+    display was configured in the settings.
     '''
     
     

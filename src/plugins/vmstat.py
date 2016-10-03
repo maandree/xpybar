@@ -23,6 +23,8 @@ from util import *
 class VMStat:
     '''
     Various virtual memory statistics
+    
+    @variable  keys:list<str>  List of avaiable keys
     '''
     
     
@@ -37,8 +39,10 @@ class VMStat:
         vmstat = map(lambda x : x.split(' '), filter(lambda x : not x == '', vmstat.split('\n')))
         
         self.__info = {}
+        self.keys = []
         for field, value in vmstat:
             self.__info[field] = int(value)
+            self.keys.append(field)
     
     
     def __contains__(self, key):

@@ -40,7 +40,7 @@ class SNMP:
         filter_ = lambda array : filter(lambda x : not x == '', array)
         snmp = list(map(lambda x : x.split(' '), filter_(snmp.split('\n'))))
         snmp_h = filter(lambda i : i % 2 == 0, range(len(snmp)))
-        snmp_d = filter(lambda i : i % 2 == 0, range(len(snmp)))
+        snmp_d = filter(lambda i : i % 2 == 1, range(len(snmp)))
         snmp_h = list(map(lambda i : snmp[i], snmp_h))
         snmp_d = list(map(lambda i : snmp[i], snmp_d))
         snmp = zip(snmp_h, snmp_d)

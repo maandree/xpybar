@@ -38,13 +38,13 @@ class SoftIRQs:
         softirqs = softirqs.decode('utf-8', 'replace')
         
         filter_ = lambda array : filter(lambda x : not x == '', array)
-        softirqs = map(lambda x : x.split(' '), filter_(softirqs.split('\n')[1:]))
+        softirqs = map(lambda x : list(filter_(x.split(' '))), filter_(softirqs.split('\n')[1:]))
         
         self.__info = {}
         self.keys = []
         for line in softirqs:
             self.__info[line[0][:-1]] = [int(x) for x in line[1:]]
-            self.keys.append(line[0])
+            self.keys.append(line[0][:-1])
     
     
     def __contains__(self, key):

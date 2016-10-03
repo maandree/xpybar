@@ -23,6 +23,8 @@ from util import *
 class SoftIRQs:
     '''
     Data from /proc/softirqs
+    
+    @variable  keys:list<str>  List of avaiable keys
     '''
     
     
@@ -39,8 +41,10 @@ class SoftIRQs:
         softirqs = map(lambda x : x.split(' '), filter_(softirqs.split('\n')[1:]))
         
         self.__info = {}
+        self.keys = []
         for line in softirqs:
             self.__info[line[0][:-1]] = [int(x) for x in line[1:]]
+            self.keys.append(line[0])
     
     
     def __contains__(self, key):

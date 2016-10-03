@@ -41,11 +41,7 @@ List of plugins to implement:
 Demo plugins:
 
      linereader
-     snmp6
-     snmp
-     softirqs
      solar
-     vmstat
      weather
      hdparm
 

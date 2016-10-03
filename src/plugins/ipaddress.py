@@ -112,15 +112,6 @@ class IPAddress:
     
     def __site_0(self, download):
         try:
-            data = spawn_read(*download('http://checkip.dyndns.org'))
-            if not data == '':
-                self.__isolated = False
-            return data.split('<body>')[1].split('</body>')[0].split(': ')[1]
-        except:
-            return None
-    
-    def __site_1(self, download):
-        try:
             data = spawn_read(*download('http://ipecho.net/plain'))
             if not data == '':
                 self.__isolated = False
@@ -129,19 +120,7 @@ class IPAddress:
         except:
             return None
     
-    def __site_2(self, download):
-        try:
-            data = spawn_read(*download('http://www.checkmyipaddress.org'))
-            if not data == '':
-                self.__isolated = False
-            data = [line.strip() for line in data.replace('\r\n', '\n').split('\n') if '</h3>' in line]
-            data = [line.split('>')[1].split('<')[0] for line in data]
-            data = [line for line in data if ' ' not in line]
-            return data[0] if not len(data) == 0 else None
-        except:
-            return None
-    
-    def __site_3(self, download):
+    def __site_1(self, download):
         try:
             data = spawn_read(*download('http://www.ip-address.org'))
             if not data == '':
@@ -160,7 +139,7 @@ class IPAddress:
         except:
             return None
     
-    def __site_4(self, download):
+    def __site_2(self, download):
         try:
             data = spawn_read(*download('http://www.myipnumber.com/my-ip-address.asp'))
             if not data == '':
@@ -170,7 +149,7 @@ class IPAddress:
         except:
             return None
     
-    def __site_5(self, download):
+    def __site_3(self, download):
         try:
             data = spawn_read(*download('http://www.findipinfo.com'))
             if not data == '':
@@ -179,7 +158,7 @@ class IPAddress:
         except:
             return None
     
-    def __site_6(self, download):
+    def __site_4(self, download):
         try:
             data = spawn_read(*download('http://what-ip.net'))
             if not data == '':
@@ -188,7 +167,7 @@ class IPAddress:
         except:
             return None
     
-    def __site_7(self, download):
+    def __site_5(self, download):
         try:
             data = spawn_read(*download('http://my-ip-address.com'))
             if not data == '':
@@ -197,12 +176,33 @@ class IPAddress:
         except:
             return None
     
-    def __site_8(self, download):
+    def __site_6(self, download):
         try:
             data = spawn_read(*download('https://duckduckgo.com?q=what is my ip address'))
             if not data == '':
                 self.__isolated = False
             return data.split('"Answer":"Your IP address is ')[1].split(' ')[0]
+        except:
+            return None
+    
+    def __site_7(self, download):
+        try:
+            data = spawn_read(*download('http://checkip.dyndns.org'))
+            if not data == '':
+                self.__isolated = False
+            return data.split('<body>')[1].split('</body>')[0].split(': ')[1]
+        except:
+            return None
+    
+    def __site_8(self, download):
+        try:
+            data = spawn_read(*download('http://www.checkmyipaddress.org'))
+            if not data == '':
+                self.__isolated = False
+            data = [line.strip() for line in data.replace('\r\n', '\n').split('\n') if '</h3>' in line]
+            data = [line.split('>')[1].split('<')[0] for line in data]
+            data = [line for line in data if ' ' not in line]
+            return data[0] if not len(data) == 0 else None
         except:
             return None
 

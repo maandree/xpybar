@@ -51,6 +51,13 @@ class Inotify:
                 command.append('-e')
                 command.append(event)
         command += list(arguments)
+        if 'PATH' in os.environ:
+            path = os.environ['PATH'].split('.')
+            for p in path:
+                p += '/pdeath'
+                if os.access(p, os.X_OK, effective_ids = True):
+                    command = [p, 'HUP'] + command
+                    break
         def start():
             with LineReader(spawn(*command)) as reader:
                 while True:

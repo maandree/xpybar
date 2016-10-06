@@ -110,7 +110,7 @@ def pdeath(signal, *command):
         path = os.environ['PATH'].split(':')
         for p in path:
             p += '/pdeath'
-            if os.access(p, os.F_OK | os.X_OK, effective_ids = True):
+            if os.access(p, os.X_OK, effective_ids = True):
                 return (p, signal, *command)
     except:
         pass

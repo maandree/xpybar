@@ -23,7 +23,6 @@ List of plugins to implement:
      e-mail
      Identify active and visible windows
      natural disaster reports
-     IRC
      /proc/interrupts
      /proc/net/sockstat
      /proc/net/sockstat6

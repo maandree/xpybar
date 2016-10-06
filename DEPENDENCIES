@@ -15,7 +15,8 @@ OPTIONAL RUNTIME DEPENDENCIES:
 	python-pytz: for timezone support
 	python-sysv-ipc: for ropty example
 	iputils: for ping support
-	inotify-tools: for inotify support
+	inotify-tools: for ii and inotify support
+	ii: for ii support
 	alarm: for limiting the time of a file search in locks
 	findutils: for file search in locks
 	graphicsmagick: for image support
@@ -23,6 +24,7 @@ OPTIONAL RUNTIME DEPENDENCIES:
 	file: for image support
 	librsvg: for image support
 	solar-python>=2.5: for solar data
+	pdeath: for automatic killing of child processes on exit
 
 
 BUILD DEPENDENCIES:

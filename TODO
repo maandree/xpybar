@@ -32,7 +32,6 @@ List of plugins to implement:
      /proc/net/rarp (requires RARP to be configured into the kernel)
      /proc/net/igmp
      /proc/net/raw
-     /proc/net/snmp
      /proc/net/tcp
      /proc/net/udp
      /proc/net/unix

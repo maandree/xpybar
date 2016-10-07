@@ -617,6 +617,16 @@ SCROLL_DOWN = 5
 :int  The index of the psuedo-button for scrolling downwards
 '''
 
+SCROLL_LEFT = 6
+'''
+:int  The index of the psuedo-button for scrolling left
+'''
+
+SCROLL_RIGHT = 7
+'''
+:int  The index of the psuedo-button for scrolling right
+'''
+
 FORWARD_BUTTON = 8 # X1
 '''
 :int  The index of the forward button, also known as X1

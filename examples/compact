@@ -67,6 +67,7 @@ from plugins.xkb import XKB
 #from plugins.application import Application
 #from plugins.hdparm import HDParm
 #from plugins.image import Image
+#from plugins.irc import II
 #from plugins.kmsg import KMsg
 #from plugins.lunar import Lunar
 #from plugins.menu import Menu

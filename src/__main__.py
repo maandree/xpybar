@@ -546,7 +546,7 @@ if config_file is not None:
     code = None
     with open(config_file, 'rb') as script:
         code = script.read()
-    code = code.decode('utf-8', 'error') + '\n'
+    code = code.decode('utf-8', 'strict') + '\n'
     code = compile(code, config_file, 'exec')
     g, l = globals(), dict(locals())
     for key in l:

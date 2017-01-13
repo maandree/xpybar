@@ -60,5 +60,5 @@ class XDisplay:
             self.screen = None if self.screen == '' else int(self.screen)
         r = get_screen().root
         d = get_display()
-        self.vt = r.get_full_property(d.get_atom('XFree86_VT'), Xlib.Xatom.INTEGER).value[0]
+        self.vt = r.get_full_property(d.get_atom('XFree86_VT'), Xlib.Xatom.INTEGER).value.decode('utf-8', 'replace')[0]
 

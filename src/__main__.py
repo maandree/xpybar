@@ -154,7 +154,7 @@ class Bar:
         @param   text:str  The text
         @return  :int      The width of the text
         '''
-        return self.font.query_text_extents(text).overall_width
+        return self.font.query_text_extents(text.encode('utf8')).overall_width
     
     def draw_text(self, x, y, descent, text, *, colour = None, clear = None):
         '''

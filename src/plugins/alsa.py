@@ -25,7 +25,9 @@ class ALSA:
     ALSA volume controller
     
     @variable  cardindex:int          The index of the audio card
-    @variable  cardname:str           The name of the audio card
+    @variable  cardname:str           The name of the audio card, will be
+                                      'default' if the default audio card is selected
+                                      using it's logical name or logical index
     @variable  mixername:str          The name of the mixer
     @variable  mixer:alsaaudio.Mixer  The mixer object used internally by this class
     '''
@@ -35,19 +37,32 @@ class ALSA:
     '''
     :int  Channel index that selects all available channels
     '''
+
+    DEFAULT_CARD = -1
+    '''
+    :int  Logical index of the default audio card
+    '''
     
     
-    def __init__(self, cardindex = 0, mixername = 'Master'):
+    def __init__(self, card = -1, mixername = 'Master', *, **kwargs):
         '''
         Constructor
         
-        @param  cardindex:int  The index of the audio card
+        @param  card:int|str   The index or name of the audio card,
+                               `ALSA.DEFAULT_CARD` (-1) or 'default' for the default card
         @param  mixername:str  The name of the mixer
         '''
-        self.cardindex = cardindex
-        self.cardname = alsaaudio.cards()[cardindex]
+        if card == -1 and 'cardindex' in kwargs: # For backwards compatibility
+            card = kwargs['cardindex']
+        if isinstance(card, str):
+            if card == 'default':
+                card = -1
+            else:
+                card = alsaaudio.cards().index(card)
+        self.card = card
         self.mixername = mixername
-        self.mixer = alsaaudio.Mixer(self.mixername, 0, self.cardindex)
+        self.mixer = alsaaudio.Mixer(self.mixername, 0, self.card)
+        self.cardname = mixer.cardname
     
     
     def get_volume(self):
@@ -116,12 +131,20 @@ class ALSA:
     
     
     @staticmethod
-    def get_mixers(cardindex = 0):
+    def get_mixers(card = -1, *, **kwargs):
         '''
         Get the names of all available mixers for an audio card
         
-        @param   cardindex:int  The index of the audio card
+        @param   card:int|str   The index or name of the audio card,
+                                `ALSA.DEFAULT_CARD` (-1) or 'default' for the default card
         @return  :list<str>     The names of all available mixers for an audio card
         '''
+        if card == -1 and 'cardindex' in kwargs: # For backwards compatibility
+            card = kwargs['cardindex']
+        if isinstance(card, str):
+            if card == 'default':
+                card = -1
+            else:
+                card = alsaaudio.cards().index(card)
         return alsaaudio.mixers(cardindex)
 

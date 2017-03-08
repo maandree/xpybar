@@ -44,7 +44,7 @@ class ALSA:
     '''
     
     
-    def __init__(self, card = -1, mixername = 'Master', *, **kwargs):
+    def __init__(self, card = -1, mixername = 'Master', *, cardindex = None):
         '''
         Constructor
         
@@ -52,8 +52,8 @@ class ALSA:
                                `ALSA.DEFAULT_CARD` (-1) or 'default' for the default card
         @param  mixername:str  The name of the mixer
         '''
-        if card == -1 and 'cardindex' in kwargs: # For backwards compatibility
-            card = kwargs['cardindex']
+        if card == -1 and cardindex is not None: # For backwards compatibility
+            card = cardindex
         if isinstance(card, str):
             if card == 'default':
                 card = -1
@@ -131,7 +131,7 @@ class ALSA:
     
     
     @staticmethod
-    def get_mixers(card = -1, *, **kwargs):
+    def get_mixers(card = -1, *, cardindex = None):
         '''
         Get the names of all available mixers for an audio card
         
@@ -139,8 +139,8 @@ class ALSA:
                                 `ALSA.DEFAULT_CARD` (-1) or 'default' for the default card
         @return  :list<str>     The names of all available mixers for an audio card
         '''
-        if card == -1 and 'cardindex' in kwargs: # For backwards compatibility
-            card = kwargs['cardindex']
+        if card == -1 and cardindex is not None: # For backwards compatibility
+            card = cardindex
         if isinstance(card, str):
             if card == 'default':
                 card = -1

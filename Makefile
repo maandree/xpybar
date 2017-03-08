@@ -38,7 +38,7 @@ PLUGINS = chase clock cpuinfo cpuonline cpu df discstats ipaddress  \
           pacman snmp snmp6 softirqs solar uname uptime users       \
           vmstat weather xdisplay xkb alsa dentrystate inodestate   \
           files hdparm tzclock ropty ping inotify random swaps      \
-          locks image application menu ii
+          locks image application menu ii powersupply lid
 
 PLUGIN_EXAMPLES = chase clock cpu cpuinfo cpuonline df discstats   \
                   ipaddress kmsg loadavg lunar mem moc network     \

@@ -5,8 +5,6 @@ List of plugins to implement:
      portage
      iostat [-x] [-d] [-N] -zk [-p | <devices>...] <interval>
      SMART monitoring
-     Battery
-     /proc/acpi (mute)
      System tray
      Eyes
      Taskbar (as in rarity)
@@ -35,6 +33,11 @@ List of plugins to implement:
      /proc/net/udp
      /proc/net/unix
      /proc/sysvipc
+     /sys/class/rtc
+     /sys/class/rfkill
+     /sys/class/leds
+     /sys/class/ieee80211
+     /sys/class/bluetooth
 
 Demo plugins:
 
@@ -43,6 +46,8 @@ Demo plugins:
      weather
      hdparm
      ii
+     powersupply
+     lid
 
 Terminal mode
 

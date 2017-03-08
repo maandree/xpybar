@@ -37,5 +37,5 @@ class Lid:
         '''
         if not os.path.exists('/proc/acpi/button/lid/LID/state'):
             return None
-        with open('/proc/acpi/button/lid/LID/state') as file:
-            return 'open' in file.read.decode('utf-8', 'strict')
+        with open('/proc/acpi/button/lid/LID/state', 'rb') as file:
+            return 'open' in file.read().decode('utf-8', 'strict')

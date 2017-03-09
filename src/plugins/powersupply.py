@@ -101,7 +101,7 @@ class PowerSupply:
             with open(self.path + '/voltage_min_design', 'rb') as file:
                 self.voltage_min_design = int(file.read().decode('utf-8', 'strict')[:-1])
     
-    def get_alarm():
+    def get_alarm(self):
         '''
         Get the alarm level
         
@@ -112,7 +112,7 @@ class PowerSupply:
                 return int(file.read().decode('utf-8', 'strict')[:-1])
         return None
     
-    def get_capacity():
+    def get_capacity(self):
         '''
         Get the current capacity
         
@@ -126,7 +126,7 @@ class PowerSupply:
                 return int(file.read().decode('utf-8', 'strict')[:-1])
         return None
     
-    def get_capacity_level():
+    def get_capacity_level(self):
         '''
         TODO some information about what this is would be nice
         Normal
@@ -137,7 +137,7 @@ class PowerSupply:
                 return file.read().decode('utf-8', 'strict')[:-1]
         return None
     
-    def get_charge_full():
+    def get_charge_full(self):
         '''
         Get the charge when the power supply is fully charged
         according to the last known charge as fully charged state
@@ -153,7 +153,7 @@ class PowerSupply:
                 return int(file.read().decode('utf-8', 'strict')[:-1])
         return None
     
-    def get_charge():
+    def get_charge(self):
         '''
         Get the current charge
         
@@ -168,7 +168,7 @@ class PowerSupply:
                 return int(file.read().decode('utf-8', 'strict')[:-1])
         return None
     
-    def get_current():
+    def get_current(self):
         '''
         Get the current current
         
@@ -185,7 +185,7 @@ class PowerSupply:
             return 1000000 * power / voltage
         return None
     
-    def get_power():
+    def get_power(self):
         '''
         Get the current power
         
@@ -202,7 +202,7 @@ class PowerSupply:
             return voltage * current / 1000000
         return None
     
-    def get_cycle_count():
+    def get_cycle_count(self):
         '''
         Get the battery's cycle count, that is, the full charge
         energy divided by the total used energy
@@ -215,7 +215,7 @@ class PowerSupply:
                 return int(file.read().decode('utf-8', 'strict')[:-1])
         return None
     
-    def get_status():
+    def get_status(self):
         '''
         Get the current status
         
@@ -228,7 +228,7 @@ class PowerSupply:
                 return file.read().decode('utf-8', 'strict')[:-1]
         return None
     
-    def get_voltage():
+    def get_voltage(self):
         '''
         Get the current voltage
         

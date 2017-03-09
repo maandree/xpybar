@@ -100,7 +100,7 @@ class PowerSupply:
         if os.path.exists(self.path + '/voltage_min_design'):
             with open(self.path + '/voltage_min_design', 'rb') as file:
                 self.voltage_min_design = int(file.read().decode('utf-8', 'strict')[:-1])
-        
+    
     def get_alarm():
         '''
         Get the alarm level

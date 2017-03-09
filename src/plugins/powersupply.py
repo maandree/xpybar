@@ -129,6 +129,8 @@ class PowerSupply:
     def get_capacity_level():
         '''
         TODO some information about what this is would be nice
+        Normal
+        Full
         '''
         if os.path.exists(self.path + '/capacity_level'):
             with open(self.path + '/capacity_level', 'rb') as file:
@@ -218,7 +220,7 @@ class PowerSupply:
         Get the current status
         
         @return  :str?  The current status, known values are
-                        'Charging', 'Discharging' and 'Unknown',
+                        'Full', 'Charging', 'Discharging' and 'Unknown',
                         `None` if unknown or if unapplicable
         '''
         if os.path.exists(self.path + '/status'):

@@ -30,12 +30,15 @@ class Lid:
         '''
         Check whether the lid is open
         
-        @param  :bool?  `True` if the lid is open,
-                        `False` if the lid is closed,
-                        `None` if there is no lid, or if the
-                        computer does not report the lid's state
+        @param  :dict<str, bool>  A map from the ID:s of the lids (you probably just
+                                  have one or zero) to `True` for open and `False`
+                                  for closed.
         '''
-        if not os.path.exists('/proc/acpi/button/lid/LID/state'):
-            return None
-        with open('/proc/acpi/button/lid/LID/state', 'rb') as file:
-            return 'open' in file.read().decode('utf-8', 'strict')
+        ret = {}
+        for lid in os.listdir('/proc/acpi/button/lid/'):
+            try:
+                with open('/proc/acpi/button/lid/%s/state' % lid, 'rb') as file:
+                    ret[lid] = 'open' in file.read().decode('utf-8', 'strict')
+            except:
+                pass
+        return ret

@@ -38,7 +38,7 @@ class Weather:
     
     @variable  wind_dir:float?           The wind direction, `None` if variable
     @variable  wind_speed:float          The wind speed in knots
-    @variable  wind_gusts:float?         The wind gusts (variability of the wind speed) in knots
+    @variable  wind_gusts:float?         The wind gusts (variability of the wind speed; towards) in knots
     @variable  wind_var:(float, float)?  The wind direction range, `None` if less than 60° variation
     @variable  temp:float                The temperature in °C
     @variable  dew:float                 The dew point in °C
@@ -80,13 +80,13 @@ class Weather:
         self.station, station_header = station_header[0], ', '.join(station_header[1:])
         self.location = station_header.split(' (')[0]
         self.latitude, self.longitude = station_header.split(') ')[1].split(' ')[:2]
-        self.latitude, ysign = self.latitude[:-1], self.latitude[-1] == 'S'
+        self.latitude,  ysign = self.latitude[:-1],  self.latitude[-1]  == 'S'
         self.longitude, xsign = self.longitude[:-1], self.longitude[-1] == 'W'
-        self.latitude = [float(x) for x in self.latitude.split('-')]
-        self.longitude = [float(x) for x in  self.longitude.split('-')]
-        self.latitude = self.latitude[0] + self.latitude[1] / 100
+        self.latitude  = [float(x) for x in self.latitude.split('-')]
+        self.longitude = [float(x) for x in self.longitude.split('-')]
+        self.latitude  = self.latitude[0]  + self.latitude[1]  / 100
         self.longitude = self.longitude[0] + self.longitude[1] / 100
-        self.latitude = -(self.latitude) if ysign else self.latitude
+        self.latitude  = -(self.latitude)  if ysign else self.latitude
         self.longitude = -(self.longitude) if xsign else self.longitude
         
         self.fields = {}

@@ -753,7 +753,7 @@ class MyWeather(Entry):
                     self.in_deg_f = button == SCROLL_UP
             elif index == 2: # wind speed/gusts
                 if button == LEFT_BUTTON:
-                    if self.plusminus is None or col < self.plusminus:
+                    if self.towards is None or col < self.towards:
                         self.show_wind_speed = False
                     else:
                         self.show_wind_gusts = False
@@ -909,7 +909,7 @@ class MyWeather(Entry):
                 if beaufort >= 7:   colour = '33'
                 if beaufort >= 10:  colour = '31'
                 if beaufort >= 12:  colour = '39;41'
-                wind += '±\033[%sm%.0f\033[0m' % (colour, value)
+                wind += '→\033[%sm%.0f\033[0m' % (colour, value)
             wind += unit
             text.append(wind)
         else:
@@ -1045,13 +1045,13 @@ class MyWeather(Entry):
         else:
             segments.append(None)
         x -= 1
-        self.plusminus = None
+        self.towards = None
         for i, segment in enumerate(text):
             if segment is None:
                 segments.append(None)
             else:
-                if i == 1 and '±' in segment:
-                    self.plusminus = x + Bar.coloured_length(segment.split('±')[0])
+                if i == 1 and '→' in segment:
+                    self.towards = x + Bar.coloured_length(segment.split('→')[0])
                 w = Bar.coloured_length(segment)
                 x += 1
                 segments.append((x, w))

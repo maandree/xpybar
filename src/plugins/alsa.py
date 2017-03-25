@@ -59,10 +59,10 @@ class ALSA:
                 card = -1
             else:
                 card = alsaaudio.cards().index(card)
-        self.card = card
+        self.cardindex = card
         self.mixername = mixername
-        self.mixer = alsaaudio.Mixer(self.mixername, 0, self.card)
-        self.cardname = mixer.cardname
+        self.mixer = alsaaudio.Mixer(self.mixername, 0, self.cardindex)
+        self.cardname = self.mixer.cardname
     
     
     def get_volume(self):

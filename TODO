@@ -3,7 +3,6 @@ List of plugins to implement:
      MPD
      Alarm clock
      portage
-     iostat [-x] [-d] [-N] -zk [-p | <devices>...] <interval>
      SMART monitoring
      System tray
      Eyes
@@ -38,6 +37,10 @@ List of plugins to implement:
      /sys/class/leds
      /sys/class/ieee80211
      /sys/class/bluetooth
+     /proc/buddyinfo
+     /proc/zoneinfo
+     /proc/pagetypeinfo
+     /proc/[pid]/
 
 Demo plugins:
 
@@ -53,4 +56,6 @@ Terminal mode
 
 workspace and layout switching in xmonad
 fix so that ropty works with wall too
+use C to gather system information efficiently, which
+    will also circumvent the global interpretor lock
 

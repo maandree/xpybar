@@ -146,5 +146,5 @@ class ALSA:
                 card = -1
             else:
                 card = alsaaudio.cards().index(card)
-        return alsaaudio.mixers(cardindex)
+        return alsaaudio.mixers(card)
 

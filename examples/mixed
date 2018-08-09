@@ -1,7 +1,7 @@
 # -*- python -*-
 '''
 xpybar – xmobar replacement written in python
-Copyright © 2014, 2015, 2016, 2017  Mattias Andrée (maandree@member.fsf.org)
+Copyright © 2014, 2015, 2016, 2017, 2018  Mattias Andrée (maandree@kth.se)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -54,8 +54,8 @@ def start():
         Clocked.update_all(functions)
         bar.invalidate()
     
-    async(lambda : forever(read_stdin))
-    async(lambda : clock_.continuous_sync(update_per_clock))
+    xasync(lambda : forever(read_stdin))
+    xasync(lambda : clock_.continuous_sync(update_per_clock))
 
 
 semaphore = threading.Semaphore()

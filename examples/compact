@@ -1,7 +1,7 @@
 # -*- python -*-
 '''
 xpybar – xmobar replacement written in python
-Copyright © 2014, 2015, 2016, 2017  Mattias Andrée (maandree@member.fsf.org)
+Copyright © 2014, 2015, 2016, 2017, 2018  Mattias Andrée (maandree@kth.se)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -265,7 +265,7 @@ class MyXMonad(Entry):
         self.show_full = False
         self.short_layout = None
         Entry.__init__(self, *args, **kwargs)
-        async(lambda : forever(t(self.refresh)), name = 'xmonad')
+        xasync(lambda : forever(t(self.refresh)), name = 'xmonad')
     
     def action(self, col, button, x, y):
         if button == MIDDLE_BUTTON:
@@ -566,7 +566,7 @@ class MyComputer(Entry):
             self.invalidate()
         elif button == RIGHT_BUTTON:
             if self.display == 0:
-                async(lambda : subprocess.Popen(['mate-system-monitor']).wait())
+                xasync(lambda : subprocess.Popen(['mate-system-monitor']).wait())
             else:
                 self.invalidate()
         elif button == SCROLL_UP:
@@ -703,7 +703,7 @@ class MyWeather(Entry):
         self.station = 0
         self.updated = False
         self.segments = []
-        self.refresh = Sometimes(lambda : async(self.refresh_, name = 'weather'), 20 * 60 * 4)
+        self.refresh = Sometimes(lambda : xasync(self.refresh_, name = 'weather'), 20 * 60 * 4)
         self.refresh()
         Entry.__init__(self, *args, **kwargs)
     
@@ -1104,13 +1104,13 @@ class MyNews(Entry):
             self.status_path = HOME + '/.var/lib/featherweight/status'
         self.get_news()
         Entry.__init__(self, *args, **kwargs)
-        async(self.refresh, name = 'news')
+        xasync(self.refresh, name = 'news')
     
     def action(self, col, button, x, y):
         if button == LEFT_BUTTON:
-            async(lambda : subprocess.Popen([TERMINAL, '-e', 'featherweight']).wait())
+            xasync(lambda : subprocess.Popen([TERMINAL, '-e', 'featherweight']).wait())
         elif button == RIGHT_BUTTON:
-            async(lambda : subprocess.Popen(['featherweight', '--update', '--system']).wait())
+            xasync(lambda : subprocess.Popen(['featherweight', '--update', '--system']).wait())
     
     def get_news(self):
         try:
@@ -1173,7 +1173,7 @@ class MyALSA(Entry):
         self.sep_width = Bar.coloured_length(SEPARATOR)
         self.get_volume()
         Entry.__init__(self, *args, **kwargs)
-        async((self.refresh_posix_ipc, self.refresh_cmdipc, self.refresh_wait)[method], name = 'alsa')
+        xasync((self.refresh_posix_ipc, self.refresh_cmdipc, self.refresh_wait)[method], name = 'alsa')
     
     def action(self, col, button, x, y):
         mixer = 0
@@ -2309,7 +2309,7 @@ class MyTop(Entry):
         self.top_cmd = pdeath('HUP', 'top', '-b', '-n', '1', '-o', '%CPU', '-w', '10000')
         self.refresh()
         Entry.__init__(self, *args, **kwargs)
-        async(lambda : watch(5, t(self.refresh)), name = 'top')
+        xasync(lambda : watch(5, t(self.refresh)), name = 'top')
     
     def action(self, col, button, x, y):
         if button == LEFT_BUTTON:
@@ -2380,13 +2380,13 @@ class MyMOC(Entry):
                 if col % 3 == 2:
                     return
                 col //= 3
-                if   col == 0:           async(lambda : moc.play().wait())
-                elif col == 1:           async(lambda : moc.toggle_pause().wait())
-                elif col == 2:           async(lambda : moc.stop().wait())
-                elif col == 3:           async(lambda : moc.previous().wait())
-                elif col == 4:           async(lambda : moc.next().wait())
-            elif button == SCROLL_UP:    async(lambda : moc.seek(+5).wait())
-            elif button == SCROLL_DOWN:  async(lambda : moc.seek(-5).wait())
+                if   col == 0:           xasync(lambda : moc.play().wait())
+                elif col == 1:           xasync(lambda : moc.toggle_pause().wait())
+                elif col == 2:           xasync(lambda : moc.stop().wait())
+                elif col == 3:           xasync(lambda : moc.previous().wait())
+                elif col == 4:           xasync(lambda : moc.next().wait())
+            elif button == SCROLL_UP:    xasync(lambda : moc.seek(+5).wait())
+            elif button == SCROLL_DOWN:  xasync(lambda : moc.seek(-5).wait())
     
     def function_display_(self):
         moc = MOC()
@@ -2415,15 +2415,15 @@ class MyIPAddress(Entry):
         Entry.__init__(self, *args, **kwargs)
         def init():
             self.refresh()
-            async(lambda : Clock(sync_to = 10 * Clock.MINUTES).continuous_sync(t(self.refresh)), name = 'ipaddress')
-        async(init, name = 'ipaddress')
+            xasync(lambda : Clock(sync_to = 10 * Clock.MINUTES).continuous_sync(t(self.refresh)), name = 'ipaddress')
+        xasync(init, name = 'ipaddress')
     
     def action(self, col, button, x, y):
         if button == LEFT_BUTTON:
             self.show_public = not self.show_public
             self.invalidate()
         elif button == RIGHT_BUTTON:
-            async(self.refresh, name = 'ipaddress')
+            xasync(self.refresh, name = 'ipaddress')
         elif button in (SCROLL_UP, SCROLL_DOWN):
             nic = self.show_nic
             if nic is None:
@@ -2492,8 +2492,8 @@ class MyLeapsec(Entry):
         Entry.__init__(self, *args, **kwargs)
         def init():
             self.refresh()
-            async(lambda : Clock(sync_to = Clock.MINUTES).continuous_sync(Sometimes(t(self.refresh), 12 * 60)), name = 'leapsec')
-        async(init, name = 'leapsec')
+            xasync(lambda : Clock(sync_to = Clock.MINUTES).continuous_sync(Sometimes(t(self.refresh), 12 * 60)), name = 'leapsec')
+        xasync(init, name = 'leapsec')
     
     def action(self, col, button, x, y):
         if button == RIGHT_BUTTON:
@@ -2632,8 +2632,8 @@ class MyTimer(Entry):
             return self.dur(countdown)
         if not self.notified:
             self.notified = True
-            async(self.notify, name = 'timer notify')
-            async(self.wall, name = 'timer wall')
+            xasync(self.notify, name = 'timer notify')
+            xasync(self.wall, name = 'timer wall')
         countdown %= 2
         if countdown == 0:
             return '\033[37;41mYou are done\033[00m'
@@ -2718,8 +2718,8 @@ def start():
     start_()
     bar.clear()
     get_display().flush()
-    async(lambda : clock.continuous_sync(t(update_per_clock)), name = 'clock')
-    async(mqueue_wait, name = 'mqueue')
+    xasync(lambda : clock.continuous_sync(t(update_per_clock)), name = 'clock')
+    xasync(mqueue_wait, name = 'mqueue')
 
 def redraw():
     if semaphore.acquire(blocking = False):

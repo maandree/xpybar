@@ -1,7 +1,7 @@
 # -*- python -*-
 '''
 xpybar – xmobar replacement written in python
-Copyright © 2014, 2015, 2016, 2017  Mattias Andrée (maandree@member.fsf.org)
+Copyright © 2014, 2015, 2016, 2017, 2018  Mattias Andrée (maandree@kth.se)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ class Inotify:
         @param  callback:(str)→void  Function that will be called everytime a line is read from
                                      `inotifywait`'s standard output, the parameter will be that line,
                                      note that this will not be asynchronously, you may want to specify
-                                     something like `lambda : async(fun)` for that, and use semaphores
+                                     something like `lambda : xasync(fun)` for that, and use semaphores
                                      in `fun`.
         @param  arguments:*str       The files and directories you want to watch and any addition
                                      argument you want to pass to `inotifywait`
@@ -62,5 +62,5 @@ class Inotify:
             with LineReader(spawn(*command)) as reader:
                 while True:
                     callback(reader.next())
-        async(start)
+        xasync(start)
 

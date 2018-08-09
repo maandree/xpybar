@@ -1,7 +1,7 @@
 # -*- python -*-
 '''
 xpybar – xmobar replacement written in python
-Copyright © 2014, 2015, 2016, 2017  Mattias Andrée (maandree@member.fsf.org)
+Copyright © 2014, 2015, 2016, 2017, 2018  Mattias Andrée (maandree@kth.se)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -572,8 +572,8 @@ def start():
             bar.invalidate()
     
     # Start monitoring
-    async(lambda : watch(1 / TICKS_PER_SECOND, update_sys), name = 'sys')
-    async(lambda : my_clock.continuous_sync(update_clock), name = 'clock')
+    xasync(lambda : watch(1 / TICKS_PER_SECOND, update_sys), name = 'sys')
+    xasync(lambda : my_clock.continuous_sync(update_clock), name = 'clock')
 
 
 
@@ -689,15 +689,15 @@ def button_pressed(y, lx, rx, button):
             elif stops_r0[4] > rx >= stops_r0[5]: # moc
                 mx = stops_r0[4] - rx - 1 - 5
                 if button == LEFT_BUTTON:
-                    if    0 <= mx <  1:          async(lambda : moc_controller.play().wait())         # >
-                    elif  2 <= mx <  4:          async(lambda : moc_controller.toggle_pause().wait()) # ||
-                    elif  5 <= mx <  7:          async(lambda : moc_controller.stop().wait())         # []
-                    elif  8 <= mx < 10:          async(lambda : moc_controller.previous().wait())     # |<
-                    elif 11 <= mx < 13:          async(lambda : moc_controller.next().wait())         # >|
-                elif button == FORWARD_BUTTON:   async(lambda : moc_controller.next().wait())
-                elif button == BACKWARD_BUTTON:  async(lambda : moc_controller.previous().wait())
-                elif button == SCROLL_UP:        async(lambda : moc_controller.seek(+5).wait())
-                elif button == SCROLL_DOWN:      async(lambda : moc_controller.seek(-5).wait())
+                    if    0 <= mx <  1:          xasync(lambda : moc_controller.play().wait())         # >
+                    elif  2 <= mx <  4:          xasync(lambda : moc_controller.toggle_pause().wait()) # ||
+                    elif  5 <= mx <  7:          xasync(lambda : moc_controller.stop().wait())         # []
+                    elif  8 <= mx < 10:          xasync(lambda : moc_controller.previous().wait())     # |<
+                    elif 11 <= mx < 13:          xasync(lambda : moc_controller.next().wait())         # >|
+                elif button == FORWARD_BUTTON:   xasync(lambda : moc_controller.next().wait())
+                elif button == BACKWARD_BUTTON:  xasync(lambda : moc_controller.previous().wait())
+                elif button == SCROLL_UP:        xasync(lambda : moc_controller.seek(+5).wait())
+                elif button == SCROLL_DOWN:      xasync(lambda : moc_controller.seek(-5).wait())
     except:
         pass
 

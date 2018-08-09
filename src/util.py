@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
 xpybar – xmobar replacement written in python
-Copyright © 2014, 2015, 2016, 2017  Mattias Andrée (maandree@member.fsf.org)
+Copyright © 2014, 2015, 2016, 2017, 2018  Mattias Andrée (maandree@kth.se)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ def setproctitle(title):
         pass
 
 
-def async(target, name = None, group = None):
+def xasync(target, name = None, group = None):
     '''
     Start a function asynchronously
     
@@ -67,6 +67,7 @@ def async(target, name = None, group = None):
     t.setDaemon(True)
     t.start()
     return t
+globals()['async'] = xasync ## xasync was named async until the release of Python 3.7 when it became a reserved keyword
 
 
 def watch(interval, target, delay = 0):

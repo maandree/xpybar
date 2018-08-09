@@ -125,7 +125,7 @@ running some code.) You can find the source code and read it at
 @url{https://github.com/maandree/xpybar/tree/master/src/}.
 If the documentation is not clear enough, please file a bug
 att @url{https://github.com/maandree/xpybar/issues} or to
-@code{maandree@@member.fsf.org}.
+@code{maandree@@kth.se}.
 
 Graphic-functions are found in @file{x.py} and @file{__main__.py}.
 You will also find some basic functions @file{__main__.py}.

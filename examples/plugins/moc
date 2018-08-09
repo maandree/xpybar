@@ -1,7 +1,7 @@
 # -*- python -*-
 '''
 xpybar – xmobar replacement written in python
-Copyright © 2014, 2015, 2016, 2017  Mattias Andrée (maandree@member.fsf.org)
+Copyright © 2014, 2015, 2016, 2017, 2018  Mattias Andrée (maandree@kth.se)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ clock = Clock(sync_to = Clock.SECONDS)
 start_ = start
 def start():
     start_()
-    async(lambda : clock.continuous_sync(lambda : bar.invalidate()))
+    xasync(lambda : clock.continuous_sync(lambda : bar.invalidate()))
 
 
 line2 = ['File', 'Title', 'SongTitle', 'Album', 'Artist']

@@ -58,7 +58,7 @@ class PowerSupply:
         Constructor
         
         @param  name:str  The name of the power supply, you can find
-                          the with `PowerSupplu.supplies`
+                          the with `PowerSupply.supplies`
         '''
         self.name = name
         self.path = '/sys/class/power_supply/' + name

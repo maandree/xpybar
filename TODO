@@ -1,3 +1,6 @@
+Bugs:
+     Negative delta in idle CPU time is not supported
+
 List of plugins to implement:
 
      MPD

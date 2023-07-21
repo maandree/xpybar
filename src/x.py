@@ -148,8 +148,8 @@ def create_panel(width, height, left, ypos, panel_height, at_top):
                                        colormap = Xlib.X.CopyFromParent,
                                        override_redirect = get_override_redirect())
     
-    top_    = lambda x, y, w, h : [0, 0, y + h, 0, 0, 0, 0, 0, x, x + w, 0, 0]
-    bottom_ = lambda x, y, w, h : [0, 0, 0, y + h, 0, 0, 0, 0, 0, 0, x, x + w]
+    top_    = lambda x, y, w, h : [0, 0, y + h, 0, 0, 0, 0, 0, x, x + w - 1, 0, 0]
+    bottom_ = lambda x, y, w, h : [0, 0, 0, y + h, 0, 0, 0, 0, 0, 0, x, x + w - 1]
     
     window.set_wm_name('xpybar')
     window.set_wm_icon_name('xpybar')

@@ -122,9 +122,9 @@ script via the variable @code{config_file}, which is a list.
 
 @code{xpybar} is configured by reimplement functions (and
 running some code.) You can find the source code and read it at
-@url{https://github.com/maandree/xpybar/tree/master/src/}.
+@url{https://codeberg.org/maandree/xpybar/tree/master/src/}.
 If the documentation is not clear enough, please file a bug
-att @url{https://github.com/maandree/xpybar/issues} or to
+att @url{https://codeberg.org/maandree/xpybar/issues} or to
 @code{maandree@@kth.se}.
 
 Graphic-functions are found in @file{x.py} and @file{__main__.py}.

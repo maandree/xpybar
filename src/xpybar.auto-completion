@@ -14,4 +14,3 @@
 	(unargumented  (options -W --warranty)  (complete --warranty)
 	(desc 'Print non-warranty information'))
 )
-

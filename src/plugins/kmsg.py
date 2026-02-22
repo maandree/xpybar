@@ -53,4 +53,3 @@ class KMsg(LineReader):
                 return LineReader.next(self)
         except:
             return None
-

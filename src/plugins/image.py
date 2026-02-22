@@ -237,4 +237,3 @@ class Image:
         return best[0][0]
 
 # TODO search /usr/share/pixmaps
-

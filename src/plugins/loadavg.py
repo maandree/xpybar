@@ -65,4 +65,3 @@ class AverageLoad:
         self.average_avg_15_min = self.total_avg_15_min / AverageLoad.cpu_count
         self.last_pid = int(self.last_pid)
         self.active_tasks, self.total_tasks = [int(t) for t in tasks.split('/')]
-

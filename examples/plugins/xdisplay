@@ -52,4 +52,3 @@ def redraw():
     
     bar.clear()
     bar.draw_coloured_text(0, 10, 0, 2, text)
-

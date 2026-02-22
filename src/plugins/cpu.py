@@ -123,4 +123,3 @@ class CPU:
         self.softirq = fields['softirq'][1:] if 'softirq' in fields else None
         self.softirq_total = fields['softirq'][0] if 'softirq' in fields else None
         self.fields = fields
-

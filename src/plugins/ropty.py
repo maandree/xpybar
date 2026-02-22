@@ -110,4 +110,3 @@ class ROPTY(LineReader):
         finally:
             self.__condition.release()
         return rc
-

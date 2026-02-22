@@ -1,5 +1,5 @@
 NAME
-	xpybar - A highly extensible minimalistic dock panel configured in Python 3
+	xpybar - Highly extensible minimalistic dock panel configured in Python 3
 
 SYNOPSIS
 	xpybar [OPTION]... [-- CONFIGURATION_OPTION...]
@@ -60,4 +60,3 @@ SEE ALSO
 	dmenu(1), metar(1), stlarch_icons
 
 	Full documentation available locally via: info '(xpybar)'
-

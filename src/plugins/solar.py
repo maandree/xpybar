@@ -250,4 +250,3 @@ class Solar:
                                    `None` if none were found within a year
         '''
         return self.u(solar_python.past_elevation_derivative(self.lat, self.lon, derivative, self.now()))
-

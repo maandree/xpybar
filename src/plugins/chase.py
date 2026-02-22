@@ -53,4 +53,3 @@ class Chase:
             self.status = len(list(page)) == 0
             return True
         return False
-

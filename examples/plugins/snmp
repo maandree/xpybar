@@ -54,4 +54,3 @@ def unhandled_event(e):
         elif e.detail == SCROLL_DOWN:
             index = max(index - 1, 0)
         bar.invalidate()
-

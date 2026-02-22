@@ -202,4 +202,3 @@ def close_x():
     global display
     display.flush()
     display.close()
-

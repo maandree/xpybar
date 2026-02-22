@@ -41,4 +41,3 @@ class DentryState:
         state = state.decode('utf-8', 'replace').replace('\t', ' ')
         state = [int(field) for field in state.split(' ') if not field == '']
         (self.nr_dentry, self.nr_unused, self.age_limit, self.want_pages, _dummy1, _dummy_2) = state
-

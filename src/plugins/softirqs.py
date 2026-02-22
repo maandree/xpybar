@@ -65,4 +65,3 @@ class SoftIRQs:
         @return  :list<int>  The value of the field, for each processor
         '''
         return self.__info[key]
-

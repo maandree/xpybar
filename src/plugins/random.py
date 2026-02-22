@@ -56,4 +56,3 @@ class Random:
         '''
         with open('/proc/sys/kernel/random/entropy_avail', 'rb') as file:
             return int(file.read().decode('utf-8', 'replace').rstrip('\n'))
-

@@ -49,4 +49,3 @@ class Files:
         state = state.decode('utf-8', 'replace').replace('\t', ' ')
         state = [int(field) for field in state.split(' ') if not field == '']
         (self.nr_files, self.nr_free_files, self.file_max) = state
-

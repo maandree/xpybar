@@ -134,4 +134,3 @@ class LeapSeconds:
             s += 1
         s = calendar.timegm((y, m, d, 0, 0, s))
         return (y, m, d, s, a, t)
-

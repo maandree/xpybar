@@ -93,4 +93,3 @@ class LineReader:
         Invoked when `with` exits
         '''
         self.close()
-

@@ -138,4 +138,3 @@ class Pacman:
             self.packager = None
         self.build_date     = text('Build Date')
         self.validated_by   = list(filter(lambda x : not x == 'Sum', plur('Validated By')))
-

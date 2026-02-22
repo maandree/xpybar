@@ -76,4 +76,3 @@ def redraw():
     text = '%s\n%s' % (get(True), get(False))
     bar.clear()
     bar.draw_coloured_text(0, 10, 0, 2, text)
-

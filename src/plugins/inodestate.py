@@ -42,4 +42,3 @@ class InodeState:
         state = state.decode('utf-8', 'replace').replace('\t', ' ')
         state = [int(field) for field in state.split(' ') if not field == '']
         (self.nr_inodes, self.nr_free_inodes, self.preshrink, _dummy1, _dummy2, _dummy_3, _dummy_4) = state
-

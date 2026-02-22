@@ -139,4 +139,3 @@ class CPUInfo: # TODO enable setting scaling
         with open(path, 'rb') as file:
             cont = file.read().decode('utf-8', 'replace').rstrip('\n')
         return cont
-

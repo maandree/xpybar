@@ -87,4 +87,3 @@ def redraw():
              s('Softirq', cpu_.softirq_total), s('Softirq', cpu_.softirq))
     bar.clear()
     bar.draw_coloured_text(0, 10, 0, 2, text)
-

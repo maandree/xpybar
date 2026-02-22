@@ -62,4 +62,3 @@ workspace and layout switching in xmonad
 fix so that ropty works with wall too
 use C to gather system information efficiently, which
     will also circumvent the global interpretor lock
-

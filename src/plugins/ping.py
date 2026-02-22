@@ -187,4 +187,3 @@ class Ping:
         monitor = PingMonitor()
         xasync(monitor.start)
         return monitor
-

@@ -265,4 +265,3 @@ class PowerSupply:
         @return  :list<str>  The name of all available power supplies
         '''
         return os.listdir('/sys/class/power_supply')
-

@@ -85,4 +85,3 @@ class Lunar:
 # TODO add zodiac sign
 # TODO add distances
 # TODO add angular diameters
-

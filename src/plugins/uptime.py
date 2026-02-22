@@ -77,4 +77,3 @@ class Uptime:
         hours, t = int(t % 24), t // 24
         days = int(t)
         return (days, hours, minutes, seconds)
-

@@ -77,4 +77,3 @@ def redraw():
     bar.partial_clear(0, bar.width, 10, 0, 2, text)
     bar.draw_coloured_text(0, 10, 0, 2, text)
     # TODO this is very flickery
-

@@ -63,4 +63,3 @@ class Inotify:
                 while True:
                     callback(reader.next())
         xasync(start)
-

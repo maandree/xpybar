@@ -73,4 +73,3 @@ class SNMP:
         @return  :int     The value of the field
         '''
         return self.__info[key]
-

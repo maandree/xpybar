@@ -83,4 +83,3 @@ class Network:
             values = devices[dev]
             for i in range(len(values)):
                 fields[columns[i]] = values[i]
-

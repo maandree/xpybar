@@ -75,4 +75,3 @@ def redraw():
 
 
 # TODO add workspace switching and layout rotation
-

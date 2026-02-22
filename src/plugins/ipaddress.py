@@ -205,4 +205,3 @@ class IPAddress:
             return data[0] if not len(data) == 0 else None
         except:
             return None
-

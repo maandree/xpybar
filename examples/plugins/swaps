@@ -49,4 +49,3 @@ def redraw():
     text = '\n'.join(' │ '.join('%s: %s' % (h, v) for (h, v) in title_and_extend(swap)) for swap in swaps_.swaps)
     bar.clear()
     bar.draw_coloured_text(0, 10, 0, 2, text)
-

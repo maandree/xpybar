@@ -53,4 +53,3 @@ class Swaps:
     @staticmethod
     def __split(line):
         return [field for field in line.split(' ') if not field == '']
-

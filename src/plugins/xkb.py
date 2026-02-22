@@ -86,4 +86,3 @@ class XKB:
         if (mask & self.__caps)   == self.__caps:    rc.append('Caps')
         if (mask & self.__scroll) == self.__scroll:  rc.append('Scroll')
         return rc
-

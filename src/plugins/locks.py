@@ -190,4 +190,3 @@ class Locks:
             @return  :list<str>      All found pathnames of the file
             '''
             return Locks.find(self.major, self.minor, self.inode, alarm)
-

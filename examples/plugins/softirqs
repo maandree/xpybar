@@ -73,4 +73,3 @@ def unhandled_event(e):
             label = keys[index]
             xlabel = make_label(label)
         bar.invalidate()
-

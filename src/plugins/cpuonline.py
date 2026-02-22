@@ -52,4 +52,3 @@ class CPUOnline: # TODO make it possible to turn CPU:s on and off
         data = [x if x is not None else [] for x in data]
         
         (self.offline, self.online, self.possible, self.present) = data
-

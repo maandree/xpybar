@@ -311,4 +311,3 @@ class MOC: # TODO add support for waiting for events and reading settings
             opts = filter(lambda opt : opt is not None, opts)
             return MOC.__interact('--off', ','.join(opts))
         return None
-

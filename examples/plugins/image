@@ -39,4 +39,3 @@ def redraw():
     bar.clear()
     image_.draw(bar, 0, 0)
     image_.draw(bar, bar.width - image_.width, 0)
-

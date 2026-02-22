@@ -46,5 +46,3 @@ class Uname:
         self.processor         = u(spawn_read('uname', '-p'))
         self.hardware_platform = u(spawn_read('uname', '-i'))
         self.operating_system  = spawn_read('uname', '-o')
-
-

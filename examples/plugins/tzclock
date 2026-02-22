@@ -47,4 +47,3 @@ def redraw():
     text = ' │ '.join([tz.from_posix_time(time) for tz in timezones])
     bar.clear()
     bar.draw_coloured_text(0, 10, 0, 2, text)
-

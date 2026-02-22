@@ -178,4 +178,3 @@ class Weather:
         if ob.endswith('SM') and (len(ob) > 0):
             if len(list(filter(lambda c : not ('0' <= c <= '9'), ob))) == 2:
                 self.visibility = float(ob[:-2])
-

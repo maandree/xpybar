@@ -322,4 +322,3 @@ class Clocked:
         for f in functions:
             if isinstance(f, Clocked):
                 f(True)
-

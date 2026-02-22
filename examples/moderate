@@ -742,4 +742,3 @@ def button_pressed_mixer(mx, button):
             snd(False)
             bar.invalidate()
             break
-

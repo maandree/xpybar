@@ -94,4 +94,3 @@ class HDParm: # TODO add output parsers
         '''
         test = lambda dev : (len(dev) == 3) and (dev[:2] in ('sd', 'hd'))
         return filter(test, os.listdir('/dev'))
-

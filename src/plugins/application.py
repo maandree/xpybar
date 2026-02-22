@@ -144,4 +144,3 @@ class Application:
             else:
                 buf += c
         return buf
-

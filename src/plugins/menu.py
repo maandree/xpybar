@@ -148,4 +148,3 @@ class Menu:
         self.palette += [0x555555, 0xEB5E6A, 0x0EC287, 0xF2CA38, 0x00ACE0, 0xC473D1, 0x00C3C7, 0xEEEEEE]
         self.palette = [((p >> 16) & 255, (p >> 8) & 255, p & 255) for p in self.palette]
         self.palette = [self.create_colour(*p) for p in self.palette]
-

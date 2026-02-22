@@ -110,4 +110,3 @@ class Users:
                     users[user] = user = str(user)
             rc.append((user, tty))
         return rc
-

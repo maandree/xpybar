@@ -80,4 +80,3 @@ class DiscStat:
         (self.r_complete, self.r_merge, self.r_sectors, self.r_time) = fields[3 : 7]
         (self.w_complete, self.w_merge, self.w_sectors, self.w_time) = fields[7 : 11]
         (self.io_current, self.io_time, self.io_weighted_time) = fields[11 : 14]
-

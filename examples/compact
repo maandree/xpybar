@@ -2756,4 +2756,3 @@ def unhandled_event(e):
             for f in group.functions:
                 if f.click(row, lcol, rcol, button, x, y):
                     break
-

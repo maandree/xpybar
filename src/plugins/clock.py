@@ -92,4 +92,3 @@ class Clock:
         @return  :float  The current POSIX time
         '''
         return time.time()
-

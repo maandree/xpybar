@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
 xpybar – xmobar replacement written in python
-Copyright © 2014, 2015, 2016, 2017, 2018, 2019  Mattias Andrée (m@maandreese)
+Copyright © 2014, 2015, 2016, 2017, 2018, 2019, 2026  Mattias Andrée (m@maandree.se)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -126,7 +126,7 @@ def get_override_redirect():
     return True
 
 
-def create_panel(width, height, left, ypos, panel_height, at_top):
+def create_panel(width, height, left, ypos, panel_height, at_top, top = 0, xpos = 0, panel_width = None, at_left = True, sidebar = False):
     '''
     Create a docked panel, not mapped yet
     
@@ -134,29 +134,53 @@ def create_panel(width, height, left, ypos, panel_height, at_top):
     @param   height:int        The height of the output
     @param   left:int          The left position of the output
     @param   ypos:int          The position of the panel in relation to either the top or bottom edge of the output
-    @param   panel_height:int  The height of the panel
+    @param   panel_height:int? The height of the panel, `None` for `height`
     @param   at_top:bool       Whether the panel is to be docked to the top of the output, otherwise to the bottom
+    @param   top:int           The top position of the output
+    @param   xpos:int          The position of the panel in relation to either the left or right edge of the output
+    @param   panel_width:int?  The width of the panel, `None` for `width`
+    @param   at_left:bool      Whether the panel is to be docked to the left edge of the output, otherwise to the right edge
+    @param   sidebar:bool      If `True`, the panel will be docked to the left or right edge,
+                               otherwise it will be docked to the top or the bottom edge
     @return                    The window
     '''
     global display, screen
-    ypos = ypos if at_top else (height - ypos - panel_height)
-    window = screen.root.create_window(left, ypos, width, panel_height, 0,
+
+    sw, sh = screen['width_in_pixels'], screen['height_in_pixels']
+
+    if sidebar:
+        if panel_height is None:
+            panel_height = height
+    else:
+        if panel_width is None:
+            panel_width = width
+
+    w, h = panel_width, panel_height
+    y = top + (ypos if at_top else (height - ypos - h))
+    x = left + (xpos if at_left else (width - xpos - w))
+    window = screen.root.create_window(x, y, panel_width, panel_height, 0,
                                        Xlib.X.CopyFromParent,
                                        Xlib.X.InputOutput,
                                        Xlib.X.CopyFromParent,
                                        event_mask = get_event_mask(),
                                        colormap = Xlib.X.CopyFromParent,
                                        override_redirect = get_override_redirect())
-    
-    top_    = lambda x, y, w, h : [0, 0, y + h, 0, 0, 0, 0, 0, x, x + w - 1, 0, 0]
-    bottom_ = lambda x, y, w, h : [0, 0, 0, y + h, 0, 0, 0, 0, 0, 0, x, x + w - 1]
-    
+
     window.set_wm_name('xpybar')
     window.set_wm_icon_name('xpybar')
     window.set_wm_class('bar', 'xpybar')
     window.set_wm_client_machine(os.uname().nodename)
-    
-    position = (top_ if at_top else bottom_)(left, ypos, width, panel_height)
+
+    if sidebar:
+        if at_left:
+            position = [x + w, 0, 0, 0,     y, y + h - 1, 0, 0,    0, 0, 0, 0]
+        else:
+            position = [0, sw - x, 0, 0,    0, 0, y, y + h - 1,    0, 0, 0, 0]
+    else:
+        if at_top:
+            position = [0, 0, y + h, 0,    0, 0, 0, 0,    x, x + w - 1, 0, 0]
+        else:
+            position = [0, 0, 0, sh - y,   0, 0, 0, 0,    0, 0, x, x + w - 1]
     _CARD    = display.intern_atom("CARDINAL")
     _PSTRUT  = display.intern_atom("_NET_WM_STRUT_PARTIAL")
     _STRUT   = display.intern_atom("_NET_WM_STRUT")

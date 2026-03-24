@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 copyright = '''
 xpybar – xmobar replacement written in python
-Copyright © 2014, 2015, 2016, 2017, 2018, 2019  Mattias Andrée (m@maandreese)
+Copyright © 2014, 2015, 2016, 2017, 2018, 2019, 2026  Mattias Andrée (m@maandree.se)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,10 +31,12 @@ PROGRAM_VERSION = '1.20'
 
 
 global OUTPUT, HEIGHT, YPOS, TOP, FONT, BACKGROUND, FOREGROUND
+global WIDTH, XPOS, LEFT, SIDEBAR
 global display, outputs, redraw, Bar, start, stop
 global conf_opts, config_file, parser
 
 OUTPUT, HEIGHT, YPOS, TOP = 0, 12, 0, True
+WIDTH, XPOS, LEFT, SIDEBAR = 0, 0, True, False
 FONT = '-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*'
 BACKGROUND, FOREGROUND = (0, 0, 0), (192, 192, 192)
 
@@ -58,7 +60,7 @@ def start():
     feel free to replace this completely
     '''
     global bar
-    bar = Bar(OUTPUT, HEIGHT, YPOS, TOP, FONT, BACKGROUND, FOREGROUND)
+    bar = Bar(OUTPUT, HEIGHT, YPOS, TOP, FONT, BACKGROUND, FOREGROUND, WIDTH, XPOS, LEFT, SIDEBAR)
     bar.map()
 
 def stop():
@@ -90,9 +92,15 @@ class Bar:
     @variable  width:int         The output's pixel width
     @variable  height:int        The output's pixel height
     @variable  left:int          The output's left position
+    @variable  top:int           The output's top position
     @variable  ypos:int          The position of the panel in relation to either the top or bottom edge of the output
+    @variable  xpos:int          The position of the panel in relation to either the left or right edge of the output
     @variable  panel_height:int  The panel's height
+    @variable  panel_width:int   The panel's width
     @variable  at_top:bool       Whether the panel is to be docked to the top of the output, otherwise to the bottom
+    @variable  at_left:bool      Whether the panel is to be docked to the left edge of the output, otherwise to the right edge
+    @variable  sidebar:bool      If `True`, the bar will be docked to the left or right edge,
+                                 otherwise it will be docked to the top or the bottom edge
     
     @variable  background        The default background
     @variable  foreground        The default foreground
@@ -104,22 +112,43 @@ class Bar:
     @variable  cmap_cache        Custom colour map cache
     '''
     
-    def __init__(self, output, height, ypos, top, font, background, foreground):
+    def __init__(self, output, height, ypos, top, font, background, foreground, width = 0, xpos = 0, left = True, sidebar = False):
         '''
         Constructor
         
-        @param  output:int                                 The index of the output within the screen as printed by xrandr, except primary is first
-        @param  height:int                                 The height of the panel
-        @param  ypos:int                                   The position of the panel in relation the either the top or bottom edge of the output
-        @param  top:bool                                   Whether the panel is to be docked to the top of the output, otherwise to the bottom
+        @param  output:int                                 The index of the output within the screen as printed by xrandr,
+                                                           except primary is first
+        @param  height:int                                 The height of the panel, 0 to span the entire output if `sidebar`,
+                                                           if negative, the absolute value is subtracted with the output's height
+        @param  ypos:int                                   The position of the panel in relation the either the top or bottom
+                                                           edge of the output
+        @param  top:bool                                   Whether the panel is to be docked to the top of the output,
+                                                           otherwise to the bottom
         @param  font:str                                   The default font
         @param  background:(red:int, green:int, blue:int)  The default background
         @param  foreground:(red:int, green:int, blue:int)  The default foreground
+        @param  width:int                                  The width of the panel, 0 to span the entire output unless `sidebar`,
+                                                           if negative, the absolute value is subtracted with the output's width
+        @param  xpos:int                                   The position of the panel in relation the either the left or right
+                                                           edge of the output
+        @param  left:bool                                  Whether the panel is to be docked to the left edge of the output,
+                                                           otherwise to the right edge
+        @param  sidebar:bool                               If `True`, the bar will be docked to the left or right edge,
+                                                           otherwise it will be docked to the top or the bottom edge
         '''
         ## Panel position
-        pos = outputs[output][:3] + [ypos, height, top]
-        self.width, self.height, self.left, self.ypos, self.panel_height, self.at_top = pos
+        self.width, self.height, self.left, self.top = outputs[output]
+        self.xpos, self.ypos, self.panel_width, self.panel_height = xpos, ypos, width, height
+        self.at_top, self.at_left, self.sidebar = top, left, sidebar
+        if sidebar:
+            if self.panel_height <= 0:
+                self.panel_height += self.height
+        else:
+            if self.panel_width <= 0:
+                self.panel_width += self.width
         ## Create window and create/fetch resources
+        pos = [self.width, self.height, self.left, self.ypos, self.panel_height, self.at_top]
+        pos += [self.top, self.xpos, self.panel_width, self.at_left, self.sidebar]
         self.window = create_panel(*pos)
         self.gc = self.window.create_gc()
         self.cmap = self.window.get_attributes().colormap

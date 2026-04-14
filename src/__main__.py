@@ -462,7 +462,7 @@ class Bar:
         @param  height:int  The height of the rectangle
         '''
         self.change_colour(self.background)
-        self.window.fill_rectangle(self.gc, 0, 0, self.width, self.panel_height)
+        self.window.fill_rectangle(self.gc, x, y, width, height)
         self.change_colour(self.foreground)
         self.change_font(self.font)
     
@@ -470,7 +470,7 @@ class Bar:
         '''
         Fill the panel with its background colour and reset the colour and font
         '''
-        self.clear_rectangle(0, 0, self.width, self.panel_height)
+        self.clear_rectangle(0, 0, self.panel_width, self.panel_height)
     
     def invalidate(self):
         '''
